@@ -1,4 +1,6 @@
 package ojoaldato.modelo;
+import java.math.BigDecimal;
+
 
 /**
  * Clase abstracta base del modelo que representa a un cliente.
@@ -11,6 +13,10 @@ public abstract class Cliente {
     private String email;
     private BigDecimal cuota;
 
+    // Método polifórmico
+    public abstract BigDecimal calcularGastosEnvio(BigDecimal base);
+
+
     public Cliente() {}
     public Cliente(String nombre, String domicilio, String nif, String email, BigDecimal cuota) {
         this.nombre = nombre;
@@ -20,7 +26,6 @@ public abstract class Cliente {
         this.cuota = cuota;
     }
 
-    public abstract BigDecimal calcularGastosEnvio(BigDecimal base);
 
     public String getNombre() {
         return nombre;
