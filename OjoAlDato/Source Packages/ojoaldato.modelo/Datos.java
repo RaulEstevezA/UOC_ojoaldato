@@ -184,4 +184,39 @@ public class Datos {
         }
         return todos;
     }
+
+
+    // ================================
+    // PEDIDOS POR TIPO CLIENTE
+    // ================================
+
+    /**
+     * Devuelve una lista con todos los pedidos realizados por clientes estandar.
+     *
+     * @return Lista de pedidos de clientes estandar
+     */
+    public List<Pedido> listarPedidosClientesEstandar() {
+        List<Pedido> resultado = new ArrayList<>();
+        for (Map.Entry<Cliente, List<Pedido>> entry : pedidosPorCliente.entrySet()) {
+            if (entry.getKey() instanceof ClienteEstandar) {
+                resultado.addAll(entry.getValue());
+            }
+        }
+        return resultado;
+    }
+
+    /**
+     * Devuelve una lista con todos los pedidos realizados por clientes premium.
+     *
+     * @return Lista de pedidos de clientes premium
+     */
+    public List<Pedido> listarPedidosClientesPremium() {
+        List<Pedido> resultado = new ArrayList<>();
+        for (Map.Entry<Cliente, List<Pedido>> entry : pedidosPorCliente.entrySet()) {
+            if (entry.getKey() instanceof ClientePremium) {
+                resultado.addAll(entry.getValue());
+            }
+        }
+        return resultado;
+    }
 }
