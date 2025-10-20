@@ -32,4 +32,57 @@ public class Datos {
         articulos = new ArrayList<>();
         pedidosPorCliente = new HashMap<>();
     }
+    // ================================
+    // CLIENTES
+    // ================================
+
+    /**
+     * Agrega un nuevo cliente a la lista cliente.
+     *
+     * @param c Cliente a agregar
+     * @throws RuntimeException si el cliente ya existe en la lista
+     */
+    public void agregarCliente(Cliente c) throws RuntimeException { // Añadir excepcion personalizada
+        if (clientes.contains(c)) {
+            System.out.println("El cliente ya existe"); // Cambiar Sysout por excepcion
+        }
+        clientes.add(c);
+    }
+
+    /**
+     * Elimina un cliente del sistema y sus pedidos asociados
+     *
+     * @param c Cliente a eliminar
+     * @throws RuntimeException si el cliente no existe
+     */
+    public void eliminarCliente(Cliente c) throws RuntimeException {
+        if (!clientes.remove(c)) {
+            System.out.println("El cliente no existe"); // Cambiar por excepcion
+        }
+        pedidosPorCliente.remove(c);
+    }
+
+    /**
+     * Busca un cliente por su dirección de correo electrónico
+     *
+     * @param email correo electrónico del cliente a buscar
+     * @return El cliente encontrado, o {@code null} si no existe
+     */
+    public Cliente buscarCliente(String email) {
+        for (Cliente c : clientes) {
+            if (c.getEmail().equalsIgnoreCase(email)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Devuelve una lista de todos los clientes registrados
+     *
+     * @return Lista de clientes
+     */
+    public List<Cliente> listarClientes() {
+        return clientes;
+    }
 }
