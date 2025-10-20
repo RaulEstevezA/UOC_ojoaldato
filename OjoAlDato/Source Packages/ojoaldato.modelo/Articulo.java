@@ -1,7 +1,11 @@
 package ojoaldato.modelo;
 
+import java.math.BigDecimal;
+
+
 /**
  * Clase que representa un artículo disponible en el sistema.
+ * Identidad: codigo (único).
  */
 public class Articulo {
     private String codigo;

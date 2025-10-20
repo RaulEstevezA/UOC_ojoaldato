@@ -1,5 +1,8 @@
 package ojoaldato.modelo;
 
+import java.math.BigDecimal;
+
+
 /**
  * Clase abstracta base del modelo que representa a un cliente.
  * Se completará con atributos y métodos según el UML definitivo (AA1).
@@ -11,7 +14,17 @@ public abstract class Cliente {
     private String email;
     private BigDecimal cuota;
 
+    // Método polifórmico
+    public abstract BigDecimal calcularGastosEnvio(BigDecimal base);
+
+
     public Cliente() {}
+    public Cliente(String nombre, String domicilio, String nif, String email) {
+        this.nombre = nombre;
+        this.domicilio = domicilio;
+        this.nif = nif;
+        this.email = email;
+    }
     public Cliente(String nombre, String domicilio, String nif, String email, BigDecimal cuota) {
         this.nombre = nombre;
         this.domicilio = domicilio;
@@ -20,7 +33,6 @@ public abstract class Cliente {
         this.cuota = cuota;
     }
 
-    public abstract BigDecimal calcularGastosEnvio(BigDecimal base);
 
     public String getNombre() {
         return nombre;
