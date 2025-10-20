@@ -138,4 +138,50 @@ public class Datos {
     public List<Articulo> listarArticulo() {
         return new ArrayList<>(articulos);
     }
+
+    // ================================
+    // PEDIDOS
+    // ================================
+
+    /**
+     * Crea un nuevo pedido asociado a un cliente.
+     *
+     * @param c Cliente que realiza el pedido
+     * @param p Pedido a registrar
+     */
+    public void crearPedido(Cliente c, Pedido p) {
+        pedidosPorCliente.computeIfAbsent(c, k -> new ArrayList<>()).add(p);
+    }
+
+    /**
+     * Devuelve una lista de pedidos realizados por un cliente específico
+     *
+     * @param c Cliente cuyos pedidos se desean consultar
+     * @return Lista de pedidos del cliente, o una lista vacía si no tiene pedidos.
+     */
+    public List<Pedido> listarPedidosPorCliente(Cliente c) {
+        return pedidosPorCliente.getOrDefault(c, new ArrayList<>());
+    }
+
+    /**
+     * Devuelve el mapa completo de clientes y sus pedidos.
+     *
+     * @return Mapa de pedidos por cliente.
+     */
+    public Map<Cliente, List<Pedido>> getPedidosPorCliente() {
+        return pedidosPorCliente;
+    }
+
+    /**
+     * Devuelve una lista con todos los pedidos registrados en el sistema.
+     *
+     * @return Lista de todos los pedidos.
+     */
+    public List<Pedido> listarTodosPedidos() {
+        List<Pedido> todos = new ArrayList<>();
+        for (List<Pedido> pedidos : pedidosPorCliente.values()) {
+            todos.addAll(pedidos);
+        }
+        return todos;
+    }
 }
