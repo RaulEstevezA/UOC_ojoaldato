@@ -85,4 +85,57 @@ public class Datos {
     public List<Cliente> listarClientes() {
         return clientes;
     }
+
+    // ================================
+    // ARTÍCULOS
+    // ================================
+
+    /**
+     * Agrega un artículo al sistema
+     *
+     * @param a Artículo a agregar
+     * @throws RuntimeException si el artículo ya existe
+     */
+    public void agregarArticulo(Articulo a) throws RuntimeException { // Crear excepción personalizada
+        if (articulos.contains(a)) {
+            System.out.println("El artículo ya existe"); // Cambiar por excepción
+        }
+        articulos.add(a);
+    }
+
+    /**
+     * Elimina un artículo del sistema.
+     *
+     * @param a Artículo a eliminar
+     * @throws RuntimeException si el artículo no existe
+     */
+    public void eliminarArticulo(Articulo a) throws RuntimeException {
+        if (!articulos.remove(a)) {
+            System.out.println("El artículo no existe");
+        }
+    }
+
+    /**
+     * Busca un artículo por su código
+     *
+     * @param codigo código identificador del artículo
+     * @return El artículo encontrado, o {@code null} si no existe
+     */
+    public Articulo buscarArticulo(String codigo) {
+        for (Articulo a : articulos) {
+            if(a.getCodigo().equalsIgnoreCase(codigo)) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Devuelve una lista de todos los artículos disponibles.
+     *
+     * @return Lista de artículos
+     */
+    public List<Articulo> listarArticulo() {
+        return new ArrayList<>(articulos);
+    }
 }
