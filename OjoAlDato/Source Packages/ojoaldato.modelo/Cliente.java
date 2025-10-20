@@ -1,4 +1,5 @@
 package ojoaldato.modelo;
+
 import java.math.BigDecimal;
 
 
@@ -18,6 +19,12 @@ public abstract class Cliente {
 
 
     public Cliente() {}
+    public Cliente(String nombre, String domicilio, String nif, String email) {
+        this.nombre = nombre;
+        this.domicilio = domicilio;
+        this.nif = nif;
+        this.email = email;
+    }
     public Cliente(String nombre, String domicilio, String nif, String email, BigDecimal cuota) {
         this.nombre = nombre;
         this.domicilio = domicilio;
