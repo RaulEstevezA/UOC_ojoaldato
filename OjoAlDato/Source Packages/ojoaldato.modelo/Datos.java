@@ -17,5 +17,19 @@ import java.util.Map;
  * @version 1.0
  */
 public class Datos {
+    /** Lista de clientes registrados en el sistema*/
+    private List<Cliente> clientes;
 
+    /** Lista de artículos disponibles en el sistema*/
+    private List<Articulo> articulos;
+
+    /** Mapa que relaciona cada cliente con su lista de pedidos*/
+    private Map<Cliente, List<Pedido>> pedidosPorCliente;
+
+    /** Constructor que inicializa las colecciones utilizadas en la clase.*/
+    public Datos() {
+        clientes = new ArrayList<>();
+        articulos = new ArrayList<>();
+        pedidosPorCliente = new HashMap<>();
+    }
 }
