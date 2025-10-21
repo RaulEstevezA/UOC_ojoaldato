@@ -1,4 +1,5 @@
 package ojoaldato.modelo;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
