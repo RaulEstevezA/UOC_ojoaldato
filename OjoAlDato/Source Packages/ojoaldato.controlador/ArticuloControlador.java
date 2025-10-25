@@ -66,4 +66,14 @@ public class ArticuloControlador {
     public Articulo buscarArticulo(String codigo) {
         return datos.buscarArticulo(codigo);
     }
+
+    /**
+     * Devuelve una lista con todos los artículos registrados en el sistema.
+     *
+     * @return lista de artículos actuales
+     */
+    public List<Articulo> listarArticulos() {
+        return datos.listarArticulo();
+    }
+
 }
