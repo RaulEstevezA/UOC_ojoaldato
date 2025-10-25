@@ -36,4 +36,23 @@ public class ArticuloControlador {
             return false;
         }
     }
+
+    /**
+     * Elimina un artículo del sistema a partir de su código.
+     *
+     * @param codigo código identificador del artículo a eliminar
+     * @return true si se eliminó correctamente, false si no se encontró
+     */
+    public boolean eliminarArticulo(String codigo) {
+        // Busca el artículo por su código en el modelo Datos
+        Articulo articulo = datos.buscarArticulo(codigo);
+        if (articulo != null) {
+            // Si existe, se elimina
+            datos.eliminarArticulo(articulo);
+            return true;
+        } else {
+            // Si no existe, devuelve false
+            return false;
+        }
+    }
 }
