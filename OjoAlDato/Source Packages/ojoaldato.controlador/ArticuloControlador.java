@@ -55,4 +55,15 @@ public class ArticuloControlador {
             return false;
         }
     }
+
+    /**
+     * Busca un artículo en el sistema a partir de su código.
+     *
+     * @param codigo código identificador del artículo
+     * @return el objeto Articulo si se encuentra, o null si no existe
+     */
+
+    public Articulo buscarArticulo(String codigo) {
+        return datos.buscarArticulo(codigo);
+    }
 }
