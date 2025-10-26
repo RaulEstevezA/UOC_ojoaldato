@@ -56,7 +56,7 @@ build/
 # Tests
 # ===============================
 # JUnit / surefire reports
-test-output/
+GastosEnvioTest-output/
 surefire-reports/
 *.ser
 
