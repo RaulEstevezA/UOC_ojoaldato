@@ -2,8 +2,6 @@ package ojoaldato.controlador;
 
 import ojoaldato.modelo.Articulo;
 import ojoaldato.modelo.Datos;
-import ojoaldato.exception.ElementoNoEncontradoException;
-import ojoaldato.exception.ElementoDuplicadoException;
 
 import java.util.List;
 
@@ -21,16 +19,21 @@ public class ArticuloControlador {
 
     /**
     @param datos objeto del modelo que gestiona la información del sistema
-     * @throws ElementoDuplicadoException si el artículo ya existe.
-     */
-    public void agregarArticulo(Articulo articulo) {
-        try {
+    */
+
+    public ArticuloControlador(Datos datos) {
+        this.datos = datos;
+    }
+
+    public boolean agregarArticulo(Articulo articulo) {
+        // Busca si ya existe un artículo con el mismo código
+        if (datos.buscarArticulo(articulo.getCodigo()) == null) {
+            // Si no existe, lo agrega al modelo
             datos.agregarArticulo(articulo);
-            System.out.println("Artículo agregado correctamente: " + articulo.getCodigo());
-        } catch (ElementoDuplicadoException e) {
-            // Mensaje claro que luego se reemplazará por alerta en JavaFX
-            System.out.println("Error al agregar artículo: " + e.getMessage());
-            throw e; // Re-lanzamos para que la vista pueda manejarlo también
+            return true;
+        } else {
+            // Si ya existe, no se agrega
+            return false;
         }
     }
 
@@ -38,16 +41,18 @@ public class ArticuloControlador {
      * Elimina un artículo del sistema a partir de su código.
      *
      * @param codigo código identificador del artículo a eliminar
-     * @throws ElementoNoEncontradoException si el artículo no existe.
+     * @return true si se eliminó correctamente, false si no se encontró
      */
-    public void eliminarArticulo(String codigo) {
-        try {
-            Articulo articulo = datos.buscarArticulo(codigo);
+    public boolean eliminarArticulo(String codigo) {
+        // Busca el artículo por su código en el modelo Datos
+        Articulo articulo = datos.buscarArticulo(codigo);
+        if (articulo != null) {
+            // Si existe, se elimina
             datos.eliminarArticulo(articulo);
-            System.out.println("Artículo eliminado correctamente: " + codigo);
-        } catch (ElementoNoEncontradoException e) {
-            System.out.println("Error al eliminar artículo: " + e.getMessage());
-            throw e;
+            return true;
+        } else {
+            // Si no existe, devuelve false
+            return false;
         }
     }
 
@@ -56,15 +61,10 @@ public class ArticuloControlador {
      *
      * @param codigo código identificador del artículo
      * @return el objeto Articulo si se encuentra, o null si no existe
-     * @throws ElementoNoEncontradoException si no se encuentra el artículo.
      */
+
     public Articulo buscarArticulo(String codigo) {
-        try {
-            return datos.buscarArticulo(codigo);
-        } catch (ElementoNoEncontradoException e) {
-            System.out.println("Error al buscar artículo: " + e.getMessage());
-            throw e;
-        }
+        return datos.buscarArticulo(codigo);
     }
 
     /**
