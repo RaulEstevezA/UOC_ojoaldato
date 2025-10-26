@@ -1,9 +1,12 @@
 package ojoaldato.modelo;
 
+import ojoaldato.exception.ElementoNoEncontradoException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * Clase {@code Datos} que actúa como la capa de gestión de datos dentro del patrón MVC.
@@ -14,7 +17,6 @@ import java.util.Map;
  * El almacenamiento de pedidos se realiza mediante un {@code Map} que asocia cada cliente con su lista de pedidos
  * correspondiente.
  *
- * @version 1.0
  */
 public class Datos {
     /** Lista de clientes registrados en el sistema*/
@@ -32,6 +34,7 @@ public class Datos {
         articulos = new ArrayList<>();
         pedidosPorCliente = new HashMap<>();
     }
+
     // ================================
     // CLIENTES
     // ================================
@@ -66,15 +69,12 @@ public class Datos {
      * Busca un cliente por su dirección de correo electrónico
      *
      * @param email correo electrónico del cliente a buscar
-     * @return El cliente encontrado, o {@code null} si no existe
+     * @return El cliente encontrado
+     * @throws ElementoNoEncontradoException si no existe
      */
     public Cliente buscarCliente(String email) {
-        for (Cliente c : clientes) {
-            if (c.getEmail().equalsIgnoreCase(email)) {
-                return c;
-            }
-        }
-        return null;
+        return buscarElemento(clientes, c -> c.getEmail().equalsIgnoreCase(email),
+                "No se encontró ningún cliente con el email: " + email);
     }
 
     /**
@@ -119,15 +119,12 @@ public class Datos {
      * Busca un artículo por su código
      *
      * @param codigo código identificador del artículo
-     * @return El artículo encontrado, o {@code null} si no existe
+     * @return El artículo encontrado
+     * @throws ElementoNoEncontradoException si no existe
      */
     public Articulo buscarArticulo(String codigo) {
-        for (Articulo a : articulos) {
-            if(a.getCodigo().equalsIgnoreCase(codigo)) {
-                return a;
-            }
-        }
-        return null;
+        return buscarElemento(articulos, a -> a.getCodigo().equalsIgnoreCase(codigo),
+                "No se encontró ningún artículo con el código: " + codigo);
     }
 
     /**
@@ -217,6 +214,48 @@ public class Datos {
                 resultado.addAll(entry.getValue());
             }
         }
+        return resultado;
+    }
+
+    // ==================================
+    // MÉTODOS GENÉRICOS (JAVA GENERICS)
+    // ==================================
+
+    /**
+     * Método genérico para buscar un único elemento dentro de una lista según una condición
+     *
+     * @param <T> Tipo de elementos de la lista
+     * @param lista Lista donde se realizará la búsqueda
+     * @param condicion Expresión lambda que define la condición de búsqueda
+     * @return El primer elemento que cumple la condición, o null si no se encuentra
+     */
+    private <T> T buscarElemento(List<T> lista, Predicate<T> condicion, String mensajeError) {
+        for (T elemento : lista) {
+            if (condicion.test(elemento)) {
+                return elemento;
+            }
+        }
+
+        throw new ElementoNoEncontradoException(mensajeError);
+
+    }
+
+    /**
+     * Método genérico para filtrar todos los elementos de una lista que cumpla una condición
+     *
+     * @param <T> Tipo de elementos de la lista
+     * @param lista Lista donde se realizará la búsqueda
+     * @param condicion Expresión lambda que define la condición de filtrado
+     * @return Lista con todos los elementos que cumplen la condición
+     */
+    private <T> List<T> filtrarElementos(List<T> lista, Predicate<T> condicion) {
+        List<T> resultado = new ArrayList<>();
+        for (T elemento : lista) {
+            if (condicion.test(elemento)) {
+                resultado.add(elemento);
+            }
+        }
+
         return resultado;
     }
 }
