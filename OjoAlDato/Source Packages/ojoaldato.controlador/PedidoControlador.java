@@ -62,5 +62,13 @@ public class PedidoControlador {
         return datos.listarPedidosClientesEstandar();
     }
 
+    /**
+     * Lista todos los pedidos realizados por clientes premium.
+     *
+     * @return Lista de pedidos de clientes premium
+     */
+    public List<Pedido> listarPedidosClientesPremium() {
+        return datos.listarPedidosClientesPremium();
+    }
 
 }
