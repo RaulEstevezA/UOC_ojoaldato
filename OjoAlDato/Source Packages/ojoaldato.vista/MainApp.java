@@ -1,4 +1,4 @@
-package ojoaldatovista;
+package ojoaldato.vista;
 
 import java.io.IOException;
 
