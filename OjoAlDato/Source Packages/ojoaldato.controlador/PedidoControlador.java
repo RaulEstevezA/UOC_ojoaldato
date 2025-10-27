@@ -44,4 +44,15 @@ public class PedidoControlador {
         return datos.listarPedidosPorCliente(cliente);
     }
 
+    /**
+     * Devuelve una lista con todos los pedidos registrados en el sistema.
+     *
+     * @return Lista de todos los pedidos
+     */
+    public List<Pedido> listarTodosPedidos() {
+        return datos.listarTodosPedidos();
+    }
+
+
+
 }
