@@ -53,6 +53,14 @@ public class PedidoControlador {
         return datos.listarTodosPedidos();
     }
 
+    /**
+     * Lista todos los pedidos realizados por clientes estándar.
+     *
+     * @return Lista de pedidos de clientes estándar
+     */
+    public List<Pedido> listarPedidosClientesEstandar() {
+        return datos.listarPedidosClientesEstandar();
+    }
 
 
 }
