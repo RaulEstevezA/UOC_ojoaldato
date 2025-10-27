@@ -34,6 +34,14 @@ public class PedidoControlador {
         }
     }
 
-
+    /**
+     * Lista todos los pedidos realizados por un cliente concreto.
+     *
+     * @param cliente Cliente cuyos pedidos se desean consultar
+     * @return Lista de pedidos del cliente, o una lista vacía si no tiene
+     */
+    public List<Pedido> listarPedidosPorCliente(Cliente cliente) {
+        return datos.listarPedidosPorCliente(cliente);
+    }
 
 }
