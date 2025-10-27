@@ -1,7 +1,6 @@
 package ojoaldato.modelo;
 
 import ojoaldato.exception.ElementoNoEncontradoException;
-import ojoaldato.exception.ElementoDuplicadoException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,11 +42,11 @@ public class Datos {
      * Agrega un nuevo cliente a la lista cliente.
      *
      * @param c Cliente a agregar
-     * @throws ElementoDuplicadoException si el cliente ya existe en la lista
+     * @throws RuntimeException si el cliente ya existe en la lista
      */
-    public void agregarCliente(Cliente c) {
+    public void agregarCliente(Cliente c) throws RuntimeException { // Añadir excepcion personalizada
         if (clientes.contains(c)) {
-            throw new ElementoDuplicadoException("El cliente con email " + c.getEmail() + " ya está registrado.");
+            System.out.println("El cliente ya existe"); // Cambiar Sysout por excepcion
         }
         clientes.add(c);
     }
@@ -56,11 +55,11 @@ public class Datos {
      * Elimina un cliente del sistema y sus pedidos asociados
      *
      * @param c Cliente a eliminar
-     * @throws ElementoNoEncontradoException si el cliente no existe
+     * @throws RuntimeException si el cliente no existe
      */
-    public void eliminarCliente(Cliente c) {
+    public void eliminarCliente(Cliente c) throws RuntimeException {
         if (!clientes.remove(c)) {
-            throw new ElementoNoEncontradoException("No se encontró el cliente: " + c.getEmail());
+            System.out.println("El cliente no existe"); // Cambiar por excepcion
         }
         pedidosPorCliente.remove(c);
     }
@@ -94,11 +93,11 @@ public class Datos {
      * Agrega un artículo al sistema
      *
      * @param a Artículo a agregar
-     * @throws ElementoDuplicadoException si el artículo ya existe
+     * @throws RuntimeException si el artículo ya existe
      */
-    public void agregarArticulo(Articulo a) {
+    public void agregarArticulo(Articulo a) throws RuntimeException { // Crear excepción personalizada
         if (articulos.contains(a)) {
-            throw new ElementoDuplicadoException("El artículo con código " + a.getCodigo() + " ya existe en el sistema.");
+            System.out.println("El artículo ya existe"); // Cambiar por excepción
         }
         articulos.add(a);
     }
@@ -107,11 +106,11 @@ public class Datos {
      * Elimina un artículo del sistema.
      *
      * @param a Artículo a eliminar
-     * @throws ElementoNoEncontradoException si el artículo no existe
+     * @throws RuntimeException si el artículo no existe
      */
-    public void eliminarArticulo(Articulo a) {
+    public void eliminarArticulo(Articulo a) throws RuntimeException {
         if (!articulos.remove(a)) {
-            throw new ElementoNoEncontradoException("No se encontró el artículo con código " + a.getCodigo());
+            System.out.println("El artículo no existe");
         }
     }
 
