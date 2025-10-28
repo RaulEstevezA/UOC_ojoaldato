@@ -26,6 +26,9 @@ public class Datos {
     /** Lista de artículos disponibles en el sistema*/
     private List<Articulo> articulos;
 
+    /** Lista de pedidos en el sistema*/
+    private List<Pedido> pedidos;
+
     /** Mapa que relaciona cada cliente con su lista de pedidos*/
     private Map<Cliente, List<Pedido>> pedidosPorCliente;
 
@@ -33,6 +36,7 @@ public class Datos {
     public Datos() {
         clientes = new ArrayList<>();
         articulos = new ArrayList<>();
+        pedidos = new ArrayList<>();
         pedidosPorCliente = new HashMap<>();
     }
 
@@ -246,6 +250,14 @@ public class Datos {
         }
 
         return todos;
+    }
+
+    public List<Pedido> listarPedidosPendientes() {
+        return filtrarElementos(pedidos, p -> !p.isEnviado());
+    }
+
+    public List<Pedido> listarPedidosEnviados() {
+        return filtrarElementos(pedidos, Pedido::isEnviado);
     }
 
 
