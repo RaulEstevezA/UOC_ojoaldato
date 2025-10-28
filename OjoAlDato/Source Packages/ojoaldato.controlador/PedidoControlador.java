@@ -95,4 +95,12 @@ public class PedidoControlador {
         }
     }
 
+    public List<Pedido> listarPedidosPendientes() {
+        return datos.listarPedidosPendientes();
+    }
+
+    public List<Pedido> listarPedidosEnviados() {
+        return datos.listarPedidosEnviados();
+    }
+
 }
