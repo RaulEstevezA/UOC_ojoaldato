@@ -3,6 +3,8 @@ package ojoaldato.modelo;
 import ojoaldato.exception.ElementoNoEncontradoException;
 import ojoaldato.exception.PedidoInvalidoException;
 import ojoaldato.exception.ElementoDuplicadoException;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,9 @@ public class Datos {
     /** Lista de artículos disponibles en el sistema*/
     private List<Articulo> articulos;
 
+    /** Lista de pedidos en el sistema*/
+    private List<Pedido> pedidos;
+
     /** Mapa que relaciona cada cliente con su lista de pedidos*/
     private Map<Cliente, List<Pedido>> pedidosPorCliente;
 
@@ -33,6 +38,7 @@ public class Datos {
     public Datos() {
         clientes = new ArrayList<>();
         articulos = new ArrayList<>();
+        pedidos = new ArrayList<>();
         pedidosPorCliente = new HashMap<>();
     }
 
@@ -246,6 +252,28 @@ public class Datos {
         }
 
         return todos;
+    }
+
+    public List<Pedido> listarPedidosPendientes() {
+        return filtrarElementos(pedidos, p -> !p.esCancelable(LocalDateTime.now()));
+    }
+
+    public List<Pedido> listarPedidosEnviados() {
+        return filtrarElementos(pedidos, p -> !p.esCancelable(LocalDateTime.now()));
+    }
+
+    public boolean marcarPedidoEnviado(int numPedido) {
+        for (Pedido p : pedidos) {
+            if (p.getNumPedido() == numPedido) {
+                if (!p.esCancelable(LocalDateTime.now())) {
+                    return true;
+                }
+            } else {
+                p.setEnviado(true);
+                return true;
+            }
+        }
+        return false;
     }
 
 
