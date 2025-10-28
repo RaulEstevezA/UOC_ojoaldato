@@ -1,6 +1,7 @@
 package ojoaldato.modelo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 
 /**
@@ -76,11 +77,19 @@ public abstract class Cliente {
 
     @Override
     public String toString() {
-        return "Cliente: \n" +
-                "Nombre = " + nombre + '\n' +
-                "Domicilio = " + domicilio + '\n' +
-                "NIF = " + nif + '\n' +
-                "Email = " + email + '\n' +
-                "Cuota = " + cuota + '\n';
+        StringBuilder sb = new StringBuilder();
+        sb.append("-------------------------------------------\n");
+        sb.append("CLIENTE\n");
+        sb.append("-------------------------------------------\n");
+        sb.append("Nombre:            ").append(nombre).append("\n");
+        sb.append("Domicilio:         ").append(domicilio).append("\n");
+        sb.append("NIF:               ").append(nif).append("\n");
+        sb.append("Email:             ").append(email).append("\n");
+
+        if (cuota != null) {
+            sb.append("Cuota:             ").append(cuota.setScale(2, RoundingMode.HALF_UP));
+        }
+
+        return sb.toString();
     }
 }
