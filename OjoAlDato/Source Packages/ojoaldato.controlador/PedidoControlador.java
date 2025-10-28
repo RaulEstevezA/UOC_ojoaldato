@@ -24,7 +24,7 @@ public class PedidoControlador {
      *
      * @param c Cliente que realiza el pedido
      * @param p  Pedido a registrar
-     * @return true si se crea correctamente, false si el cliente no existe
+     * @return Mensaje con el resultado de la operación
      */
 
     public String addPedido(Cliente c, Pedido p) {
@@ -56,7 +56,7 @@ public class PedidoControlador {
     /**
      * Devuelve una lista con todos los pedidos registrados en el sistema.
      *
-     * @return Lista de todos los pedidos
+     * @return Lista de todos los pedidos o lista vacía si no existen registros de pedidos
      */
     public List<Pedido> listarTodosPedidos() {
         try {
@@ -70,7 +70,7 @@ public class PedidoControlador {
     /**
      * Lista todos los pedidos realizados por clientes estándar.
      *
-     * @return Lista de pedidos de clientes estándar
+     * @return Lista de pedidos de clientes estándar o lista vacía si no hay
      */
     public List<Pedido> listarPedidosClientesEstandar() {
         try {
@@ -84,7 +84,7 @@ public class PedidoControlador {
     /**
      * Lista todos los pedidos realizados por clientes premium.
      *
-     * @return Lista de pedidos de clientes premium
+     * @return Lista de pedidos de clientes premium o lista vacía si no hay
      */
     public List<Pedido> listarPedidosClientesPremium() {
         try {

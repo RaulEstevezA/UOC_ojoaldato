@@ -35,7 +35,7 @@ public class ClienteControlador {
      * dos clientes con el mismo correo electrónico.
      *
      * @param c Cliente que se desea agregar
-     * @return true si se agregó correctamente, false si ya existía un cliente con ese email
+     * @return Mensaje con el resultado de la operación
      */
     public String addCliente(Cliente c) {
         try {
@@ -55,7 +55,7 @@ public class ClienteControlador {
      * lo elimina de la lista. También se eliminan sus pedidos asociados.
      *
      * @param email correo electrónico del cliente que se desea eliminar
-     * @return true si el cliente existía y se eliminó correctamente, false si no se encontró
+     * @return Mensaje con el resultado de la operación
      */
     public String deleteCliente(String email) {
         try {
@@ -89,7 +89,7 @@ public class ClienteControlador {
      *
      * Este método simplemente llama al modelo para recuperar la lista de clientes.
      *
-     * @return lista de clientes actuales
+     * @return lista de clientes actuales o lista vacía
      */
     public List<Cliente> listarClientes() {
         try {
