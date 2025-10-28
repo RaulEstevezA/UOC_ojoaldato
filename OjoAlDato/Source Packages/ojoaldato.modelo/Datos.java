@@ -53,8 +53,12 @@ public class Datos {
      * @throws ElementoDuplicadoException si el cliente ya existe en la lista
      */
     public void agregarCliente(Cliente c) {
-        if (clientes.contains(c)) {
-            throw new ElementoDuplicadoException("El cliente con email " + c.getEmail() + " ya está registrado.");
+        for (Cliente cliente : clientes) {
+            if (cliente.getEmail().equalsIgnoreCase(c.getEmail())) {
+                throw new ElementoDuplicadoException(
+                        "El cliente con email " + c.getEmail() + " ya existe."
+                );
+            }
         }
         clientes.add(c);
     }
