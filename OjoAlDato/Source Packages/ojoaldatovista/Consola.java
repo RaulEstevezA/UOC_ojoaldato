@@ -1,20 +1,29 @@
 package ojoaldatovista;
-import java.math.BigDecimal;
-import java.util.Scanner;
-import java.util.List;
 
 import ojoaldato.controlador.ArticuloControlador;
-import ojoaldato.modelo.Articulo;
 import ojoaldato.controlador.ClienteControlador;
+import ojoaldato.controlador.PedidoControlador;
+import ojoaldato.modelo.Articulo;
 import ojoaldato.modelo.Cliente;
 import ojoaldato.modelo.ClienteEstandar;
 import ojoaldato.modelo.ClientePremium;
+import ojoaldato.modelo.Pedido;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Scanner;
 
 // Clase para mostrar el menú principal del programa por consola
 
 public class Consola {
+    // Inicialización de los controladores para acceder a sus métodos
+    private static ClienteControlador repositorioCliente = new ClienteControlador();
+    private static ArticuloControlador repositorioArticulo = new ArticuloControlador();
+    private static PedidoControlador pedidosControlador = new PedidoControlador();
 
     public static void main(String[] args) {
+
         Scanner entrada = new Scanner(System.in); //Scanner para leer los datos del usuario
         int opcion;
 
@@ -42,7 +51,6 @@ public class Consola {
 
     // --- SUB MENÚS --- //
 
-
     // SUBMENÚ ARTÍCULOS
     private static void menuArticulos(Scanner entrada) {
         ArticuloControlador articulo = new ArticuloControlador();
@@ -57,19 +65,6 @@ public class Consola {
 
             switch (opcion) {
                 case 1 -> {
-                    System.out.println("Código del artículo: ");
-                    String codigo = entrada.nextLine();
-                    System.out.println("Descripción del artículo: ");
-                    String descripcion = entrada.nextLine();
-                    System.out.println("PVP: ");
-                    BigDecimal pvp = new BigDecimal(entrada.nextLine());
-                    System.out.println("Gastos de envío: ");
-                    BigDecimal gastosEnvio = new BigDecimal(entrada.nextLine());
-                    System.out.println("Tiempo de preparación: ");
-                    int tiempoPreparacion = Integer.parseInt(entrada.nextLine());
-
-                    Articulo a = new Articulo(codigo, descripcion, pvp, gastosEnvio, tiempoPreparacion);
-                    System.out.println(articulo.addArticulo(a));
                 }
                 case 2 -> {
                     List<Articulo> listarArticulos = articulo.listarArticulos();
@@ -78,6 +73,21 @@ public class Consola {
                 default -> System.out.println("Opción no válida");
             }
         } while (opcion !=0);
+    }
+
+    private static Articulo pedirDatosArticulo(Scanner entrada) {
+        System.out.println("Código del artículo: ");
+        String codigo = entrada.nextLine();
+        System.out.println("Descripción del artículo: ");
+        String descripcion = entrada.nextLine();
+        System.out.println("PVP: ");
+        BigDecimal pvp = new BigDecimal(entrada.nextLine());
+        System.out.println("Gastos de envío: ");
+        BigDecimal gastosEnvio = new BigDecimal(entrada.nextLine());
+        System.out.println("Tiempo de preparación: ");
+        int tiempoPreparacion = Integer.parseInt(entrada.nextLine());
+
+        return new Articulo(codigo, descripcion, pvp, gastosEnvio, tiempoPreparacion);
     }
 
     // SUBMENÚ CLIENTES
@@ -96,30 +106,12 @@ public class Consola {
 
             switch (opcion) {
                 case 1 -> {
-                    System.out.println("Nombre y Apellidos: ");
-                    String nombre = entrada.nextLine();
-                    System.out.println("Domicilio: ");
-                    String domicilio = entrada.nextLine();
-                    System.out.println("NIF: ");
-                    String nif = entrada.nextLine();
-                    System.out.println("Email: ");
-                    String email = entrada.nextLine();
-                    Cliente c = new ClienteEstandar(nombre, domicilio, nif, email); //Constructor ClienteEstandar ?
-                    System.out.println(cliente.addCliente(c));
+                    Cliente c = pedirDatosCliente(entrada, false);
+                    System.out.println(repositorioCliente.addCliente(c));
                 }
                 case 2 -> {
-                    System.out.println("Nombre y Apellidos: ");
-                    String nombre = entrada.nextLine();
-                    System.out.println("Domicilio: ");
-                    String domicilio = entrada.nextLine();
-                    System.out.println("NIF: ");
-                    String nif = entrada.nextLine();
-                    System.out.println("Email: ");
-                    String email = entrada.nextLine();
-                    System.out.println("Cuota: ");
-                    BigDecimal cuota = new BigDecimal(entrada.nextLine());
-                    Cliente c = new ClientePremium(nombre, domicilio, nif, email, cuota, null);
-                    System.out.println(cliente.addCliente(c));
+                    Cliente c = pedirDatosCliente(entrada, true);
+                    System.out.println(repositorioCliente.addCliente(c));
                 }
                 case 3 -> {
                     List<Cliente> listarClientesEstandar = cliente.listarClientesEstandar();
@@ -131,6 +123,24 @@ public class Consola {
                 default -> System.out.println("Opción no válida");
             }
         } while (opcion !=0);
+    }
+
+    private static Cliente pedirDatosCliente(Scanner entrada, boolean esPremium) {
+        System.out.println("Nombre y Apellidos: ");
+        String nombre = entrada.nextLine();
+        System.out.println("Domicilio: ");
+        String domicilio = entrada.nextLine();
+        System.out.println("NIF: ");
+        String nif = entrada.nextLine();
+        System.out.println("Email: ");
+        String email = entrada.nextLine();
+
+        if (esPremium) {
+            Cliente cp = new ClientePremium(nombre, domicilio, nif, email);
+            return cp;
+        } else {
+            return new ClienteEstandar(nombre, domicilio, nif, email);
+        }
     }
 
     // SUBMENÚ PEDIDOS
@@ -148,8 +158,14 @@ public class Consola {
 
             switch (opcion) { // Pendiente de implementar
                 case 1 -> {
+                    Pedido p = pedirDatosPedido(entrada);
+                    if (p != null) {
+                        Cliente c = p.getCliente();
+                        System.out.println(pedidosControlador.addPedido(c, p));
+                    }
                 }
                 case 2 -> {
+
                 }
                 case 3 -> {
                 }
@@ -160,4 +176,37 @@ public class Consola {
             }
         } while (opcion !=0);
     }
+
+    private static Pedido pedirDatosPedido(Scanner entrada) {
+        System.out.println("Número del pedido: ");
+        int numPedido = Integer.parseInt(entrada.nextLine());
+
+        // ---- Seleccionar cliente ----
+        System.out.println("Email del cliente: ");
+        String email = entrada.nextLine();
+        Cliente cliente = repositorioCliente.buscarCliente(email);
+        if (cliente == null) {
+            System.out.println("No se encontró un cliente con el email proporcionado.");
+            return null;
+        }
+
+        // ---- Seleccionar artículo -----
+        System.out.println("Código del artículo: ");
+        String codigo = entrada.nextLine();
+        Articulo articulo = repositorioArticulo.buscarArticulo(codigo);
+        if (articulo == null) {
+            System.out.println("No se encontró ningún artículo con el código proporcionado.");
+            return null;
+        }
+
+        // ---- Cantidad ----
+        System.out.println("Cantidad: ");
+        int cantidad = Integer.parseInt(entrada.nextLine());
+
+        // ---- Timestamp
+        LocalDateTime fechaHora = LocalDateTime.now();
+
+        return new Pedido(numPedido, cliente, articulo, cantidad, fechaHora);
+    }
+
 }
