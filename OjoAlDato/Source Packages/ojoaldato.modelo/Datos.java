@@ -3,6 +3,8 @@ package ojoaldato.modelo;
 import ojoaldato.exception.ElementoNoEncontradoException;
 import ojoaldato.exception.PedidoInvalidoException;
 import ojoaldato.exception.ElementoDuplicadoException;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -253,11 +255,25 @@ public class Datos {
     }
 
     public List<Pedido> listarPedidosPendientes() {
-        return filtrarElementos(pedidos, p -> !p.isEnviado());
+        return filtrarElementos(pedidos, p -> !p.esCancelable(LocalDateTime.now()));
     }
 
     public List<Pedido> listarPedidosEnviados() {
-        return filtrarElementos(pedidos, Pedido::isEnviado);
+        return filtrarElementos(pedidos, p -> !p.esCancelable(LocalDateTime.now()));
+    }
+
+    public boolean marcarPedidoEnviado(int numPedido) {
+        for (Pedido p : pedidos) {
+            if (p.getNumPedido() == numPedido) {
+                if (!p.esCancelable(LocalDateTime.now())) {
+                    return true;
+                }
+            } else {
+                p.setEnviado(true);
+                return true;
+            }
+        }
+        return false;
     }
 
 
