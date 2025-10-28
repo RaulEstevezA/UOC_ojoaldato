@@ -4,7 +4,6 @@ import ojoaldato.exception.ElementoNoEncontradoException;
 import ojoaldato.exception.PedidoInvalidoException;
 import ojoaldato.modelo.Pedido;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import ojoaldato.modelo.Datos;
