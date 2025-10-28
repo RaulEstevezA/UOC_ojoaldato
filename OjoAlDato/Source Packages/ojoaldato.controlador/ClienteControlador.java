@@ -3,6 +3,7 @@ package ojoaldato.controlador;
 import ojoaldato.exception.ElementoDuplicadoException;
 import ojoaldato.exception.ElementoNoEncontradoException;
 import ojoaldato.modelo.Cliente;
+import ojoaldato.modelo.ClienteEstandar;
 import ojoaldato.modelo.Datos;
 import ojoaldato.modelo.Pedido;
 
@@ -96,6 +97,34 @@ public class ClienteControlador {
             return datos.listarClientes();
         } catch (Exception e) {
             System.err.println("Error al listar clientes. " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * Devuelve una lista con todos los clientes de tipo estándar registrados en el sistema.
+     *
+     * @return Lista de clientes estándar. Si no hay clientes de este tipo, devuelve una lista vacía.
+     */
+    public List<Cliente> listarClientesEstandar() {
+        try {
+            return datos.listarClientesEstandar();
+        } catch (ElementoNoEncontradoException e) {
+            System.err.println("Aviso: " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * Devuelve una lista con todos los clientes de tipo premium registrados en el sistema.
+     *
+     * @return Lista de clientes premium. Si no hay clientes de este tipo, devuelve una lista vacía.
+     */
+    public List<Cliente> listarClientesPremium() {
+        try {
+            return datos.listarClientesPremium();
+        } catch (ElementoNoEncontradoException e) {
+            System.err.println("Aviso: " + e.getMessage());
             return Collections.emptyList();
         }
     }

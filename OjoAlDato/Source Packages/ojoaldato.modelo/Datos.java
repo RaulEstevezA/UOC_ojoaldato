@@ -88,6 +88,36 @@ public class Datos {
         return clientes;
     }
 
+    public List<Cliente> listarClientesEstandar() {
+        List<Cliente> resultado = new ArrayList<>();
+        for (Cliente c : clientes) {
+            if (c instanceof ClienteEstandar) {
+                resultado.add(c);
+            }
+        }
+
+        if (resultado.isEmpty()) {
+            throw new ElementoNoEncontradoException("No se encontraron clientes estándar registrados.");
+        }
+
+        return resultado;
+    }
+
+    public List<Cliente> listarClientesPremium() {
+        List<Cliente> resultado = new ArrayList<>();
+        for (Cliente c : clientes) {
+            if (c instanceof ClientePremium) {
+                resultado.add(c);
+            }
+        }
+
+        if (resultado.isEmpty()) {
+            throw new ElementoNoEncontradoException("No se encontraron clientes premium registrados.");
+        }
+
+        return resultado;
+    }
+
     // ================================
     // ARTÍCULOS
     // ================================
