@@ -18,9 +18,11 @@ import java.util.List;
 
 
 public class ArticuloControlador {
-    private Datos datos = new Datos();
+    private Datos datos;
 
-    public ArticuloControlador() {}
+    public ArticuloControlador(Datos datos) { //Constructor modificado para recibir el objeto Datos en lugar de crear una copia propia
+        this.datos = datos;
+    }
 
     /**
      * Añade un artículo en el sistema
@@ -85,5 +87,4 @@ public class ArticuloControlador {
             return Collections.emptyList();
         }
     }
-
 }

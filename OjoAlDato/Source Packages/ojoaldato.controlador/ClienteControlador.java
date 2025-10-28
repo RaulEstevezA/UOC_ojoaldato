@@ -21,9 +21,11 @@ import java.util.*;
  */
 
 public class ClienteControlador {
-    private Datos datos = new Datos();
+    private Datos datos;
 
-    public ClienteControlador() {}
+    public ClienteControlador(Datos datos) { //Constructor modificado para recibir el objeto Datos en lugar de crear una copia propia
+        this.datos = datos;
+    }
 
     // ==============================
     // Métodos de gestión de clientes
