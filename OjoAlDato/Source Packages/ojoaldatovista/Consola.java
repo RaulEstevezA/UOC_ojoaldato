@@ -69,7 +69,7 @@ public class Consola {
                     Articulo a = pedirDatosArticulo(entrada);
                     System.out.println(repositorioArticulo.addArticulo(a));
                 }
-                case 2 -> mostrarLista(repositorioArticulo.listarArticulos(), "No hay artículos registrados");
+                case 2 -> mostrarLista(repositorioArticulo.listarArticulos(), null);
                 case 0 -> System.out.println("Volviendo al menú principal.");
                 default -> System.out.println("Opción no válida");
             }
@@ -112,9 +112,9 @@ public class Consola {
                     Cliente c = pedirDatosCliente(entrada, false);
                     System.out.println(repositorioCliente.addCliente(c));
                 }
-                case 2 -> mostrarLista(repositorioCliente.listarClientes(), "No hay clientes registrados");
-                case 3 -> mostrarLista(repositorioCliente.listarClientesEstandar(), "No hay clientes estándar registrados.");
-                case 4 -> mostrarLista(repositorioCliente.listarClientesPremium(), "No hay clientes premium registrados.");
+                case 2 -> mostrarLista(repositorioCliente.listarClientes(), null);
+                case 3 -> mostrarLista(repositorioCliente.listarClientesEstandar(), null);
+                case 4 -> mostrarLista(repositorioCliente.listarClientesPremium(), null);
                 case 0 -> System.out.println("Volviendo al menú principal.");
                 default -> System.out.println("Opción no válida");
             }
@@ -230,7 +230,11 @@ public class Consola {
     // =======================
 
     private static <T> void mostrarLista(List<T> lista, String emptyMessage) {
-        if (lista == null || lista.isEmpty()) System.out.print(emptyMessage);
+        if (lista == null || lista.isEmpty()) {
+            if (emptyMessage != null && !emptyMessage.isEmpty()) {
+                System.out.print(emptyMessage);
+            }
+        }
         else lista.forEach(System.out::println);
     }
 
