@@ -22,7 +22,7 @@ import java.util.*;
 public class ClienteControlador {
     private Datos datos = new Datos();
 
-    public ClienteControlador(Datos datos) {}
+    public ClienteControlador() {}
 
     // ==============================
     // Métodos de gestión de clientes
