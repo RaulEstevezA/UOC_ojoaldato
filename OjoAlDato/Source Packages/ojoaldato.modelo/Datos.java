@@ -205,6 +205,27 @@ public class Datos {
         pedidosClientes.add(p);
     }
 
+    public void eliminarPedido(int numPedido) {
+        for (List<Pedido> listaPedidos : pedidosPorCliente.values()) {
+            for(Pedido p : listaPedidos) {
+                if (p.getNumPedido() == numPedido) {
+                    if (p.esCancelable(LocalDateTime.now())) {
+                        listaPedidos.remove(p);
+                        pedidosPorCliente.get(p.getCliente()).remove(p);
+                        return;
+                    } else {
+                        throw new PedidoInvalidoException(
+                                "El pedido nº " + numPedido + " ya ha sido enviado y no se puede eliminar."
+                        );
+                    }
+                }
+            }
+        }
+        throw new ElementoNoEncontradoException(
+                "No se encontró ningún pedido con el número " + numPedido
+        );
+    }
+
     /**
      * Devuelve una lista de pedidos realizados por un cliente específico
      *
@@ -254,12 +275,16 @@ public class Datos {
         return todos;
     }
 
-    public List<Pedido> listarPedidosPendientes() {
-        return filtrarElementos(pedidos, p -> !p.esCancelable(LocalDateTime.now()));
+    public List<Pedido> listarPedidosPendientes(String email) {
+        return filtrarElementos(pedidos, p ->
+                p.esCancelable(LocalDateTime.now()) &&
+                (email == null || p.getCliente().getEmail().equalsIgnoreCase(email)));
     }
 
-    public List<Pedido> listarPedidosEnviados() {
-        return filtrarElementos(pedidos, p -> !p.esCancelable(LocalDateTime.now()));
+    public List<Pedido> listarPedidosEnviados(String email) {
+        return filtrarElementos(pedidos, p ->
+                !p.esCancelable(LocalDateTime.now()) &&
+                (email == null || p.getCliente().getEmail().equalsIgnoreCase(email)));
     }
 
     public boolean marcarPedidoEnviado(int numPedido) {
@@ -269,7 +294,6 @@ public class Datos {
                     return true;
                 }
             } else {
-                p.setEnviado(true);
                 return true;
             }
         }
