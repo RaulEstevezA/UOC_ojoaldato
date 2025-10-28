@@ -1,9 +1,8 @@
 package ojoaldato.modelo;
 
-import ojoaldato.exception.ElementoDuplicadoException;
 import ojoaldato.exception.ElementoNoEncontradoException;
 import ojoaldato.exception.PedidoInvalidoException;
-
+import ojoaldato.exception.ElementoDuplicadoException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,11 +44,11 @@ public class Datos {
      * Agrega un nuevo cliente a la lista cliente.
      *
      * @param c Cliente a agregar
-     * @throws RuntimeException si el cliente ya existe en la lista
+     * @throws ElementoDuplicadoException si el cliente ya existe en la lista
      */
     public void agregarCliente(Cliente c) {
         if (clientes.contains(c)) {
-            throw new ElementoDuplicadoException("El cliente con email " + c.getEmail() + " ya existe.");
+            throw new ElementoDuplicadoException("El cliente con email " + c.getEmail() + " ya está registrado.");
         }
         clientes.add(c);
     }
@@ -113,8 +112,8 @@ public class Datos {
      * @throws ElementoNoEncontradoException si el artículo no existe
      */
     public void eliminarArticulo(Articulo a) {
-        if (!articulos.remove(a)) {
-            throw new ElementoNoEncontradoException("El artículo con código " + a.getCodigo() + " no existe.");
+        if (!articulos.remove(a)) {;
+            throw new ElementoNoEncontradoException("No se encontró el artículo con código " + a.getCodigo());
         }
     }
 
