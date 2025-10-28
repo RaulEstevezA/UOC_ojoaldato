@@ -135,8 +135,12 @@ public class Datos {
      * @throws ElementoDuplicadoException si el artículo ya existe
      */
     public void agregarArticulo(Articulo a) {
-        if (articulos.contains(a)) {
-            throw new ElementoDuplicadoException("El artículo con código " + a.getCodigo() + " ya existe");
+        for (Articulo articulo : articulos) {
+            if (articulo.getCodigo().equalsIgnoreCase(a.getCodigo())) {
+                throw new ElementoDuplicadoException(
+                        "El artículo con código " + a.getCodigo() + " ya existe."
+                );
+            }
         }
         articulos.add(a);
     }
