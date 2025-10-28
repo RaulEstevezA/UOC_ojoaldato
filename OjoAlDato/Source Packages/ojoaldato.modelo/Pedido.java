@@ -15,7 +15,6 @@ public class Pedido {
     private Articulo articulo;
     private int cantidad;
     private LocalDateTime fechaHora;
-    private boolean enviado = false;
 
     /**
      * Constructor completo
@@ -47,13 +46,6 @@ public class Pedido {
 
     public LocalDateTime getFechaHora() { return fechaHora; }
     public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
-
-    public boolean isEnviado() {
-        return enviado;
-    }
-    public void setEnviado(boolean enviado) {
-        this.enviado = enviado;
-    }
 
     /**
      * Calcula el importe total del pedido (precio * cantidad + envío)
