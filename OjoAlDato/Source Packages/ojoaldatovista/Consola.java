@@ -14,13 +14,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
-// Clase para mostrar el menú principal del programa por consola
+/**
+ *
+ */
 
 public class Consola {
     // Inicialización de los controladores para acceder a sus métodos
     private static ClienteControlador repositorioCliente = new ClienteControlador();
     private static ArticuloControlador repositorioArticulo = new ArticuloControlador();
-    private static PedidoControlador pedidosControlador = new PedidoControlador();
+    private static PedidoControlador repositorioPedidos = new PedidoControlador();
 
     public static void main(String[] args) {
 
@@ -53,7 +55,6 @@ public class Consola {
 
     // SUBMENÚ ARTÍCULOS
     private static void menuArticulos(Scanner entrada) {
-        ArticuloControlador articulo = new ArticuloControlador();
         int opcion;
         do {
             System.out.println("\n---GESTIÓN DE ARTÍCULOS---");
@@ -65,16 +66,19 @@ public class Consola {
 
             switch (opcion) {
                 case 1 -> {
+                    Articulo a = pedirDatosArticulo(entrada);
+                    System.out.println(repositorioArticulo.addArticulo(a));
                 }
-                case 2 -> {
-                    List<Articulo> listarArticulos = articulo.listarArticulos();
-                }
+                case 2 -> mostrarLista(repositorioArticulo.listarArticulos(), "No hay artículos registrados");
                 case 0 -> System.out.println("Volviendo al menú principal.");
                 default -> System.out.println("Opción no válida");
             }
         } while (opcion !=0);
     }
 
+    // =======================
+    // Método auxiliar para pedir datos de Artículo
+    // =======================
     private static Articulo pedirDatosArticulo(Scanner entrada) {
         System.out.println("Código del artículo: ");
         String codigo = entrada.nextLine();
@@ -92,7 +96,6 @@ public class Consola {
 
     // SUBMENÚ CLIENTES
     private static void menuClientes(Scanner entrada) {
-        ClienteControlador cliente = new ClienteControlador();
         int opcion;
         do {
             System.out.println("\n---GESTIÓN DE CLIENTES---");
@@ -109,22 +112,18 @@ public class Consola {
                     Cliente c = pedirDatosCliente(entrada, false);
                     System.out.println(repositorioCliente.addCliente(c));
                 }
-                case 2 -> {
-                    Cliente c = pedirDatosCliente(entrada, true);
-                    System.out.println(repositorioCliente.addCliente(c));
-                }
-                case 3 -> {
-                    List<Cliente> listarClientesEstandar = cliente.listarClientesEstandar();
-                }
-                case 4 -> {
-                    List<Cliente> listarClientesPremium = cliente.listarClientesPremium();
-                }
+                case 2 -> mostrarLista(repositorioCliente.listarClientes(), "No hay clientes registrados");
+                case 3 -> mostrarLista(repositorioCliente.listarClientesEstandar(), "No hay clientes estándar registrados.");
+                case 4 -> mostrarLista(repositorioCliente.listarClientesPremium(), "No hay clientes premium registrados.");
                 case 0 -> System.out.println("Volviendo al menú principal.");
                 default -> System.out.println("Opción no válida");
             }
         } while (opcion !=0);
     }
 
+    // =======================
+    // Método auxiliar para pedir datos de Cliente
+    // =======================
     private static Cliente pedirDatosCliente(Scanner entrada, boolean esPremium) {
         System.out.println("Nombre y Apellidos: ");
         String nombre = entrada.nextLine();
@@ -161,15 +160,29 @@ public class Consola {
                     Pedido p = pedirDatosPedido(entrada);
                     if (p != null) {
                         Cliente c = p.getCliente();
-                        System.out.println(pedidosControlador.addPedido(c, p));
+                        System.out.println(repositorioPedidos.addPedido(c, p));
                     }
                 }
                 case 2 -> {
-
+                    System.out.println("Número de pedido a eliminar: ");
+                    int numPedido = Integer.parseInt(entrada.nextLine());
+                    System.out.println(repositorioPedidos.deletePedido(numPedido));
                 }
                 case 3 -> {
+                    System.out.println("Filtrar por email (Enter para todos): ");
+                    String email = entrada.nextLine();
+                    if (email.isEmpty()) email = null;
+                    List<Pedido> pendientes = repositorioPedidos.listarPedidosPendientes();
+                    System.out.println("\n---- PEDIDOS PENDIENTES ----");
+                    mostrarLista(pendientes, "No hay pedidos pendientes.");
                 }
                 case 4 -> {
+                    System.out.println("Filtrar por email (Enter para todos): ");
+                    String email = entrada.nextLine();
+                    if (email.isEmpty()) email = null;
+                    List<Pedido> enviados = repositorioPedidos.listarPedidosEnviados();
+                    System.out.println("\n---- PEDIDOS ENVIADOS ----");
+                    mostrarLista(enviados, "No hay pedidos enviados.");
                 }
                 case 0 -> System.out.println("Volviendo al menú principal.");
                 default -> System.out.println("Opción no válida");
@@ -177,6 +190,9 @@ public class Consola {
         } while (opcion !=0);
     }
 
+    // =======================
+    // Método auxiliar para pedir datos de Pedido
+    // =======================
     private static Pedido pedirDatosPedido(Scanner entrada) {
         System.out.println("Número del pedido: ");
         int numPedido = Integer.parseInt(entrada.nextLine());
@@ -207,6 +223,15 @@ public class Consola {
         LocalDateTime fechaHora = LocalDateTime.now();
 
         return new Pedido(numPedido, cliente, articulo, cantidad, fechaHora);
+    }
+
+    // =======================
+    // Método auxiliar para mostrar listas
+    // =======================
+
+    private static <T> void mostrarLista(List<T> lista, String emptyMessage) {
+        if (lista == null || lista.isEmpty()) System.out.print(emptyMessage);
+        else lista.forEach(System.out::println);
     }
 
 }
