@@ -110,7 +110,7 @@ public class ClienteControlador {
         try {
             return datos.listarClientesEstandar();
         } catch (ElementoNoEncontradoException e) {
-            System.err.println("Aviso: " + e.getMessage());
+            System.out.println("Aviso: " + e.getMessage());
             return Collections.emptyList();
         }
     }
@@ -124,7 +124,7 @@ public class ClienteControlador {
         try {
             return datos.listarClientesPremium();
         } catch (ElementoNoEncontradoException e) {
-            System.err.println("Aviso: " + e.getMessage());
+            System.out.println("Aviso: " + e.getMessage());
             return Collections.emptyList();
         }
     }
