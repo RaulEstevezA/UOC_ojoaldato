@@ -38,6 +38,17 @@ public class PedidoControlador {
         }
     }
 
+    public String deletePedido(int numPedido) {
+        try {
+            datos.eliminarPedido(numPedido);
+            return "Pedido eliminado correctamente.";
+        } catch (PedidoInvalidoException | ElementoNoEncontradoException e) {
+            return "No se pudo eliminar el pedido: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error inesperado al eliminar el pedido " + numPedido + ".\n" + e.getMessage();
+        }
+    }
+
     /**
      * Lista todos los pedidos realizados por un cliente concreto.
      *
@@ -93,6 +104,14 @@ public class PedidoControlador {
             System.err.println("Aviso: " + e.getMessage());
             return Collections.emptyList();
         }
+    }
+
+    public List<Pedido> listarPedidosPendientes() {
+        return datos.listarPedidosPendientes(null);
+    }
+
+    public List<Pedido> listarPedidosEnviados() {
+        return datos.listarPedidosEnviados(null);
     }
 
 }
