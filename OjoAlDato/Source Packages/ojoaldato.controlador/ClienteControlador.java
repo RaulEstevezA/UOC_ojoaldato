@@ -1,13 +1,12 @@
 package ojoaldato.controlador;
 
+import ojoaldato.exception.ElementoDuplicadoException;
+import ojoaldato.exception.ElementoNoEncontradoException;
 import ojoaldato.modelo.Cliente;
 import ojoaldato.modelo.Datos;
 import ojoaldato.modelo.Pedido;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 
 /**
@@ -21,13 +20,9 @@ import java.util.Optional;
  */
 
 public class ClienteControlador {
-    private Datos datos;
-    // Lista donde se almacenan los clientes en memoria
+    private Datos datos = new Datos();
 
-    // Constructor: el controlador necesita el modelo para trabajar
-    public ClienteControlador(Datos datos) {
-        this.datos = datos;
-    }
+    public ClienteControlador() {}
 
     // ==============================
     // Métodos de gestión de clientes
@@ -39,18 +34,17 @@ public class ClienteControlador {
      * El email se utiliza como identificador único del cliente, ya que no puede haber
      * dos clientes con el mismo correo electrónico.
      *
-     * @param cliente Cliente que se desea agregar
-     * @return true si se agregó correctamente, false si ya existía un cliente con ese email
+     * @param c Cliente que se desea agregar
+     * @return Mensaje con el resultado de la operación
      */
-    public boolean agregarCliente(Cliente cliente) {
-        // Busca en el modelo si ya existe un cliente con el mismo email
-        if (datos.buscarCliente(cliente.getEmail()) == null) {
-            // Si no existe, lo agrega a la lista de clientes del modelo
-            datos.agregarCliente(cliente);
-            return true; // Operación exitosa
-        } else {
-            // Si ya existe un cliente con ese email, no lo agrega
-            return false;
+    public String addCliente(Cliente c) {
+        try {
+            datos.agregarCliente(c);
+            return "Cliente con email " + c.getEmail() +" añadido correctamente.";
+        } catch (ElementoDuplicadoException e) {
+            return "No se pudo añadir el cliente. Ya existe un cliente con ese email.";
+        } catch (Exception e) {
+            return "Error inesperado al agregar cliente: " + e.getMessage();
         }
     }
 
@@ -61,18 +55,17 @@ public class ClienteControlador {
      * lo elimina de la lista. También se eliminan sus pedidos asociados.
      *
      * @param email correo electrónico del cliente que se desea eliminar
-     * @return true si el cliente existía y se eliminó correctamente, false si no se encontró
+     * @return Mensaje con el resultado de la operación
      */
-    public boolean eliminarCliente(String email) {
-        // Busca el cliente en el modelo por su email
-        Cliente cliente = datos.buscarCliente(email);
-        if (cliente != null) {
-            // Si se encuentra, se elimina
+    public String deleteCliente(String email) {
+        try {
+            Cliente cliente = datos.buscarCliente(email);
             datos.eliminarCliente(cliente);
-            return true;
-        } else {
-            // Si no existe ningún cliente con ese email, devuelve false
-            return false;
+            return "Cliente con email " + cliente.getEmail() + " eliminado correctamente.";
+        } catch (ElementoNoEncontradoException e) {
+            return "No se encontró ningún cliente con email " + email;
+        } catch (Exception e) {
+            return "Error inesperado al eliminar cliente. " + e.getMessage();
         }
     }
 
@@ -83,7 +76,12 @@ public class ClienteControlador {
      * @return el objeto Cliente si se encuentra, o null si no existe
      */
     public Cliente buscarCliente(String email) {
-        return datos.buscarCliente(email);
+        try {
+            return datos.buscarCliente(email);
+        } catch (ElementoNoEncontradoException e) {
+            System.err.println("Aviso: " + e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -91,9 +89,14 @@ public class ClienteControlador {
      *
      * Este método simplemente llama al modelo para recuperar la lista de clientes.
      *
-     * @return lista de clientes actuales
+     * @return lista de clientes actuales o lista vacía
      */
     public List<Cliente> listarClientes() {
-        return datos.listarClientes();
+        try {
+            return datos.listarClientes();
+        } catch (Exception e) {
+            System.err.println("Error al listar clientes. " + e.getMessage());
+            return Collections.emptyList();
+        }
     }
 }

@@ -1,6 +1,10 @@
 package ojoaldato.controlador;
 
+import ojoaldato.exception.ElementoNoEncontradoException;
+import ojoaldato.exception.PedidoInvalidoException;
 import ojoaldato.modelo.Pedido;
+
+import java.util.Collections;
 import java.util.List;
 import ojoaldato.modelo.Datos;
 import ojoaldato.modelo.Cliente;
@@ -11,26 +15,26 @@ import ojoaldato.modelo.Cliente;
  */
 
 public class PedidoControlador {
-    private Datos  datos;
+    private Datos  datos = new Datos();
 
-    public PedidoControlador(Datos datos) {
-        this.datos = datos;
-    }
+    public PedidoControlador() {}
 
     /**
      * Crea un nuevo pedido asociado a un cliente.
      *
-     * @param cliente Cliente que realiza el pedido
-     * @param pedido  Pedido a registrar
-     * @return true si se crea correctamente, false si el cliente no existe
+     * @param c Cliente que realiza el pedido
+     * @param p  Pedido a registrar
+     * @return Mensaje con el resultado de la operación
      */
 
-    public boolean crearPedido(Cliente cliente, Pedido pedido) {
-        if (datos.buscarCliente(cliente.getEmail()) != null) {  /* Aquí buscamos el clienete por su email para evitar crear pedidos para clientes que no existen */
-            datos.crearPedido(cliente, pedido);
-            return true;
-        } else {
-            return false;
+    public String addPedido(Cliente c, Pedido p) {
+        try {
+            datos.crearPedido(c, p);
+            return "Pedido creado correctamente para el cliente " + c.getEmail();
+        } catch (PedidoInvalidoException | ElementoNoEncontradoException e) {
+          return "No se pudo crear el pedido: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error inesperado al crear el pedido " + p.getNumPedido() + ".\n" + e.getMessage();
         }
     }
 
@@ -41,34 +45,54 @@ public class PedidoControlador {
      * @return Lista de pedidos del cliente, o una lista vacía si no tiene
      */
     public List<Pedido> listarPedidosPorCliente(Cliente cliente) {
-        return datos.listarPedidosPorCliente(cliente);
+        try {
+            return datos.listarPedidosPorCliente(cliente);
+        } catch (ElementoNoEncontradoException e) {
+            System.err.println("Aviso: " + e.getMessage());
+            return Collections.emptyList();
+        }
     }
 
     /**
      * Devuelve una lista con todos los pedidos registrados en el sistema.
      *
-     * @return Lista de todos los pedidos
+     * @return Lista de todos los pedidos o lista vacía si no existen registros de pedidos
      */
     public List<Pedido> listarTodosPedidos() {
-        return datos.listarTodosPedidos();
+        try {
+            return datos.listarTodosPedidos();
+        } catch (ElementoNoEncontradoException e) {
+            System.err.println("Aviso: " + e.getMessage());
+            return Collections.emptyList();
+        }
     }
 
     /**
      * Lista todos los pedidos realizados por clientes estándar.
      *
-     * @return Lista de pedidos de clientes estándar
+     * @return Lista de pedidos de clientes estándar o lista vacía si no hay
      */
     public List<Pedido> listarPedidosClientesEstandar() {
-        return datos.listarPedidosClientesEstandar();
+        try {
+            return datos.listarPedidosClientesEstandar();
+        } catch (ElementoNoEncontradoException e) {
+            System.err.println("Aviso: " + e.getMessage());
+            return Collections.emptyList();
+        }
     }
 
     /**
      * Lista todos los pedidos realizados por clientes premium.
      *
-     * @return Lista de pedidos de clientes premium
+     * @return Lista de pedidos de clientes premium o lista vacía si no hay
      */
     public List<Pedido> listarPedidosClientesPremium() {
-        return datos.listarPedidosClientesPremium();
+        try {
+            return datos.listarPedidosClientesPremium();
+        } catch (ElementoNoEncontradoException e) {
+            System.err.println("Aviso: " + e.getMessage());
+            return Collections.emptyList();
+        }
     }
 
 }
