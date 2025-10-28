@@ -1,7 +1,8 @@
 package ojoaldato.modelo;
 
 import ojoaldato.exception.ElementoNoEncontradoException;
-
+import ojoaldato.exception.PedidoInvalidoException;
+import ojoaldato.exception.ElementoDuplicadoException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,11 +44,11 @@ public class Datos {
      * Agrega un nuevo cliente a la lista cliente.
      *
      * @param c Cliente a agregar
-     * @throws RuntimeException si el cliente ya existe en la lista
+     * @throws ElementoDuplicadoException si el cliente ya existe en la lista
      */
-    public void agregarCliente(Cliente c) throws RuntimeException { // Añadir excepcion personalizada
+    public void agregarCliente(Cliente c) {
         if (clientes.contains(c)) {
-            System.out.println("El cliente ya existe"); // Cambiar Sysout por excepcion
+            throw new ElementoDuplicadoException("El cliente con email " + c.getEmail() + " ya está registrado.");
         }
         clientes.add(c);
     }
@@ -56,12 +57,13 @@ public class Datos {
      * Elimina un cliente del sistema y sus pedidos asociados
      *
      * @param c Cliente a eliminar
-     * @throws RuntimeException si el cliente no existe
+     * @throws ElementoNoEncontradoException si el cliente no existe
      */
-    public void eliminarCliente(Cliente c) throws RuntimeException {
+    public void eliminarCliente(Cliente c) {
         if (!clientes.remove(c)) {
-            System.out.println("El cliente no existe"); // Cambiar por excepcion
+            throw new ElementoNoEncontradoException("El cliente con email " + c.getEmail() + " no existe.");
         }
+        clientes.remove(c);
         pedidosPorCliente.remove(c);
     }
 
@@ -94,11 +96,11 @@ public class Datos {
      * Agrega un artículo al sistema
      *
      * @param a Artículo a agregar
-     * @throws RuntimeException si el artículo ya existe
+     * @throws ElementoDuplicadoException si el artículo ya existe
      */
-    public void agregarArticulo(Articulo a) throws RuntimeException { // Crear excepción personalizada
+    public void agregarArticulo(Articulo a) {
         if (articulos.contains(a)) {
-            System.out.println("El artículo ya existe"); // Cambiar por excepción
+            throw new ElementoDuplicadoException("El artículo con código " + a.getCodigo() + " ya existe");
         }
         articulos.add(a);
     }
@@ -107,11 +109,11 @@ public class Datos {
      * Elimina un artículo del sistema.
      *
      * @param a Artículo a eliminar
-     * @throws RuntimeException si el artículo no existe
+     * @throws ElementoNoEncontradoException si el artículo no existe
      */
-    public void eliminarArticulo(Articulo a) throws RuntimeException {
-        if (!articulos.remove(a)) {
-            System.out.println("El artículo no existe");
+    public void eliminarArticulo(Articulo a) {
+        if (!articulos.remove(a)) {;
+            throw new ElementoNoEncontradoException("No se encontró el artículo con código " + a.getCodigo());
         }
     }
 
@@ -147,7 +149,24 @@ public class Datos {
      * @param p Pedido a registrar
      */
     public void crearPedido(Cliente c, Pedido p) {
-        pedidosPorCliente.computeIfAbsent(c, k -> new ArrayList<>()).add(p);
+        if (c == null) {
+            throw new PedidoInvalidoException("El cliente no puede ser nulo al crear el pedido.");
+        }
+
+        if (!clientes.contains(c)) {
+            throw new PedidoInvalidoException("El cliente con email " + c.getEmail() + " no está registrado en el sistema.");
+        }
+
+        if (p == null) {
+            throw new PedidoInvalidoException("El pedido no puede ser nulo.");
+        }
+
+        List<Pedido> pedidosClientes = pedidosPorCliente.computeIfAbsent(c, k -> new ArrayList<>());
+        if (pedidosClientes.contains(p)) {
+            throw new PedidoInvalidoException("El pedido ya existe para este cliente.");
+        }
+
+        pedidosClientes.add(p);
     }
 
     /**
@@ -157,6 +176,14 @@ public class Datos {
      * @return Lista de pedidos del cliente, o una lista vacía si no tiene pedidos.
      */
     public List<Pedido> listarPedidosPorCliente(Cliente c) {
+        if (c == null) {
+            throw new PedidoInvalidoException("El cliente no puede ser nulo.");
+        }
+
+        if (!clientes.contains(c)) {
+            throw new ElementoNoEncontradoException("El cliente con email " + c.getEmail() + " no está registrado.");
+        }
+
         return pedidosPorCliente.getOrDefault(c, new ArrayList<>());
     }
 
@@ -165,7 +192,11 @@ public class Datos {
      *
      * @return Mapa de pedidos por cliente.
      */
-    public Map<Cliente, List<Pedido>> getPedidosPorCliente() {
+    public Map<Cliente, List<Pedido>> getPedidosPorClientes() {
+        if (pedidosPorCliente.isEmpty()) {
+            throw new ElementoNoEncontradoException("No se encontraron pedidos registrados en el sistema.");
+        }
+
         return pedidosPorCliente;
     }
 
@@ -179,6 +210,11 @@ public class Datos {
         for (List<Pedido> pedidos : pedidosPorCliente.values()) {
             todos.addAll(pedidos);
         }
+
+        if (todos.isEmpty()) {
+            throw new ElementoNoEncontradoException("No se encontraron pedidos registrados en el sistema.");
+        }
+
         return todos;
     }
 
@@ -199,6 +235,12 @@ public class Datos {
                 resultado.addAll(entry.getValue());
             }
         }
+
+        if (resultado.isEmpty()) {
+            throw new ElementoNoEncontradoException("No se encontraron pedidos de clientes estándar.");
+
+        }
+
         return resultado;
     }
 
@@ -214,6 +256,11 @@ public class Datos {
                 resultado.addAll(entry.getValue());
             }
         }
+        if (resultado.isEmpty()) {
+            throw new ElementoNoEncontradoException("No se encontraron pedidos de clientes premium.");
+
+        }
+
         return resultado;
     }
 
