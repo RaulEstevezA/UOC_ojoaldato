@@ -109,7 +109,11 @@ public class Consola {
 
             switch (opcion) {
                 case 1 -> {
-                    Cliente c = pedirDatosCliente(entrada, false);
+                    System.out.println("Tipo de cliente: (E para estándar / P para premium): ");
+                    String tipo = entrada.nextLine();
+                    boolean esPremium = tipo.equalsIgnoreCase("P");
+
+                    Cliente c = pedirDatosCliente(entrada, esPremium);
                     System.out.println(repositorioCliente.addCliente(c));
                 }
                 case 2 -> mostrarLista(repositorioCliente.listarClientes(), "No hay clientes registrados");
