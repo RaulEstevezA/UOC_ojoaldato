@@ -186,22 +186,22 @@ public class Consola {
                     System.out.println("Filtrar por email (Enter para todos): ");
                     String email = entrada.nextLine();
                     if (email.isEmpty()) email = null;
-                    List<Pedido> pendientes = repositorioPedidos.listarPedidosPendientes();
-                    System.out.println("\n---- PEDIDOS PENDIENTES ----");
-                    mostrarLista(pendientes, "No hay pedidos pendientes.");
+                    List<Pedido> pendientes = repositorioPedidos.listarPedidosPendientes(email);
+                    System.out.println("\n---- PEDIDOS PENDIENTES" + (email != null ? " DE " + email : "") + " ----");
+                    mostrarLista(pendientes, "No hay pedidos pendientes" + (email != null ? " para el email " + email : "") + ".");
                 }
                 case 4 -> {
                     System.out.println("Filtrar por email (Enter para todos): ");
                     String email = entrada.nextLine();
                     if (email.isEmpty()) email = null;
-                    List<Pedido> enviados = repositorioPedidos.listarPedidosEnviados();
-                    System.out.println("\n---- PEDIDOS ENVIADOS ----");
-                    mostrarLista(enviados, "No hay pedidos enviados.");
+                    List<Pedido> enviados = repositorioPedidos.listarPedidosEnviados(email);
+                    System.out.println("\n---- PEDIDOS ENVIADOS" + (email != null ? " DE " + email : "") + " ----");
+                    mostrarLista(enviados, "No hay pedidos enviados" + (email != null ? " para el email " + email : "") + ".");
                 }
                 case 0 -> System.out.println("Volviendo al menú principal.");
                 default -> System.out.println("Opción no válida");
             }
-        } while (opcion !=0);
+        } while (opcion != 0);
     }
 
     // =======================

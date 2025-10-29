@@ -108,11 +108,11 @@ public class PedidoControlador {
         }
     }
 
-    public List<Pedido> listarPedidosPendientes() {
-        return datos.listarPedidosPendientes(null);
+    public List<Pedido> listarPedidosPendientes(String email) {
+        return datos.listarPedidosPendientes(email);
     }
 
-    public List<Pedido> listarPedidosEnviados() {
-        return datos.listarPedidosEnviados(null);
+    public List<Pedido> listarPedidosEnviados(String email) {
+        return datos.listarPedidosEnviados(email);
     }
 }
