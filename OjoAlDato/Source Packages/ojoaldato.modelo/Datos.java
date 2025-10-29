@@ -211,15 +211,20 @@ public class Datos {
         }
 
         pedidosClientes.add(p);
+
+        pedidos.add(p);
     }
 
     public void eliminarPedido(int numPedido) {
         for (List<Pedido> listaPedidos : pedidosPorCliente.values()) {
-            for(Pedido p : listaPedidos) {
+            for (Pedido p : listaPedidos) {
                 if (p.getNumPedido() == numPedido) {
                     if (p.esCancelable(LocalDateTime.now())) {
                         listaPedidos.remove(p);
                         pedidosPorCliente.get(p.getCliente()).remove(p);
+
+                        pedidos.remove(p);
+
                         return;
                     } else {
                         throw new PedidoInvalidoException(
@@ -229,6 +234,7 @@ public class Datos {
                 }
             }
         }
+
         throw new ElementoNoEncontradoException(
                 "No se encontró ningún pedido con el número " + numPedido
         );

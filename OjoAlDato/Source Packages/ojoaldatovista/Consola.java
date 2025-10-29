@@ -3,12 +3,7 @@ package ojoaldatovista;
 import ojoaldato.controlador.ArticuloControlador;
 import ojoaldato.controlador.ClienteControlador;
 import ojoaldato.controlador.PedidoControlador;
-import ojoaldato.modelo.Articulo;
-import ojoaldato.modelo.Cliente;
-import ojoaldato.modelo.ClienteEstandar;
-import ojoaldato.modelo.ClientePremium;
-import ojoaldato.modelo.Datos;
-import ojoaldato.modelo.Pedido;
+import ojoaldato.modelo.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -38,6 +33,7 @@ public class Consola {
             System.out.println("1. Gestión de Artículos");
             System.out.println("2. Gestión de Clientes");
             System.out.println("3. Gestión de Pedidos");
+            System.out.println("4. Cargar datos de ejemplo");
             System.out.println("0. Salir");
             System.out.println("Por favor, seleccione una opción:");
             opcion = Integer.parseInt(entrada.nextLine());
@@ -46,6 +42,11 @@ public class Consola {
                 case 1 -> menuArticulos(entrada);
                 case 2 -> menuClientes(entrada);
                 case 3 -> menuPedidos(entrada);
+                case 4 -> {
+                    CargarDatos.CargarDatos(repositorioCliente, repositorioArticulo,
+                            repositorioPedidos, datos);
+                    System.out.println("Datos de ejemplo cargados correctamente.");
+                }
                 case 0 -> System.out.println("Cerrando el programa...");
                 default -> System.out.println("Opción no válida");
             }

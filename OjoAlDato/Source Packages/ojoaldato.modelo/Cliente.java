@@ -92,4 +92,19 @@ public abstract class Cliente {
 
         return sb.toString();
     }
+
+// 👇 Añade aquí los métodos equals() y hashCode()
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Cliente cliente = (Cliente) obj;
+        return email != null && email.equalsIgnoreCase(cliente.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return email != null ? email.toLowerCase().hashCode() : 0;
+    }
 }
