@@ -7,6 +7,7 @@ import ojoaldato.modelo.Articulo;
 import ojoaldato.modelo.Cliente;
 import ojoaldato.modelo.ClienteEstandar;
 import ojoaldato.modelo.ClientePremium;
+import ojoaldato.modelo.Datos;
 import ojoaldato.modelo.Pedido;
 
 import java.math.BigDecimal;
@@ -20,9 +21,11 @@ import java.util.Scanner;
 
 public class Consola {
     // Inicialización de los controladores para acceder a sus métodos
-    private static ClienteControlador repositorioCliente = new ClienteControlador();
-    private static ArticuloControlador repositorioArticulo = new ArticuloControlador();
-    private static PedidoControlador repositorioPedidos = new PedidoControlador();
+    // Ahora los controladores usan el mismo objeto "datos" compartido para evitar problemas con la información
+    private static Datos datos = new Datos();
+    private static ClienteControlador repositorioCliente = new ClienteControlador(datos);
+    private static ArticuloControlador repositorioArticulo = new ArticuloControlador(datos);
+    private static PedidoControlador repositorioPedidos = new PedidoControlador(datos);
 
     public static void main(String[] args) {
 
@@ -159,7 +162,7 @@ public class Consola {
             System.out.println("Por favor, seleccione una opción:");
             opcion = Integer.parseInt(entrada.nextLine());
 
-            switch (opcion) { // Pendiente de implementar
+            switch (opcion) {
                 case 1 -> {
                     Pedido p = pedirDatosPedido(entrada);
                     if (p != null) {
