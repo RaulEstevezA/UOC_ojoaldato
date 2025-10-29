@@ -3,7 +3,13 @@ package ojoaldatovista;
 import ojoaldato.controlador.ArticuloControlador;
 import ojoaldato.controlador.ClienteControlador;
 import ojoaldato.controlador.PedidoControlador;
-import ojoaldato.modelo.*;
+import ojoaldato.modelo.Articulo;
+import ojoaldato.modelo.CargarDatos;
+import ojoaldato.modelo.Cliente;
+import ojoaldato.modelo.ClienteEstandar;
+import ojoaldato.modelo.ClientePremium;
+import ojoaldato.modelo.Datos;
+import ojoaldato.modelo.Pedido;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -44,7 +50,7 @@ public class Consola {
                 case 3 -> menuPedidos(entrada);
                 case 4 -> {
                     CargarDatos.CargarDatos(repositorioCliente, repositorioArticulo,
-                            repositorioPedidos, datos);
+                            repositorioPedidos);
                     System.out.println("Datos de ejemplo cargados correctamente.");
                 }
                 case 0 -> System.out.println("Cerrando el programa...");

@@ -16,8 +16,7 @@ public class CargarDatos {
     public static void CargarDatos(
             ClienteControlador clienteCtl,
             ArticuloControlador articuloCtl,
-            PedidoControlador pedidoCtl,
-            Datos datos
+            PedidoControlador pedidoCtl
     ) {
 
         // === CLIENTES (mismo ctor que usa Consola: sin BigDecimal) ===
