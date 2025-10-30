@@ -54,7 +54,6 @@ public class DBUtil {
     }
     
     /**
-     * ESTO HABRÁ QUE ELIMINARLO CUANDO A TODOS OS FUNCIONE CORRECTAMENTE :)
      * Método para probar la conexión a la base de datos.
      * @param args Argumentos de línea de comandos (no se utilizan)
      */
