@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * Clase de utilidad para gestionar la conexión a la base de datos MySQL.
  * Utiliza el patrón Singleton para asegurar una única instancia de conexión.
  */
-public class DBUtil {
+public class ConexionDB {
     // Datos de conexión
     private static final String URL = "jdbc:mysql://localhost:3306/ojoaldato";
     private static final String USER = "equipo";
