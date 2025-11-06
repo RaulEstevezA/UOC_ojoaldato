@@ -1,15 +1,6 @@
-// ClienteDAO.java
-
-/**
- * Clase DAO para gestionar clientes en la base de datos.
- * Implementa directamente las operaciones CRUD sobre la tabla 'clientes'.
- */
-
 package DAO;
 
 import Util.ConexionDB;
-
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,36 +8,40 @@ import ojoaldato.modelo.Cliente;
 import ojoaldato.modelo.ClienteEstandar;
 import ojoaldato.modelo.ClientePremium;
 
-
+/**
+ * Clase DAO para gestionar clientes en la base de datos.
+ * Implementa directamente las operaciones CRUD sobre la tabla 'clientes'.
+ */
 public class ClienteDAO {
 
     // Consultas SQL
     private static final String INSERTAR_CLIENTE = """
         INSERT INTO clientes
-            (email, nombre, domicilio, nif, tipo, cuota, descuento_envio)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+            (email, nombre, domicilio, nif, tipo)
+        VALUES (?, ?, ?, ?, ?)
     """;
 
     private static final String SELECCIONAR_CLIENTE = """
-        SELECT email, nombre, domicilio, nif, tipo, cuota, descuento_envio, fecha_alta, activo
+        SELECT email, nombre, domicilio, nif, tipo, fecha_alta, activo
         FROM clientes
         WHERE email = ?
     """;
 
     private static final String SELECCIONAR_TODOS_CLIENTES = """
-        SELECT email, nombre, domicilio, nif, tipo, cuota, descuento_envio, fecha_alta, activo
+        SELECT email, nombre, domicilio, nif, tipo, fecha_alta, activo
         FROM clientes
         ORDER BY nombre ASC
     """;
 
     private static final String MODIFICAR_CLIENTE = """
         UPDATE clientes
-        SET nombre = ?, domicilio = ?, nif = ?, tipo = ?, cuota = ?, descuento_envio = ?
+        SET nombre = ?, domicilio = ?, nif = ?, tipo = ?
         WHERE email = ?
     """;
 
     private static final String ELIMINAR_CLIENTE = """
-        DELETE FROM clientes
+        UPDATE clientes
+        SET activo = FALSE
         WHERE email = ?
     """;
 
@@ -54,7 +49,9 @@ public class ClienteDAO {
         SELECT 1 FROM clientes WHERE email = ? LIMIT 1
     """;
 
-    // Métodos CRUD
+    // ================================
+    // MÉTODOS CRUD
+    // ================================
 
     // Crear Cliente
     public boolean crear(Cliente c) {
@@ -66,17 +63,11 @@ public class ClienteDAO {
             ps.setString(3, c.getDomicilio());
             ps.setString(4, c.getNif());
 
-            // tipo según clase
+            // Tipo según clase
             if (c instanceof ClientePremium) {
                 ps.setString(5, "PREMIUM");
             } else {
                 ps.setString(5, "ESTANDAR");
-            }
-            ps.setBigDecimal(6, c.getCuota());
-            if (c instanceof ClientePremium) {
-                ps.setBigDecimal(7, new BigDecimal("0.8"));
-            } else {
-                ps.setBigDecimal(7, new BigDecimal("1.0"));
             }
 
             ps.executeUpdate();
@@ -117,13 +108,7 @@ public class ClienteDAO {
             ps.setString(2, c.getDomicilio());
             ps.setString(3, c.getNif());
             ps.setString(4, (c instanceof ClientePremium) ? "PREMIUM" : "ESTANDAR");
-            ps.setBigDecimal(5, c.getCuota());
-            if (c instanceof ClientePremium) {
-                ps.setBigDecimal(6, new BigDecimal("0.8"));
-            } else {
-                ps.setBigDecimal(6, new BigDecimal("1.0"));
-            }
-            ps.setString(7, c.getEmail());
+            ps.setString(5, c.getEmail());
 
             int filas = ps.executeUpdate();
             return filas > 0;
@@ -134,7 +119,7 @@ public class ClienteDAO {
         }
     }
 
-    // Eliminar Cliente
+    // "Eliminar" cliente (borrado lógico)
     public boolean eliminar(String email) {
         try (Connection con = ConexionDB.getConnection();
              PreparedStatement ps = con.prepareStatement(ELIMINAR_CLIENTE)) {
@@ -144,7 +129,7 @@ public class ClienteDAO {
             return filas > 0;
 
         } catch (SQLException e) {
-            System.err.println("Error al eliminar cliente: " + e.getMessage());
+            System.err.println("Error al desactivar cliente: " + e.getMessage());
             return false;
         }
     }
@@ -167,7 +152,7 @@ public class ClienteDAO {
         return lista;
     }
 
-    // Existe el cliente?
+    // Comprobar si existe un cliente
     public boolean existe(String email) {
         try (Connection con = ConexionDB.getConnection();
              PreparedStatement ps = con.prepareStatement(EXISTE_CLIENTE)) {
@@ -183,21 +168,21 @@ public class ClienteDAO {
         }
     }
 
-    //  Metodo auxiliar
+    // ================================
+    // MÉTODO AUXILIAR
+    // ================================
     private Cliente mapearCliente(ResultSet rs) throws SQLException {
         String email = rs.getString("email");
         String nombre = rs.getString("nombre");
         String domicilio = rs.getString("domicilio");
         String nif = rs.getString("nif");
         String tipo = rs.getString("tipo");
-        var cuota = rs.getBigDecimal("cuota");
-        var descuento = rs.getBigDecimal("descuento_envio");
 
         Cliente c;
         if ("PREMIUM".equalsIgnoreCase(tipo)) {
-            c = new ClientePremium(email, nombre, domicilio, nif, cuota, descuento);
+            c = new ClientePremium(nombre, domicilio, nif, email);
         } else {
-            c = new ClienteEstandar(email, nombre, domicilio, nif);
+            c = new ClienteEstandar(nombre, domicilio, nif, email);
         }
 
         return c;
