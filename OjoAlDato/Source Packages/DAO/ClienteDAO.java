@@ -168,6 +168,44 @@ public class ClienteDAO {
         }
     }
 
+    // Listar clientes estándar
+    public List<Cliente> obtenerEstandar() {
+        List<Cliente> lista = new ArrayList<>();
+        String sql = "SELECT * FROM clientes WHERE tipo = 'ESTANDAR' ORDER BY nombre ASC";
+
+        try (Connection con = ConexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapearCliente(rs));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al listar clientes estándar: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    // Listar clientes premium
+    public List<Cliente> obtenerPremium() {
+        List<Cliente> lista = new ArrayList<>();
+        String sql = "SELECT * FROM clientes WHERE tipo = 'PREMIUM' ORDER BY nombre ASC";
+
+        try (Connection con = ConexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapearCliente(rs));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al listar clientes premium: " + e.getMessage());
+        }
+        return lista;
+    }
+
     // ================================
     // MÉTODO AUXILIAR
     // ================================
