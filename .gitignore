@@ -67,7 +67,7 @@ surefire-reports/
 *.sqlite
 *.properties
 *.env
-
+Resources/db.properties
 # ===============================
 # OS files
 # ===============================
