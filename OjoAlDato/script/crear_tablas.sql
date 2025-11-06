@@ -2,6 +2,9 @@
 -- Script de creación de la base de datos OjoAlDato
 -- =============================================
 
+-- Borrar tabla si existe
+DROP DATABASE IF EXISTS ojoaldato;
+
 -- Crear la base de datos (si no existe)
 CREATE DATABASE IF NOT EXISTS ojoaldato 
 DEFAULT CHARACTER SET utf8mb4 
@@ -22,10 +25,8 @@ CREATE TABLE clientes (
     domicilio VARCHAR(200) NOT NULL,
     nif VARCHAR(20) NOT NULL UNIQUE,
     tipo ENUM('ESTANDAR', 'PREMIUM') NOT NULL,
-    cuota DECIMAL(10,2) DEFAULT 0.00,
-    descuento_envio DECIMAL(5,2) DEFAULT 0.00,
     fecha_alta DATETIME DEFAULT CURRENT_TIMESTAMP,
-    activo BOOLEAN DEFAULT TRUE,
+    activo BOOLEAN DEFAULT TRUE,∫
     CONSTRAINT chk_email CHECK (email LIKE '%@%.%')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -44,6 +45,7 @@ CREATE TABLE articulos (
     fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT chk_pvp_positivo CHECK (pvp >= 0),
     CONSTRAINT chk_gastos_envio_positivos CHECK (gastos_envio >= 0)
+    CONSTRAINT chk_stock_no_negativo CHECK (stock >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- =============================================
