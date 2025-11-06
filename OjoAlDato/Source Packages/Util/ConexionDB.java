@@ -33,7 +33,7 @@ public class ConexionDB {
 //            throw new RuntimeException("No se pudo cargar el driver de MySQL", e);
 //        }
 //    }
-    
+
     /**
      * Obtiene una conexión a la base de datos.
      * @return Objeto Connection para interactuar con la base de datos

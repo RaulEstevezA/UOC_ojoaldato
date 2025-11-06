@@ -22,7 +22,7 @@ public interface IDAO<T, K> {
      * @return La entidad encontrada o null si no existe
      */
     T buscar(K id);
-    
+
     /**
      * Actualiza una entidad existente
      * @param entidad La entidad con los datos actualizados
