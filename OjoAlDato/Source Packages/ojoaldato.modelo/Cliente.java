@@ -93,7 +93,6 @@ public abstract class Cliente {
         return sb.toString();
     }
 
-// 👇 Añade aquí los métodos equals() y hashCode()
 
     @Override
     public boolean equals(Object obj) {

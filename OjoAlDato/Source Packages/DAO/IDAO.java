@@ -18,11 +18,11 @@ public interface IDAO<T, K> {
     
     /**
      * Busca una entidad por su email
-     * @param email El email a buscar
+     * @param id El email a buscar
      * @return La entidad encontrada o null si no existe
      */
-    T buscarPorEmail(String email);
-    
+    T buscar(K id);
+
     /**
      * Actualiza una entidad existente
      * @param entidad La entidad con los datos actualizados
