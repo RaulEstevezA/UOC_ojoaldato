@@ -26,7 +26,7 @@ CREATE TABLE clientes (
     nif VARCHAR(20) NOT NULL UNIQUE,
     tipo ENUM('ESTANDAR', 'PREMIUM') NOT NULL,
     fecha_alta DATETIME DEFAULT CURRENT_TIMESTAMP,
-    activo BOOLEAN DEFAULT TRUE,∫
+    activo BOOLEAN DEFAULT TRUE,
     CONSTRAINT chk_email CHECK (email LIKE '%@%.%')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -44,7 +44,7 @@ CREATE TABLE articulos (
     activo BOOLEAN DEFAULT TRUE,
     fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT chk_pvp_positivo CHECK (pvp >= 0),
-    CONSTRAINT chk_gastos_envio_positivos CHECK (gastos_envio >= 0)
+    CONSTRAINT chk_gastos_envio_positivos CHECK (gastos_envio >= 0),
     CONSTRAINT chk_stock_no_negativo CHECK (stock >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -166,17 +166,28 @@ ORDER BY
 -- =============================================
 -- Datos de prueba (opcional)
 
--- Clientes de prueba
-INSERT INTO clientes (nombre, domicilio, nif, email, tipo, descuento_envio) VALUES
-('Cliente Estándar', 'Calle Falsa 123', '12345678A', 'cliente1@ejemplo.com', 'ESTANDAR', 0),
-('Cliente Premium', 'Avenida Real 456', '87654321B', 'cliente2@ejemplo.com', 'PREMIUM', 20);
+-- ==========================================
+-- CLIENTES DE PRUEBA
+-- ==========================================
+INSERT INTO clientes (email, nombre, domicilio, nif, tipo)
+VALUES
+('cliente1@ejemplo.com', 'Cliente Estándar', 'Calle Falsa 123', '12345678A', 'ESTANDAR'),
+('cliente2@ejemplo.com', 'Cliente Premium', 'Avenida Real 456', '87654321B', 'PREMIUM');
 
--- Artículos de prueba
-INSERT INTO articulos (codigo, descripcion, pvp, gastos_envio, tiempo_preparacion, stock) VALUES
+-- ==========================================
+-- ARTÍCULOS DE PRUEBA
+-- ==========================================
+INSERT INTO articulos (codigo, descripcion, pvp, gastos_envio, tiempo_preparacion, stock)
+VALUES
 ('ART001', 'Artículo de prueba 1', 19.99, 4.99, 24, 100),
 ('ART002', 'Artículo de prueba 2', 49.99, 7.99, 48, 50);
 
--- Crear algunos pedidos de prueba
-CALL crear_pedido('cliente1@ejemplo.com', 'ART001', 2);
-CALL crear_pedido('cliente2@ejemplo.com', 'ART002', 1);
-*/
+-- ==========================================
+-- PEDIDOS DE PRUEBA
+-- ==========================================
+INSERT INTO pedidos (email_cliente, codigo_articulo, cantidad, fecha_hora, precio_total, gastos_envio)
+VALUES
+('cliente1@ejemplo.com', 'ART001', 2, NOW(), 19.99 * 2, 4.99),
+('cliente2@ejemplo.com', 'ART002', 1, NOW(), 49.99, 7.99);
+
+
