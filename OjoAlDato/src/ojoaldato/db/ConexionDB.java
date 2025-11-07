@@ -1,4 +1,4 @@
-package Util;
+package ojoaldato.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

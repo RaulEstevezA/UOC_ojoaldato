@@ -1,6 +1,6 @@
-package DAO;
+package ojoaldato.DAO;
 
-import Util.ConexionDB;
+import ojoaldato.db.ConexionDB;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import ojoaldato.modelo.ClienteEstandar;
 import ojoaldato.modelo.ClientePremium;
 
 /**
- * Implementación del patrón DAO para la entidad Cliente.
+ * Implementación del patrón ojoaldato.DAO para la entidad Cliente.
  * Aplica el perfil genérico definido en la interfaz IDAO<Cliente, String>.
  *
  * Gestiona las operaciones CRUD sobre la tabla 'clientes' en MySQL.
@@ -143,6 +143,64 @@ public class ClienteDAO implements IDAO<Cliente, String> {
         } catch (SQLException e) {
             System.err.println("Error al listar clientes: " + e.getMessage());
         }
+        return lista;
+    }
+
+
+    // Métodos específicos de ClienteDAO
+    /**
+     * Obtiene todos los clientes de tipo ESTANDAR.
+     * @return Lista de clientes estándar.
+     */
+    public List<Cliente> obtenerEstandar() {
+        List<Cliente> lista = new ArrayList<>();
+        String sql = """
+        SELECT email, nombre, domicilio, nif, tipo, cuota, descuento_envio
+        FROM clientes
+        WHERE tipo = 'ESTANDAR'
+        ORDER BY nombre ASC
+    """;
+
+        try (Connection con = ConexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapearCliente(rs));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al listar clientes estándar: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    /**
+     * Obtiene todos los clientes de tipo PREMIUM.
+     * @return Lista de clientes premium.
+     */
+    public List<Cliente> obtenerPremium() {
+        List<Cliente> lista = new ArrayList<>();
+        String sql = """
+        SELECT email, nombre, domicilio, nif, tipo, cuota, descuento_envio
+        FROM clientes
+        WHERE tipo = 'PREMIUM'
+        ORDER BY nombre ASC
+    """;
+
+        try (Connection con = ConexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapearCliente(rs));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al listar clientes premium: " + e.getMessage());
+        }
+
         return lista;
     }
 

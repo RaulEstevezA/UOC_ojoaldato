@@ -10,7 +10,7 @@ import ojoaldato.modelo.Datos;
 import ojoaldato.modelo.Cliente;
 
 /**
- * Clase PedidoControlador que actúa como intermediaria entre la vista
+ * Clase PedidoControlador que actúa como intermediaria entre la ojoaldato.vista
  * y la capa de datos para gestionar las operaciones relacionadas con los pedidos.
  */
 

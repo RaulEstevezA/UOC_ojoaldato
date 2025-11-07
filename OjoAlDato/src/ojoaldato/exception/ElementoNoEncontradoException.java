@@ -2,7 +2,7 @@ package ojoaldato.exception;
 
 /**
  * Excepcion personalizada que se lanza cuando un elemento no se encuentra en
- * las estructuras de datos del modelo.
+ * las estructuras de datos del ojoaldato.modelo.
  */
 public class ElementoNoEncontradoException extends BaseException {
     /**

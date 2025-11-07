@@ -1,4 +1,4 @@
-package ojoaldatovista;
+package ojoaldato.vista;
 
 import ojoaldato.controlador.ArticuloControlador;
 import ojoaldato.controlador.ClienteControlador;

@@ -1,10 +1,10 @@
-package DAO;
+package ojoaldato.DAO;
 
 import java.util.List;
 
 /**
  * Interfaz genérica para operaciones CRUD básicas
- * @param <T> Tipo de la entidad con la que trabaja el DAO
+ * @param <T> Tipo de la entidad con la que trabaja el ojoaldato.DAO
  * @param <K> Es como una variable que representa "el tipo de dato que usaremos como ID
  */
 public interface IDAO<T, K> {
