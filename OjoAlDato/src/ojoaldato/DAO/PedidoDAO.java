@@ -9,7 +9,7 @@ import java.util.List;
 
 public abstract class PedidoDAO implements IDAO<Pedido, Integer> {
 
-    //Creación de un nuevo pedido en la base de datos
+    // Creación de un nuevo pedido en la base de datos
     @Override
     public boolean crear(Pedido pedido) {
         String sql = " INSERT INTO pedidos (num_pedido, email_cliente, codigo_articulo, cantidad, fecha_hora, precio_total, gastos_envio) " + "VALUES (?, ?, ?, ?, ?, ?, ?)";
