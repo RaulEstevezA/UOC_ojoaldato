@@ -1,9 +1,10 @@
 package ojoaldato.DAO;
 
-import Util.ConexionDB;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import ojoaldato.db.ConexionDB;
 import ojoaldato.modelo.Cliente;
 import ojoaldato.modelo.ClienteEstandar;
 import ojoaldato.modelo.ClientePremium;
