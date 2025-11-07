@@ -69,6 +69,8 @@ CREATE TABLE pedidos (
 -- Función: obtener_factor_descuento_envio
 -- Devuelve el factor de descuento del envío (ej. 0.80 para 20%)
 -- =============================================
+DELIMITER //
+
 CREATE FUNCTION obtener_factor_descuento_envio(p_email_cliente VARCHAR(100))
 RETURNS DECIMAL(5,2)
 READS SQL DATA
@@ -77,7 +79,7 @@ BEGIN
 
     SELECT
         CASE
-            WHEN tipo = 'PREMIUM' THEN 1 - (descuento_envio / 100)
+            WHEN tipo = 'PREMIUM' THEN 0.80  -- descuento fijo 20%
             ELSE 1.00
         END
     INTO v_descuento
@@ -89,7 +91,9 @@ BEGIN
     END IF;
 
     RETURN v_descuento;
-END;
+END //
+
+DELIMITER ;
 
 -- =============================================
 -- Procedimiento: crear_pedido
@@ -106,37 +110,37 @@ BEGIN
     DECLARE v_gastos_envio_base DECIMAL(10,2);
     DECLARE v_factor_descuento DECIMAL(5,2);
     DECLARE v_gastos_final DECIMAL(5,2);
-    
+
     -- Verificar si el cliente existe y está activo
     IF NOT EXISTS (SELECT 1 FROM clientes WHERE email = p_email_cliente AND activo = TRUE) THEN
-        SIGNAL SQLSTATE '45000' 
+        SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Cliente no encontrado o inactivo';
     END IF;
-    
+
     -- Verificar si el artículo existe, está activo y hay stock suficiente
     SELECT pvp, gastos_envio, stock >= p_cantidad
     INTO v_precio_unitario, v_gastos_envio_base, @stock_suficiente
-    FROM articulos 
+    FROM articulos
     WHERE codigo = p_codigo_articulo AND activo = TRUE;
-    
+
     IF v_precio_unitario IS NULL THEN
-        SIGNAL SQLSTATE '45000' 
+        SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Artículo no encontrado o inactivo';
     END IF;
-    
+
     IF @stock_suficiente = 0 THEN
-        SIGNAL SQLSTATE '45000' 
+        SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Stock insuficiente';
     END IF;
-    
+
     SET v_factor_descuento = obtener_factor_descuento_envio(p_email_cliente);
     SET v_gastos_final = (v_gastos_envio_base * p_cantidad) * v_factor_descuento;
 
     -- Insertar el pedido
     INSERT INTO pedidos (
-        email_cliente, 
-        codigo_articulo, 
-        cantidad, 
+        email_cliente,
+        codigo_articulo,
+        cantidad,
         fecha_hora,
         precio_total,
         gastos_envio
@@ -148,12 +152,12 @@ BEGIN
         v_precio_unitario * p_cantidad,
         v_gastos_final
     );
-    
+
     -- Actualizar el stock
-    UPDATE articulos 
-    SET stock = stock - p_cantidad 
+    UPDATE articulos
+    SET stock = stock - p_cantidad
     WHERE codigo = p_codigo_articulo;
-    
+
     SELECT LAST_INSERT_ID() AS num_pedido;
 END;
 
@@ -162,7 +166,7 @@ END;
 -- Muestra los pedidos pendientes de envío
 -- =============================================
 CREATE VIEW vista_pedidos_pendientes AS
-SELECT 
+SELECT
     p.num_pedido,
     c.nombre AS nombre_cliente,
     c.email AS email_cliente,
@@ -171,11 +175,12 @@ SELECT
     p.precio_total,
     p.gastos_envio,
     p.fecha_hora
-FROM 
+FROM
     pedidos p
     JOIN clientes c ON p.email_cliente = c.email
     JOIN articulos a ON p.codigo_articulo = a.codigo
-WHERE 
+WHERE
     p.enviado = FALSE
-ORDER BY 
+ORDER BY
     p.fecha_hora ASC;
+
