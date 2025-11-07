@@ -1,4 +1,4 @@
-package ojoaldatovista;
+package ojoaldato.vista;
 
 import javafx.application.Application;
 

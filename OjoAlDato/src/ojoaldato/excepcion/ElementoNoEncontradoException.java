@@ -1,4 +1,4 @@
-package ojoaldato.exception;
+package ojoaldato.excepcion;
 
 /**
  * Excepcion personalizada que se lanza cuando un elemento no se encuentra en

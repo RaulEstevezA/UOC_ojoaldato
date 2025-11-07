@@ -1,6 +1,6 @@
 package Test;
 
-import ojoaldato.exception.ElementoDuplicadoException;
+import ojoaldato.excepcion.ElementoDuplicadoException;
 import ojoaldato.modelo.Cliente;
 import ojoaldato.modelo.ClienteEstandar;
 import ojoaldato.modelo.Datos;
