@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * Interfaz genérica para operaciones CRUD básicas
- * @param <T> Tipo de la entidad con la que trabaja el ojoaldato.DAO
+ * @param <T> Tipo de la entidad con la que trabaja el DAO
  * @param <K> Es como una variable que representa "el tipo de dato que usaremos como ID
  */
 public interface IDAO<T, K> {
@@ -22,7 +22,7 @@ public interface IDAO<T, K> {
      * @return La entidad encontrada o null si no existe
      */
     T buscar(K id);
-    
+
     /**
      * Actualiza una entidad existente
      * @param entidad La entidad con los datos actualizados

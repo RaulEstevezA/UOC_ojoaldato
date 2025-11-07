@@ -1,7 +1,7 @@
 package ojoaldato.controlador;
 
-import ojoaldato.exception.ElementoNoEncontradoException;
-import ojoaldato.exception.PedidoInvalidoException;
+import ojoaldato.excepcion.ElementoNoEncontradoException;
+import ojoaldato.excepcion.PedidoInvalidoException;
 import ojoaldato.modelo.Pedido;
 
 import java.util.Collections;

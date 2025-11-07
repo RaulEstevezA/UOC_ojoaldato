@@ -1,8 +1,14 @@
 package ojoaldato.db;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.stream.Collectors;
 
 /**
  * Clase de utilidad para gestionar la conexión a la base de datos MySQL.
@@ -11,46 +17,58 @@ import java.sql.SQLException;
 public class ConexionDB {
     // Se cargan variables de entorno en vez de hardcodear los datos necesarios para la conexión en la BBDD
     private static final ConfigLoader CONFIG = ConfigLoader.getInstance();
+
     private static final String URL = CONFIG.getProperty("db.url");
     private static final String USER = CONFIG.getProperty("db.user");
     private static final String PASSWORD = CONFIG.getProperty("db.password");
     private static final String DRIVER = CONFIG.getProperty("db.driver");
 
-//    // Datos de conexión
-//    private static final String URL = "jdbc:mysql://localhost:3306/ojoaldato";
-//    private static final String USER = "equipo";
-//    private static final String PASSWORD = "Equipo1234.";
-//
-    // Bloque estático para registrar el driver
-//    static {
-//        try {
-//            // Cargar el driver de MySQL
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            System.out.println("Driver de MySQL cargado correctamente");
-//        } catch (ClassNotFoundException e) {
-//            System.err.println("Error al cargar el driver de MySQL");
-//            e.printStackTrace();
-//            throw new RuntimeException("No se pudo cargar el driver de MySQL", e);
-//        }
-//    }
-    
+    // Ruta al script de creación de tablas
+    private static final String SCHEMA_PATH = CONFIG.getProperty("db.schema");
+    private static final String DATA = CONFIG.getProperty("db.data");
+
+    // Instancia Singleton de la conexión
+    private static Connection connection = null;
+
+    static {
+        try {
+            // Cargar el driver de MySQL
+            Class.forName(DRIVER);
+            System.out.println("Driver de MySQL cargado correctamente");
+
+            // Ejecuta el script al cargar la clase y el driver
+            executeSqlScript(SCHEMA_PATH, "Estructura de OjoAlDato");
+            executeSqlScript(DATA, "Datos iniciales.");
+
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error al cargar el driver de MySQL");
+            e.printStackTrace();
+            throw new RuntimeException("No se pudo cargar el driver de MySQL", e);
+        } catch (SQLException e) {
+            System.err.println("Error SQL al inicializar la base de datos.");
+            e.printStackTrace();
+            throw new RuntimeException("Fallo en la ejecución del script SQL.", e);
+        } catch (IOException e) {
+            System.err.println("Error de lectura al cargar el script SQL.");
+            e.printStackTrace();
+            throw new RuntimeException("Fallo al leer el archivo de script.", e);
+        }
+    }
+
+    // Constructor privado para el patrón Singleton
+    private ConexionDB() {}
+
     /**
      * Obtiene una conexión a la base de datos.
      * @return Objeto Connection para interactuar con la base de datos
      * @throws SQLException Si ocurre un error al establecer la conexión
      */
     public static Connection getConnection() throws SQLException {
-        // Se añade el bloque estático al propio método getConnection() ya que ambos son estáticos
-        try {
-            // Cargar el driver de MySQL
-            Class.forName(DRIVER);
-            System.out.println("Driver de MySQL cargado correctamente");
-        } catch (ClassNotFoundException e) {
-            System.err.println("Error al cargar el driver de MySQL");
-            e.printStackTrace();
-            throw new RuntimeException("No se pudo cargar el driver de MySQL", e);
+        if (connection == null || connection.isClosed()) {
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Conexión establecida correctamente.");
         }
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        return connection;
     }
     
     /**
@@ -68,28 +86,39 @@ public class ConexionDB {
             }
         }
     }
-    
+
     /**
-     * ESTO HABRÁ QUE ELIMINARLO CUANDO A TODOS OS FUNCIONE CORRECTAMENTE :)
-     * Método para probar la conexión a la base de datos.
-     * @param args Argumentos de línea de comandos (no se utilizan)
+     * Lee y ejecuta el script SQL para crear las tablas.
+     *
+     * @throws SQLException
+     * @throws IOException
      */
-    public static void main(String[] args) {
-        Connection conn = null;
-        try {
-            System.out.println("=== Prueba de conexión a MySQL ===");
-            conn = getConnection();
-            System.out.println("¡Conexión exitosa a la base de datos!");
-            System.out.println("URL: " + URL);
-            System.out.println("Usuario: " + USER);
-        } catch (SQLException e) {
-            System.err.println("Error al conectar a la base de datos:");
-            System.err.println("Mensaje: " + e.getMessage());
-            System.err.println("Código de error: " + e.getErrorCode());
-            System.err.println("Estado SQL: " + e.getSQLState());
-            e.printStackTrace();
-        } finally {
-            close(conn);
+    private static void executeSqlScript(String scriptPath, String name) throws SQLException, IOException{
+        System.out.println("Verificando la estructura de datos: " + name);
+
+        // El script se lee a través del ClassLoader
+        try (InputStream is = ConexionDB.class.getClassLoader().getResourceAsStream(scriptPath);
+            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            Statement stmt = conn.createStatement()) {
+            if (is == null) {
+                System.err.println("Advertencia: No se encontró el script de "  + name + " en la ruta: " + scriptPath);
+                return;
+            }
+
+            // Lectura del script
+            String sqlScript = new BufferedReader(new InputStreamReader(is))
+                    .lines().collect(Collectors.joining("\n"));
+
+            sqlScript = sqlScript.replaceAll("/\\*(./\\n)*?\\*/", "")
+                    .replaceAll("--.*", "")
+                    .replaceAll("\r\n|\r|\n", " ")
+                    .replaceAll("\\s{2,}", " ")
+                    .trim();
+
+           stmt.execute(sqlScript);
+
+            System.out.println("Script de inicialización ejecutado con éxito.");
         }
+
     }
 }

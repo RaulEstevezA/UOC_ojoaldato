@@ -1,4 +1,4 @@
-package ojoaldato.exception;
+package ojoaldato.excepcion;
 
 /**
  * Excepción personalizada que se lanza cuando se intenta añadir un elemento

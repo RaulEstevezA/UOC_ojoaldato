@@ -1,4 +1,4 @@
-package ojoaldato.exception;
+package ojoaldato.excepcion;
 
 public class PedidoInvalidoException extends BaseException {
     public PedidoInvalidoException(String message) {
