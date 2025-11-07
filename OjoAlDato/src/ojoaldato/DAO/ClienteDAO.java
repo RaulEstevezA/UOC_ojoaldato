@@ -19,37 +19,37 @@ public class ClienteDAO implements IDAO<Cliente, String> {
 
     // Consultas SQL
     private static final String INSERTAR_CLIENTE = """
-        INSERT INTO clientes
-            (email, nombre, domicilio, nif, tipo)
-        VALUES (?, ?, ?, ?, ?)
-    """;
+                INSERT INTO clientes
+                    (email, nombre, domicilio, nif, tipo)
+                VALUES (?, ?, ?, ?, ?)
+            """;
 
     private static final String SELECCIONAR_CLIENTE = """
-        SELECT email, nombre, domicilio, nif, tipo, fecha_alta, activo
-        FROM clientes
-        WHERE email = ?
-    """;
+                SELECT email, nombre, domicilio, nif, tipo, fecha_alta, activo
+                FROM clientes
+                WHERE email = ?
+            """;
 
     private static final String SELECCIONAR_TODOS_CLIENTES = """
-        SELECT email, nombre, domicilio, nif, tipo, fecha_alta, activo
-        FROM clientes
-        ORDER BY nombre ASC
-    """;
+                SELECT email, nombre, domicilio, nif, tipo, fecha_alta, activo
+                FROM clientes
+                ORDER BY nombre ASC
+            """;
 
     private static final String MODIFICAR_CLIENTE = """
-        UPDATE clientes
-        SET nombre = ?, domicilio = ?, nif = ?, tipo = ?
-        WHERE email = ?
-    """;
+                UPDATE clientes
+                SET nombre = ?, domicilio = ?, nif = ?, tipo = ?
+                WHERE email = ?
+            """;
 
     private static final String ELIMINAR_CLIENTE = """
-        DELETE FROM clientes
-        WHERE email = ?
-    """;
+                DELETE FROM clientes
+                WHERE email = ?
+            """;
 
     private static final String EXISTE_CLIENTE = """
-        SELECT 1 FROM clientes WHERE email = ? LIMIT 1
-    """;
+                SELECT 1 FROM clientes WHERE email = ? LIMIT 1
+            """;
 
 
     // Métodos CRUD (IDAO)
@@ -148,18 +148,20 @@ public class ClienteDAO implements IDAO<Cliente, String> {
 
 
     // Métodos específicos de ClienteDAO
+
     /**
      * Obtiene todos los clientes de tipo ESTANDAR.
+     *
      * @return Lista de clientes estándar.
      */
     public List<Cliente> obtenerEstandar() {
         List<Cliente> lista = new ArrayList<>();
         String sql = """
-        SELECT email, nombre, domicilio, nif, tipo, cuota, descuento_envio
-        FROM clientes
-        WHERE tipo = 'ESTANDAR'
-        ORDER BY nombre ASC
-    """;
+                    SELECT email, nombre, domicilio, nif, tipo
+                    FROM clientes
+                    WHERE tipo = 'ESTANDAR'
+                    ORDER BY nombre ASC
+                """;
 
         try (Connection con = ConexionDB.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
@@ -178,16 +180,17 @@ public class ClienteDAO implements IDAO<Cliente, String> {
 
     /**
      * Obtiene todos los clientes de tipo PREMIUM.
+     *
      * @return Lista de clientes premium.
      */
     public List<Cliente> obtenerPremium() {
         List<Cliente> lista = new ArrayList<>();
         String sql = """
-        SELECT email, nombre, domicilio, nif, tipo, cuota, descuento_envio
-        FROM clientes
-        WHERE tipo = 'PREMIUM'
-        ORDER BY nombre ASC
-    """;
+                    SELECT email, nombre, domicilio, nif, tipo
+                    FROM clientes
+                    WHERE tipo = 'PREMIUM'
+                    ORDER BY nombre ASC
+                """;
 
         try (Connection con = ConexionDB.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
@@ -228,13 +231,28 @@ public class ClienteDAO implements IDAO<Cliente, String> {
         String nif = rs.getString("nif");
         String tipo = rs.getString("tipo");
 
-        Cliente c;
+        Cliente cliente;
+
         if ("PREMIUM".equalsIgnoreCase(tipo)) {
-            c = new ClientePremium(nombre, domicilio, nif, email, BigDecimal.valueOf(30.00), BigDecimal.valueOf(0.8));
+            // Premium: cuota 30 €, descuento 20 %
+            cliente = new ClientePremium(
+                    nombre,
+                    domicilio,
+                    nif,
+                    email,
+                    BigDecimal.valueOf(30.00),
+                    BigDecimal.valueOf(0.8)
+            );
         } else {
-            c = new ClienteEstandar(nombre, domicilio, nif, email);
+            // Estándar: sin descuento
+            cliente = new ClienteEstandar(
+                    nombre,
+                    domicilio,
+                    nif,
+                    email
+            );
         }
 
-        return c;
+        return cliente;
     }
 }
