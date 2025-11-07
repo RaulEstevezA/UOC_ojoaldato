@@ -2,7 +2,6 @@ package ojoaldato.modelo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.function.BiFunction;
 
 /**
  * Subclase de Cliente que representa un cliente premium.

@@ -1,8 +1,8 @@
 package ojoaldato.modelo;
 
-import ojoaldato.exception.ElementoNoEncontradoException;
-import ojoaldato.exception.PedidoInvalidoException;
-import ojoaldato.exception.ElementoDuplicadoException;
+import ojoaldato.excepcion.ElementoNoEncontradoException;
+import ojoaldato.excepcion.PedidoInvalidoException;
+import ojoaldato.excepcion.ElementoDuplicadoException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
