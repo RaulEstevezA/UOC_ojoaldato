@@ -1,4 +1,4 @@
-package ojoaldato.exception;
+package ojoaldato.excepcion;
 
 public abstract class BaseException extends RuntimeException {
     public BaseException(String message) {

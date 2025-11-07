@@ -1,6 +1,9 @@
 package ojoaldato.DAO;
+<<<<<<<< HEAD:OjoAlDato/Source Packages/ojoaldato/DAO/IDAO.java
 
 import ojoaldato.modelo.Pedido;
+========
+>>>>>>>> develop:OjoAlDato/src/ojoaldato/DAO/IDAO.java
 
 import java.util.List;
 
@@ -24,7 +27,7 @@ public interface IDAO<T, K> {
      * @return La entidad encontrada o null si no existe
      */
     T buscar(K id);
-    
+
     /**
      * Actualiza una entidad existente
      * @param entidad La entidad con los datos actualizados
