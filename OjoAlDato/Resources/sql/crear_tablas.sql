@@ -1,16 +1,14 @@
 -- =============================================
 -- Script de creación de la base de datos OjoAlDato
 -- =============================================
+DROP DATABASE IF EXISTS ojoaldato;
 
 -- Crear la base de datos (si no existe)
 CREATE DATABASE IF NOT EXISTS ojoaldato 
 DEFAULT CHARACTER SET utf8mb4 
-COLLATE utf8mb4_spanish2_ci;
+COLLATE utf8mb4_0900_ai_ci;
 
 USE ojoaldato;
-
--- Establecer la collation por defecto para la sesión
-SET NAMES utf8mb4 COLLATE utf8mb4_spanish2_ci;
 
 -- =============================================
 -- Tabla: clientes
@@ -67,11 +65,37 @@ CREATE TABLE pedidos (
     INDEX idx_cliente (email_cliente)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+-- =============================================
+-- Función: obtener_factor_descuento_envio
+-- Devuelve el factor de descuento del envío (ej. 0.80 para 20%)
+-- =============================================
+CREATE FUNCTION obtener_factor_descuento_envio(p_email_cliente VARCHAR(100))
+RETURNS DECIMAL(5,2)
+READS SQL DATA
+BEGIN
+    DECLARE v_descuento DECIMAL(5,2);
+
+    SELECT
+        CASE
+            WHEN tipo = 'PREMIUM' THEN 1 - (descuento_envio / 100)
+            ELSE 1.00
+        END
+    INTO v_descuento
+    FROM clientes
+    WHERE email = p_email_cliente;
+
+    IF v_descuento IS NULL THEN
+        RETURN 1.00;
+    END IF;
+
+    RETURN v_descuento;
+END;
+
 -- =============================================
 -- Procedimiento: crear_pedido
 -- Crea un nuevo pedido con validaciones
 -- =============================================
-DELIMITER //
 CREATE PROCEDURE crear_pedido(
     IN p_email_cliente VARCHAR(100),
     IN p_codigo_articulo VARCHAR(20),
@@ -79,9 +103,9 @@ CREATE PROCEDURE crear_pedido(
 )
 BEGIN
     DECLARE v_precio_unitario DECIMAL(10,2);
-    DECLARE v_gastos_envio DECIMAL(10,2);
-    DECLARE v_tipo_cliente ENUM('ESTANDAR', 'PREMIUM');
-    DECLARE v_descuento DECIMAL(5,2);
+    DECLARE v_gastos_envio_base DECIMAL(10,2);
+    DECLARE v_factor_descuento DECIMAL(5,2);
+    DECLARE v_gastos_final DECIMAL(5,2);
     
     -- Verificar si el cliente existe y está activo
     IF NOT EXISTS (SELECT 1 FROM clientes WHERE email = p_email_cliente AND activo = TRUE) THEN
@@ -91,7 +115,7 @@ BEGIN
     
     -- Verificar si el artículo existe, está activo y hay stock suficiente
     SELECT pvp, gastos_envio, stock >= p_cantidad
-    INTO v_precio_unitario, v_gastos_envio, @stock_suficiente
+    INTO v_precio_unitario, v_gastos_envio_base, @stock_suficiente
     FROM articulos 
     WHERE codigo = p_codigo_articulo AND activo = TRUE;
     
@@ -105,13 +129,9 @@ BEGIN
         SET MESSAGE_TEXT = 'Stock insuficiente';
     END IF;
     
-    -- Obtener tipo de cliente y descuento
-    SELECT tipo, 
-           CASE WHEN tipo = 'PREMIUM' THEN descuento_envio ELSE 0 END
-    INTO v_tipo_cliente, v_descuento
-    FROM clientes 
-    WHERE email = p_email_cliente;
-    
+    SET v_factor_descuento = obtener_factor_descuento_envio(p_email_cliente);
+    SET v_gastos_final = (v_gastos_envio_base * p_cantidad) * v_factor_descuento;
+
     -- Insertar el pedido
     INSERT INTO pedidos (
         email_cliente, 
@@ -126,7 +146,7 @@ BEGIN
         p_cantidad,
         NOW(),
         v_precio_unitario * p_cantidad,
-        v_gastos_envio * (1 - v_descuento/100) * p_cantidad
+        v_gastos_final
     );
     
     -- Actualizar el stock
@@ -135,8 +155,7 @@ BEGIN
     WHERE codigo = p_codigo_articulo;
     
     SELECT LAST_INSERT_ID() AS num_pedido;
-END //
-DELIMITER ;
+END;
 
 -- =============================================
 -- Vista: vista_pedidos_pendientes
@@ -160,21 +179,3 @@ WHERE
     p.enviado = FALSE
 ORDER BY 
     p.fecha_hora ASC;
-
--- =============================================
--- Datos de prueba (opcional)
-
--- Clientes de prueba
-INSERT INTO clientes (nombre, domicilio, nif, email, tipo, descuento_envio) VALUES
-('Cliente Estándar', 'Calle Falsa 123', '12345678A', 'cliente1@ejemplo.com', 'ESTANDAR', 0),
-('Cliente Premium', 'Avenida Real 456', '87654321B', 'cliente2@ejemplo.com', 'PREMIUM', 20);
-
--- Artículos de prueba
-INSERT INTO articulos (codigo, descripcion, pvp, gastos_envio, tiempo_preparacion, stock) VALUES
-('ART001', 'Artículo de prueba 1', 19.99, 4.99, 24, 100),
-('ART002', 'Artículo de prueba 2', 49.99, 7.99, 48, 50);
-
--- Crear algunos pedidos de prueba
-CALL crear_pedido('cliente1@ejemplo.com', 'ART001', 2);
-CALL crear_pedido('cliente2@ejemplo.com', 'ART002', 1);
-*/
