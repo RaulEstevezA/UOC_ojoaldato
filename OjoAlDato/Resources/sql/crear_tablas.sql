@@ -20,8 +20,6 @@ CREATE TABLE clientes (
     domicilio VARCHAR(200) NOT NULL,
     nif VARCHAR(20) NOT NULL UNIQUE,
     tipo ENUM('ESTANDAR', 'PREMIUM') NOT NULL,
-    cuota DECIMAL(10,2) DEFAULT 0.00,
-    descuento_envio DECIMAL(5,2) DEFAULT 0.00,
     fecha_alta DATETIME DEFAULT CURRENT_TIMESTAMP,
     activo BOOLEAN DEFAULT TRUE,
     CONSTRAINT chk_email CHECK (email LIKE '%@%.%')
@@ -41,7 +39,8 @@ CREATE TABLE articulos (
     activo BOOLEAN DEFAULT TRUE,
     fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT chk_pvp_positivo CHECK (pvp >= 0),
-    CONSTRAINT chk_gastos_envio_positivos CHECK (gastos_envio >= 0)
+    CONSTRAINT chk_gastos_envio_positivos CHECK (gastos_envio >= 0),
+    CONSTRAINT chk_stock_no_negativo CHECK (stock >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- =============================================
@@ -96,6 +95,7 @@ END;
 -- Procedimiento: crear_pedido
 -- Crea un nuevo pedido con validaciones
 -- =============================================
+DELIMITER //
 CREATE PROCEDURE crear_pedido(
     IN p_email_cliente VARCHAR(100),
     IN p_codigo_articulo VARCHAR(20),

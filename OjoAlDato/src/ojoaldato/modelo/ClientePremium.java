@@ -53,8 +53,13 @@ public class ClientePremium extends Cliente {
         sb.append("CLIENTE PREMIUM\n");
         sb.append("=======================================\n");
         sb.append(super.toString());
-        sb.append("Descuento envío:             \n")
-                .append(descuentoEnvio.multiply(BigDecimal.valueOf(100)).intValue())
+
+        // Calculamos el porcentaje de descuento real (ejemplo: 0.8 -> 20%)
+        BigDecimal descuentoReal = BigDecimal.valueOf(100)
+                .subtract(descuentoEnvio.multiply(BigDecimal.valueOf(100)));
+
+        sb.append("Descuento envío:           ")
+                .append(descuentoReal.intValue()) // imprime 20
                 .append("%\n");
         sb.append("Cuota mensual:             ")
                 .append(cuota.setScale(2, RoundingMode.HALF_UP))
