@@ -1,9 +1,6 @@
 package ojoaldato.DAO;
-<<<<<<<< HEAD:OjoAlDato/Source Packages/ojoaldato/DAO/IDAO.java
 
 import ojoaldato.modelo.Pedido;
-========
->>>>>>>> develop:OjoAlDato/src/ojoaldato/DAO/IDAO.java
 
 import java.util.List;
 
@@ -48,6 +45,4 @@ public interface IDAO<T, K> {
      */
     List<T> obtenerTodos();
 
-    //Búsqueda de pedidos por mail de cliente
-    Pedido buscarPorEmail(String email);
 }
