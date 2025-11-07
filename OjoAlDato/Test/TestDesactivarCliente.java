@@ -1,6 +1,6 @@
 package Test;
 
-import DAO.ClienteDAO;
+import ojoaldato.DAO.ClienteDAO;
 
 public class TestDesactivarCliente {
 
