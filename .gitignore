@@ -63,7 +63,7 @@ surefire-reports/
 # ===============================
 # Databases & config
 # ===============================
-*.db
+*.ojoaldato.db
 *.sqlite
 *.properties
 *.env
