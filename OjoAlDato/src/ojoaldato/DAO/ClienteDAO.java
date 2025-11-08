@@ -1,60 +1,58 @@
 package ojoaldato.DAO;
 
+import ojoaldato.db.ConexionDB;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import ojoaldato.db.ConexionDB;
 import ojoaldato.modelo.Cliente;
 import ojoaldato.modelo.ClienteEstandar;
 import ojoaldato.modelo.ClientePremium;
 
 /**
- * Clase DAO para gestionar clientes en la base de datos.
- * Implementa directamente las operaciones CRUD sobre la tabla 'clientes'.
+ * Implementación del patrón ojoaldato.DAO para la entidad Cliente.
+ * Aplica el perfil genérico definido en la interfaz IDAO<Cliente, String>.
+ *
+ * Gestiona las operaciones CRUD sobre la tabla 'clientes' en MySQL.
  */
-public class ClienteDAO {
+public class ClienteDAO implements IDAO<Cliente, String> {
 
     // Consultas SQL
     private static final String INSERTAR_CLIENTE = """
-        INSERT INTO clientes
-            (email, nombre, domicilio, nif, tipo)
-        VALUES (?, ?, ?, ?, ?)
-    """;
+                INSERT INTO clientes
+                    (email, nombre, domicilio, nif, tipo)
+                VALUES (?, ?, ?, ?, ?)
+            """;
 
     private static final String SELECCIONAR_CLIENTE = """
-        SELECT email, nombre, domicilio, nif, tipo, fecha_alta, activo
-        FROM clientes
-        WHERE email = ?
-    """;
+                SELECT email, nombre, domicilio, nif, tipo, fecha_alta, activo
+                FROM clientes
+                WHERE email = ?
+            """;
 
     private static final String SELECCIONAR_TODOS_CLIENTES = """
-        SELECT email, nombre, domicilio, nif, tipo, fecha_alta, activo
-        FROM clientes
-        ORDER BY nombre ASC
-    """;
+                SELECT email, nombre, domicilio, nif, tipo, fecha_alta, activo
+                FROM clientes
+                ORDER BY nombre ASC
+            """;
 
     private static final String MODIFICAR_CLIENTE = """
-        UPDATE clientes
-        SET nombre = ?, domicilio = ?, nif = ?, tipo = ?
-        WHERE email = ?
-    """;
+                UPDATE clientes
+                SET nombre = ?, domicilio = ?, nif = ?, tipo = ?
+                WHERE email = ?
+            """;
 
     private static final String ELIMINAR_CLIENTE = """
-        UPDATE clientes
-        SET activo = FALSE
-        WHERE email = ?
-    """;
+                DELETE FROM clientes
+                WHERE email = ?
+            """;
 
     private static final String EXISTE_CLIENTE = """
-        SELECT 1 FROM clientes WHERE email = ? LIMIT 1
-    """;
+                SELECT 1 FROM clientes WHERE email = ? LIMIT 1
+            """;
 
-    // ================================
-    // MÉTODOS CRUD
-    // ================================
-
-    // Crear Cliente
+    // Métodos CRUD (IDAO)
+    @Override
     public boolean crear(Cliente c) {
         try (Connection con = ConexionDB.getConnection();
              PreparedStatement ps = con.prepareStatement(INSERTAR_CLIENTE)) {
@@ -63,13 +61,7 @@ public class ClienteDAO {
             ps.setString(2, c.getNombre());
             ps.setString(3, c.getDomicilio());
             ps.setString(4, c.getNif());
-
-            // Tipo según clase
-            if (c instanceof ClientePremium) {
-                ps.setString(5, "PREMIUM");
-            } else {
-                ps.setString(5, "ESTANDAR");
-            }
+            ps.setString(5, (c instanceof ClientePremium) ? "PREMIUM" : "ESTANDAR");
 
             ps.executeUpdate();
             return true;
@@ -80,7 +72,7 @@ public class ClienteDAO {
         }
     }
 
-    // Buscar Cliente
+    @Override
     public Cliente buscar(String email) {
         if (email == null || email.isBlank()) return null;
 
@@ -100,7 +92,7 @@ public class ClienteDAO {
         return null;
     }
 
-    // Actualizar Cliente
+    @Override
     public boolean actualizar(Cliente c) {
         try (Connection con = ConexionDB.getConnection();
              PreparedStatement ps = con.prepareStatement(MODIFICAR_CLIENTE)) {
@@ -120,7 +112,7 @@ public class ClienteDAO {
         }
     }
 
-    // "Eliminar" cliente (borrado lógico)
+    @Override
     public boolean eliminar(String email) {
         try (Connection con = ConexionDB.getConnection();
              PreparedStatement ps = con.prepareStatement(ELIMINAR_CLIENTE)) {
@@ -130,12 +122,12 @@ public class ClienteDAO {
             return filas > 0;
 
         } catch (SQLException e) {
-            System.err.println("Error al desactivar cliente: " + e.getMessage());
+            System.err.println("Error al eliminar cliente: " + e.getMessage());
             return false;
         }
     }
 
-    // Obtener todos los clientes
+    @Override
     public List<Cliente> obtenerTodos() {
         List<Cliente> lista = new ArrayList<>();
 
@@ -153,7 +145,68 @@ public class ClienteDAO {
         return lista;
     }
 
-    // Comprobar si existe un cliente
+
+    // Métodos específicos de ClienteDAO
+
+    /**
+     * Obtiene todos los clientes de tipo ESTANDAR.
+     *
+     * @return Lista de clientes estándar.
+     */
+    public List<Cliente> obtenerEstandar() {
+        List<Cliente> lista = new ArrayList<>();
+        String sql = """
+                    SELECT email, nombre, domicilio, nif, tipo
+                    FROM clientes
+                    WHERE tipo = 'ESTANDAR'
+                    ORDER BY nombre ASC
+                """;
+
+        try (Connection con = ConexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapearCliente(rs));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al listar clientes estándar: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    /**
+     * Obtiene todos los clientes de tipo PREMIUM.
+     *
+     * @return Lista de clientes premium.
+     */
+    public List<Cliente> obtenerPremium() {
+        List<Cliente> lista = new ArrayList<>();
+        String sql = """
+                    SELECT email, nombre, domicilio, nif, tipo
+                    FROM clientes
+                    WHERE tipo = 'PREMIUM'
+                    ORDER BY nombre ASC
+                """;
+
+        try (Connection con = ConexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapearCliente(rs));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al listar clientes premium: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    // Métodos auxiliares
     public boolean existe(String email) {
         try (Connection con = ConexionDB.getConnection();
              PreparedStatement ps = con.prepareStatement(EXISTE_CLIENTE)) {
@@ -169,47 +222,7 @@ public class ClienteDAO {
         }
     }
 
-    // Listar clientes estándar
-    public List<Cliente> obtenerEstandar() {
-        List<Cliente> lista = new ArrayList<>();
-        String sql = "SELECT * FROM clientes WHERE tipo = 'ESTANDAR' ORDER BY nombre ASC";
-
-        try (Connection con = ConexionDB.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                lista.add(mapearCliente(rs));
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Error al listar clientes estándar: " + e.getMessage());
-        }
-        return lista;
-    }
-
-    // Listar clientes premium
-    public List<Cliente> obtenerPremium() {
-        List<Cliente> lista = new ArrayList<>();
-        String sql = "SELECT * FROM clientes WHERE tipo = 'PREMIUM' ORDER BY nombre ASC";
-
-        try (Connection con = ConexionDB.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                lista.add(mapearCliente(rs));
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Error al listar clientes premium: " + e.getMessage());
-        }
-        return lista;
-    }
-
-    // ================================
-    // MÉTODO AUXILIAR
-    // ================================
+    // Mapea un registro SQL a un objeto Cliente o subclase
     private Cliente mapearCliente(ResultSet rs) throws SQLException {
         String email = rs.getString("email");
         String nombre = rs.getString("nombre");
@@ -217,13 +230,28 @@ public class ClienteDAO {
         String nif = rs.getString("nif");
         String tipo = rs.getString("tipo");
 
-        Cliente c;
+        Cliente cliente;
+
         if ("PREMIUM".equalsIgnoreCase(tipo)) {
-            c = new ClientePremium(nombre, domicilio, nif, email);
+            // Premium: cuota 30 €, descuento 20 %
+            cliente = new ClientePremium(
+                    nombre,
+                    domicilio,
+                    nif,
+                    email,
+                    BigDecimal.valueOf(30.00),
+                    BigDecimal.valueOf(0.8)
+            );
         } else {
-            c = new ClienteEstandar(nombre, domicilio, nif, email);
+            // Estándar: sin descuento
+            cliente = new ClienteEstandar(
+                    nombre,
+                    domicilio,
+                    nif,
+                    email
+            );
         }
 
-        return c;
+        return cliente;
     }
 }

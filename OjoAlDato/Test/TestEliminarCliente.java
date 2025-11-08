@@ -1,6 +1,6 @@
 package Test;
 
-import Util.ConexionDB;
+import ojoaldato.db.ConexionDB;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
