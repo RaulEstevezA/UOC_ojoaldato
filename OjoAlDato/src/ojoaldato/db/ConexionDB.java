@@ -1,14 +1,8 @@
 package ojoaldato.db;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.stream.Collectors;
 
 /**
  * Clase de utilidad para gestionar la conexión a la base de datos MySQL.
@@ -23,10 +17,6 @@ public class ConexionDB {
     private static final String PASSWORD = CONFIG.getProperty("db.password");
     private static final String DRIVER = CONFIG.getProperty("db.driver");
 
-    // Ruta al script de creación de tablas
-    private static final String SCHEMA_PATH = CONFIG.getProperty("db.schema");
-    private static final String DATA = CONFIG.getProperty("db.data");
-
     // Instancia Singleton de la conexión
     private static Connection connection = null;
 
@@ -36,22 +26,10 @@ public class ConexionDB {
             Class.forName(DRIVER);
             System.out.println("Driver de MySQL cargado correctamente");
 
-            // Ejecuta el script al cargar la clase y el driver
-            executeSqlScript(SCHEMA_PATH, "Estructura de OjoAlDato");
-            executeSqlScript(DATA, "Datos iniciales.");
-
         } catch (ClassNotFoundException e) {
             System.err.println("Error al cargar el driver de MySQL");
             e.printStackTrace();
             throw new RuntimeException("No se pudo cargar el driver de MySQL", e);
-        } catch (SQLException e) {
-            System.err.println("Error SQL al inicializar la base de datos.");
-            e.printStackTrace();
-            throw new RuntimeException("Fallo en la ejecución del script SQL.", e);
-        } catch (IOException e) {
-            System.err.println("Error de lectura al cargar el script SQL.");
-            e.printStackTrace();
-            throw new RuntimeException("Fallo al leer el archivo de script.", e);
         }
     }
 
@@ -85,40 +63,5 @@ public class ConexionDB {
                 e.printStackTrace();
             }
         }
-    }
-
-    /**
-     * Lee y ejecuta el script SQL para crear las tablas.
-     *
-     * @throws SQLException
-     * @throws IOException
-     */
-    private static void executeSqlScript(String scriptPath, String name) throws SQLException, IOException{
-        System.out.println("Verificando la estructura de datos: " + name);
-
-        // El script se lee a través del ClassLoader
-        try (InputStream is = ConexionDB.class.getClassLoader().getResourceAsStream(scriptPath);
-            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            Statement stmt = conn.createStatement()) {
-            if (is == null) {
-                System.err.println("Advertencia: No se encontró el script de "  + name + " en la ruta: " + scriptPath);
-                return;
-            }
-
-            // Lectura del script
-            String sqlScript = new BufferedReader(new InputStreamReader(is))
-                    .lines().collect(Collectors.joining("\n"));
-
-            sqlScript = sqlScript.replaceAll("/\\*(./\\n)*?\\*/", "")
-                    .replaceAll("--.*", "")
-                    .replaceAll("\r\n|\r|\n", " ")
-                    .replaceAll("\\s{2,}", " ")
-                    .trim();
-
-           stmt.execute(sqlScript);
-
-            System.out.println("Script de inicialización ejecutado con éxito.");
-        }
-
     }
 }
