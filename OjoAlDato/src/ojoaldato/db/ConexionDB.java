@@ -4,18 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.stream.Collectors;
 
 /**
  * Clase de utilidad para gestionar la conexión a la base de datos MySQL.
  * Utiliza el patrón Singleton para asegurar una única instancia de conexión.
+ * Verifica automáticamente la estructura de la base de datos al inicializarse,
+ * ejecutando los scripts SQL de creación de tablas, vistas y datos iniciales si fuera necesario.
  */
 public class ConexionDB {
-    // Se cargan variables de entorno en vez de hardcodear los datos necesarios para la conexión en la BBDD
+    // Cargador de configuración (patrón Singleton)
     private static final ConfigLoader CONFIG = ConfigLoader.getInstance();
 
     private static final String URL = CONFIG.getProperty("db.url");
@@ -25,33 +24,44 @@ public class ConexionDB {
 
     // Ruta al script de creación de tablas
     private static final String SCHEMA_PATH = CONFIG.getProperty("db.schema");
+    private static final String VIEW_PATH = CONFIG.getProperty("db.view");
     private static final String DATA = CONFIG.getProperty("db.data");
 
-    // Instancia Singleton de la conexión
-    private static Connection connection = null;
+    // Instancia única (Singleton) de la conexión principal
+    private static Connection connection;
 
+    // Bloque estático que se ejecuta al cargar la clase
     static {
         try {
-            // Cargar el driver de MySQL
+            // 1. Carga dinámica el driver de MySQL
             Class.forName(DRIVER);
             System.out.println("Driver de MySQL cargado correctamente");
 
-            // Ejecuta el script al cargar la clase y el driver
-            executeSqlScript(SCHEMA_PATH, "Estructura de OjoAlDato");
-            executeSqlScript(DATA, "Datos iniciales.");
+            // 2. Crear conexión temporal para inicializar y verificar estructura
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Conexión establecida con éxito.");
 
-        } catch (ClassNotFoundException e) {
-            System.err.println("Error al cargar el driver de MySQL");
+            // 3. Verificar si las tablas existen
+            if (!estructuraCompleta(connection)) {
+                System.out.println("Estructura incompleta. Ejecutando scripts iniciales...");
+                // Crea la estructura inicial
+                ejecutarScripts(SCHEMA_PATH);
+
+                // 3.1 Comprueba si existe la vista
+                if (VIEW_PATH != null && !VIEW_PATH.isEmpty()) {
+                    ejecutarScripts(VIEW_PATH);
+                }
+
+                // 3.2 Comprueba si hay datos iniciales
+                if (DATA != null & !DATA.isEmpty()) {
+                    ejecutarScripts(DATA);
+                }
+            } else {
+                System.out.println("Estructura de datos verificada correctamente.");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("No se pudo cargar el driver de MySQL", e);
-        } catch (SQLException e) {
-            System.err.println("Error SQL al inicializar la base de datos.");
-            e.printStackTrace();
-            throw new RuntimeException("Fallo en la ejecución del script SQL.", e);
-        } catch (IOException e) {
-            System.err.println("Error de lectura al cargar el script SQL.");
-            e.printStackTrace();
-            throw new RuntimeException("Fallo al leer el archivo de script.", e);
+            throw new RuntimeException("Error SQL al inicializar la base de datos.", e);
         }
     }
 
@@ -60,8 +70,10 @@ public class ConexionDB {
 
     /**
      * Obtiene una conexión a la base de datos.
-     * @return Objeto Connection para interactuar con la base de datos
-     * @throws SQLException Si ocurre un error al establecer la conexión
+     * Si no existe una conexión abierta o la anterior fue cerrada, se crea una nueva instancia de conexión.
+     *
+     * @return Objeto {@link Connection} listo para realizar operaciones SQL.
+     * @throws SQLException Si ocurre un error al establecer la conexión.
      */
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
@@ -72,7 +84,8 @@ public class ConexionDB {
     }
     
     /**
-     * Cierra la conexión a la base de datos.
+     * Cierra una conexión específica de la base de datos.
+     *
      * @param conn La conexión a cerrar
      */
     public static void close(Connection conn) {
@@ -88,37 +101,59 @@ public class ConexionDB {
     }
 
     /**
-     * Lee y ejecuta el script SQL para crear las tablas.
+     * Verifica si la estructura básica de la base de datos ya está creada.
+     * Comprueba la existencia de las tablas principales necesarias para la aplicación.
      *
-     * @throws SQLException
-     * @throws IOException
+     * @param conn Conexión activa a la base de datos.
+     * @return {@code true} si todas las tablas requeridas existen; {@code false} en caso contrario.
+     * @throws SQLException Si ocurre un error al consultar el metadato de la base de datos.
      */
-    private static void executeSqlScript(String scriptPath, String name) throws SQLException, IOException{
-        System.out.println("Verificando la estructura de datos: " + name);
+    private static boolean estructuraCompleta(Connection conn) throws SQLException {
+        String[] tablas = {"clientes", "articulos", "pedidos"};
+        int contador = 0;
 
-        // El script se lee a través del ClassLoader
-        try (InputStream is = ConexionDB.class.getClassLoader().getResourceAsStream(scriptPath);
-            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            Statement stmt = conn.createStatement()) {
-            if (is == null) {
-                System.err.println("Advertencia: No se encontró el script de "  + name + " en la ruta: " + scriptPath);
-                return;
+        for (String tabla : tablas) {
+            try (ResultSet rs = conn.getMetaData().getTables(null, null, tabla, null)) {
+                if (rs.next()) contador++;
             }
-
-            // Lectura del script
-            String sqlScript = new BufferedReader(new InputStreamReader(is))
-                    .lines().collect(Collectors.joining("\n"));
-
-            sqlScript = sqlScript.replaceAll("/\\*(./\\n)*?\\*/", "")
-                    .replaceAll("--.*", "")
-                    .replaceAll("\r\n|\r|\n", " ")
-                    .replaceAll("\\s{2,}", " ")
-                    .trim();
-
-           stmt.execute(sqlScript);
-
-            System.out.println("Script de inicialización ejecutado con éxito.");
         }
 
+        return contador == tablas.length;
+    }
+
+    /**
+     * Ejecuta un archivo SQL ubicado en el classpath del proyecto.
+     * Este método lee los archivos línea por línea, separa las sentencias por punto y coma,
+     * y las ejecuta individualmente sobre la conexión activa.
+     *
+     * @param path Ruta relativa del archivo SQL
+     * @throws IOException Si el archivo no puede ser leído o no se encuentra.
+     * @throws SQLException Si alguna sentencia SQL falla durante la ejecució.
+     */
+    private static void ejecutarScripts(String path) throws IOException, SQLException {
+        if (path == null) return;
+
+        try (InputStream is = ConexionDB.class.getClassLoader().getResourceAsStream(path)) {
+            if (is == null) {
+                throw new IOException("No se encontró el archivo SQL: " + path);
+            }
+
+            String sql = new BufferedReader(new InputStreamReader(is))
+                    .lines()
+                    .collect(Collectors.joining("\n"));
+
+            // Dividir por punto y coma, ignorando líneas vacías
+            String[] statements = sql.split(";");
+            try (Statement stmt = connection.createStatement()) {
+                for (String statement : statements) {
+                    statement = statement.trim();
+                    if (!statement.isEmpty()) {
+                        stmt.execute(statement);
+                    }
+                }
+            }
+
+            System.out.println("Script ejecutado correctamente: " + path);
+        }
     }
 }
