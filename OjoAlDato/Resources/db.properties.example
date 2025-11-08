@@ -1,11 +1,11 @@
 ###############################################################
-# Configuracion de Conexión a la Base de Datos (MySQL)
+# Configuracion de ConexiÃ³n a la Base de Datos (MySQL)
 #
 # NOTA IMPORTANTE: Renombra este archivo a 'db.properties'
 # y sustituye los valores 'PLACEHOLDER' con tus credenciales.
 ###############################################################
 
-# Driver JDBC a utilizar (Fijo para MySQL Connector/J)
+# Driver JDBC a utilizar (Fijo para MySQL Connector)
 db.driver=com.mysql.cj.jdbc.Driver
 
 # URL de la conexion: jdbc:motor://servidor:puerto/esquema_o_base_de_datos
@@ -15,5 +15,14 @@ db.url=jdbc:mysql://localhost:3306/nombre_de_tu_esquema
 # Usuario de la Base de Datos
 db.user=PLACEHOLDER_USUARIO_MYSQL
 
-# Contraseña del Usuario
-db.password=PLACEHOLDER_CONTRASEÑA
+# ContraseÃ±a del Usuario
+db.password=PLACEHOLDER_CONTRASEÃ‘A
+
+# Ruta al script crear_tablas
+db.schema=PLACEHOLDER_RUTA_SCHEMA
+
+# Ruta al script crear vistas
+db.view=PLACEHOLDER_RUTA_VISTA
+
+# Ruta al script datos iniciales
+db.data=PLACEHOLDER_RUTA_DATOS
