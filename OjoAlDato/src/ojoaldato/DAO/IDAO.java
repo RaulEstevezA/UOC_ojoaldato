@@ -1,5 +1,7 @@
 package ojoaldato.DAO;
 
+import ojoaldato.modelo.Pedido;
+
 import java.util.List;
 
 /**
@@ -42,4 +44,5 @@ public interface IDAO<T, K> {
      * @return Lista con todas las entidades
      */
     List<T> obtenerTodos();
+
 }
