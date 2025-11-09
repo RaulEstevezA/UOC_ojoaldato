@@ -5,77 +5,73 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Clase sencilla para gestionar la conexión a la base de datos MySQL.
- * Utiliza el patrón Singleton para garantizar una única conexión activa.
+ * Clase de utilidad para gestionar la conexión a la base de datos MySQL.
+ * Utiliza el patrón Singleton para asegurar una única instancia de conexión.
  */
 public class ConexionDB {
-
+    // Se cargan variables de entorno en vez de hardcodear los datos necesarios para la conexión en la BBDD
     private static final ConfigLoader CONFIG = ConfigLoader.getInstance();
-
     private static final String URL = CONFIG.getProperty("db.url");
     private static final String USER = CONFIG.getProperty("db.user");
     private static final String PASSWORD = CONFIG.getProperty("db.password");
     private static final String DRIVER = CONFIG.getProperty("db.driver");
 
-    private static Connection connection = null;
-
-    static {
+    /**
+     * Obtiene una conexión a la base de datos.
+     * @return Objeto Connection para interactuar con la base de datos
+     * @throws SQLException Si ocurre un error al establecer la conexión
+     */
+    public static Connection getConnection() throws SQLException {
+        // Se añade el bloque estático al propio método getConnection() ya que ambos son estáticos
         try {
             // Cargar el driver de MySQL
             Class.forName(DRIVER);
-            System.out.println("Driver de MySQL cargado correctamente.");
+            System.out.println("Driver de MySQL cargado correctamente");
         } catch (ClassNotFoundException e) {
-            System.err.println("Error al cargar el driver de MySQL: " + e.getMessage());
-            throw new RuntimeException("No se pudo cargar el driver de MySQL.", e);
+            System.err.println("Error al cargar el driver de MySQL");
+            e.printStackTrace();
+            throw new RuntimeException("No se pudo cargar el driver de MySQL", e);
         }
-    }
-
-    private ConexionDB() {
-        // Constructor privado para evitar instanciación directa
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
     /**
-     * Obtiene una conexión activa a la base de datos.
-     *
-     * @return Conexión JDBC activa
-     * @throws SQLException si ocurre un error al conectar
-     */
-    public static Connection getConnection() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Conexión establecida correctamente.");
-        }
-        return connection;
-    }
-
-    /**
-     * Cierra la conexión abierta, si existe.
-     *
-     * @param conn conexión a cerrar
+     * Cierra la conexión a la base de datos.
+     * @param conn La conexión a cerrar
      */
     public static void close(Connection conn) {
         if (conn != null) {
             try {
                 conn.close();
-                System.out.println("Conexión cerrada correctamente.");
+                System.out.println("Conexión cerrada correctamente");
             } catch (SQLException e) {
-                System.err.println("Error al cerrar la conexión: " + e.getMessage());
+                System.err.println("Error al cerrar la conexión");
+                e.printStackTrace();
             }
         }
     }
 
     /**
-     * Método de prueba para verificar la conexión.
+     * ESTO HABRÁ QUE ELIMINARLO CUANDO A TODOS OS FUNCIONE CORRECTAMENTE :)
+     * Método para probar la conexión a la base de datos.
+     * @param args Argumentos de línea de comandos (no se utilizan)
      */
     public static void main(String[] args) {
-        System.out.println("=== PRUEBA DE CONEXIÓN ===");
-        try (Connection conn = ConexionDB.getConnection()) {
-            if (conn != null && !conn.isClosed()) {
-                System.out.println("✅ Conexión establecida correctamente con la base de datos.");
-            }
-        } catch (Exception e) {
-            System.err.println("❌ Error al conectar con la base de datos:");
+        Connection conn = null;
+        try {
+            System.out.println("=== Prueba de conexión a MySQL ===");
+            conn = getConnection();
+            System.out.println("¡Conexión exitosa a la base de datos!");
+            System.out.println("URL: " + URL);
+            System.out.println("Usuario: " + USER);
+        } catch (SQLException e) {
+            System.err.println("Error al conectar a la base de datos:");
+            System.err.println("Mensaje: " + e.getMessage());
+            System.err.println("Código de error: " + e.getErrorCode());
+            System.err.println("Estado SQL: " + e.getSQLState());
             e.printStackTrace();
+        } finally {
+            close(conn);
         }
     }
 }
