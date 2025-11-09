@@ -2,6 +2,7 @@ package ojoaldato.DAO;
 
 import ojoaldato.modelo.Pedido;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -43,6 +44,5 @@ public interface IDAO<T, K> {
      * Obtiene todas las entidades
      * @return Lista con todas las entidades
      */
-    List<T> obtenerTodos();
-
+    List<T> obtenerTodos() throws SQLException;
 }

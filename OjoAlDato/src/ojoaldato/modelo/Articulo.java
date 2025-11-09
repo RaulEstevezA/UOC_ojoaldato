@@ -13,14 +13,18 @@ public class Articulo {
     private BigDecimal pvp;
     private BigDecimal gastosEnvio;
     private int tiempoPreparacion;
+    private int stock;
+    private boolean activo;
 
     public Articulo() {}
-    public Articulo(String codigo, String descripcion, BigDecimal pvp, BigDecimal gastosEnvio, int tiempoPreparacion) {
+    public Articulo(String codigo, String descripcion, BigDecimal pvp, BigDecimal gastosEnvio, int tiempoPreparacion, int stock) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.pvp = pvp;
         this.gastosEnvio = gastosEnvio;
         this.tiempoPreparacion = tiempoPreparacion;
+        this.stock = stock;
+        this.activo = true;
     }
 
     public String getCodigo() {
@@ -62,6 +66,14 @@ public class Articulo {
     public void setTiempoPreparacion(int tiempoPreparacion) {
         this.tiempoPreparacion = tiempoPreparacion;
     }
+
+    public int getStock() { return stock; }
+
+    public void setStock(int stock) { this.stock = stock; }
+
+    public boolean getActivo() { return activo; }
+
+    public void setActivo(boolean esActivo) { this.activo = esActivo; }
 
     @Override
     public String toString() {

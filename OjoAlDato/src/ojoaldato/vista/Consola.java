@@ -3,7 +3,10 @@ package ojoaldato.vista;
 import ojoaldato.controlador.ArticuloControlador;
 import ojoaldato.controlador.ClienteControlador;
 import ojoaldato.controlador.PedidoControlador;
-import ojoaldato.modelo.CargarDatos;
+import ojoaldato.modelo.Articulo;
+import ojoaldato.modelo.Cliente;
+import ojoaldato.modelo.ClienteEstandar;
+import ojoaldato.modelo.ClientePremium;
 import ojoaldato.modelo.Datos;
 
 import java.util.Scanner;
