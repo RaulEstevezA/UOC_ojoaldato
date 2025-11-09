@@ -63,3 +63,4 @@ CREATE TABLE pedidos (
     INDEX idx_fecha_hora (fecha_hora),
     INDEX idx_cliente (email_cliente)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+

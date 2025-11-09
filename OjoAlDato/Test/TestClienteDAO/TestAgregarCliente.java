@@ -1,4 +1,4 @@
-// package Test;
+package TestClienteDAO;// package Test;
 
 import ojoaldato.DAO.ClienteDAO;
 import ojoaldato.DAO.ClienteDAOImpl;
