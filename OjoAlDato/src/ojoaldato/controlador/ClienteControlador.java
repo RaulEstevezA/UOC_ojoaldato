@@ -1,11 +1,9 @@
 package ojoaldato.controlador;
 
-import ojoaldato.exception.ElementoDuplicadoException;
-import ojoaldato.exception.ElementoNoEncontradoException;
+import ojoaldato.excepcion.ElementoDuplicadoException;
+import ojoaldato.excepcion.ElementoNoEncontradoException;
 import ojoaldato.modelo.Cliente;
-import ojoaldato.modelo.ClienteEstandar;
 import ojoaldato.modelo.Datos;
-import ojoaldato.modelo.Pedido;
 
 import java.util.*;
 
@@ -54,7 +52,7 @@ public class ClienteControlador {
     /**
      * Elimina un cliente del sistema a partir de su email.
      *
-     * Primero busca el cliente correspondiente en el modelo y, si existe,
+     * Primero busca el cliente correspondiente en el ojoaldato.modelo y, si existe,
      * lo elimina de la lista. También se eliminan sus pedidos asociados.
      *
      * @param email correo electrónico del cliente que se desea eliminar
@@ -90,7 +88,7 @@ public class ClienteControlador {
     /**
      * Devuelve una lista con todos los clientes registrados en el sistema.
      *
-     * Este método simplemente llama al modelo para recuperar la lista de clientes.
+     * Este método simplemente llama al ojoaldato.modelo para recuperar la lista de clientes.
      *
      * @return lista de clientes actuales o lista vacía
      */

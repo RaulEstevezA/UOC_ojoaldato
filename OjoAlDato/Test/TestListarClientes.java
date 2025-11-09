@@ -1,6 +1,6 @@
 package Test;
 
-import DAO.ClienteDAO;
+import ojoaldato.DAO.ClienteDAO;
 import ojoaldato.modelo.Cliente;
 
 import java.util.List;

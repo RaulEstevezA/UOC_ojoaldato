@@ -5,7 +5,7 @@ import java.math.RoundingMode;
 
 
 /**
- * Clase abstracta base del modelo que representa a un cliente.
+ * Clase abstracta base del ojoaldato.modelo que representa a un cliente.
  * Se completará con atributos y métodos según el UML definitivo (AA1).
  */
 public abstract class Cliente {

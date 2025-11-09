@@ -1,7 +1,7 @@
 package ojoaldato.controlador;
 
-import ojoaldato.exception.ElementoDuplicadoException;
-import ojoaldato.exception.ElementoNoEncontradoException;
+import ojoaldato.excepcion.ElementoDuplicadoException;
+import ojoaldato.excepcion.ElementoNoEncontradoException;
 import ojoaldato.modelo.Articulo;
 import ojoaldato.modelo.Datos;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * Forma parte de la capa CONTROLADOR del patrón MVC.
  *
  * Esta clase no almacena directamente los artículos,
- * sino que utiliza el modelo (Datos) para acceder y modificar la información.
+ * sino que utiliza el ojoaldato.modelo (Datos) para acceder y modificar la información.
  */
 
 
