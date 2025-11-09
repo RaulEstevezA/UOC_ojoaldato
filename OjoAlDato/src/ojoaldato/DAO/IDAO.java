@@ -1,7 +1,5 @@
 package ojoaldato.DAO;
 
-import ojoaldato.modelo.Pedido;
-
 import java.sql.SQLException;
 import java.util.List;
 
