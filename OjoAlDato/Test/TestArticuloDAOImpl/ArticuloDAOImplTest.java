@@ -43,4 +43,14 @@ class ArticuloDAOImplTest {
         );
     }
 
+    @Test
+    @DisplayName("Debe buscar un artículo existente por su código.")
+    void testBuscar() {
+        dao.crear(articuloTest);
+        Articulo encontrado = dao.buscar("A001");
+
+        assertNotNull(encontrado);
+        assertEquals("Artículo de prueba", encontrado.getDescripcion());
+    }
+
 }
