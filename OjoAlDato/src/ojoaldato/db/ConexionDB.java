@@ -16,6 +16,24 @@ public class ConexionDB {
     private static final String PASSWORD = CONFIG.getProperty("db.password");
     private static final String DRIVER = CONFIG.getProperty("db.driver");
 
+//    // Datos de conexión
+//    private static final String URL = "jdbc:mysql://localhost:3306/ojoaldato";
+//    private static final String USER = "equipo";
+//    private static final String PASSWORD = "Equipo1234.";
+//
+    // Bloque estático para registrar el driver
+//    static {
+//        try {
+//            // Cargar el driver de MySQL
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            System.out.println("Driver de MySQL cargado correctamente");
+//        } catch (ClassNotFoundException e) {
+//            System.err.println("Error al cargar el driver de MySQL");
+//            e.printStackTrace();
+//            throw new RuntimeException("No se pudo cargar el driver de MySQL", e);
+//        }
+//    }
+
     /**
      * Obtiene una conexión a la base de datos.
      * @return Objeto Connection para interactuar con la base de datos
@@ -75,4 +93,3 @@ public class ConexionDB {
         }
     }
 }
-
