@@ -1,4 +1,4 @@
-package DAO;
+package ojoaldato.DAO;
 
 import Util.ConexionDB;
 import java.sql.*;
