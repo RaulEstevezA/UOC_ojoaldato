@@ -56,12 +56,12 @@ public class ArticuloControlador {
      * @param codigo Codigo identificador del artículo.
      * @return El objeto artículo si lo encuentra. Null si no existe.
      */
-    public String getArticuloByCodigo(String codigo) {
+    public Articulo getArticuloByCodigo(String codigo) {
         try {
-            Articulo a = articuloDAO.buscar(codigo);
-            return a.toString();
+            return articuloDAO.buscar(codigo);
         } catch (ElementoNoEncontradoException e) {
-            return e.getMessage();
+            System.err.println("No se encontró ningún articulo con el código " + codigo);
+            return null;
         }
     }
 
