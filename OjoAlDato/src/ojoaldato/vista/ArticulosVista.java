@@ -34,7 +34,7 @@ public class ArticulosVista {
                     Articulo a = pedirDatosArticulo();
                     System.out.println(repositorioArticulo.addArticulo(a));
                 }
-                case 2 -> mostrarLista(repositorioArticulo.listarArticulos(), null);
+                case 2 -> mostrarLista(repositorioArticulo.getAllArticulos(), null);
                 case 0 -> System.out.println("Volviendo al menú principal.");
                 default -> System.out.println("Opción no válida");
             }
@@ -55,8 +55,12 @@ public class ArticulosVista {
         BigDecimal gastosEnvio = new BigDecimal(entrada.nextLine());
         System.out.println("Tiempo de preparación: ");
         int tiempoPreparacion = Integer.parseInt(entrada.nextLine());
+        System.out.println("Stock actual:");
+        int stock = Integer.parseInt(entrada.nextLine());
 
-        return new Articulo(codigo, descripcion, pvp, gastosEnvio, tiempoPreparacion);
+        Articulo a = new Articulo(codigo, descripcion, pvp, gastosEnvio, tiempoPreparacion, stock);
+        repositorioArticulo.addArticulo(a);
+        return a;
     }
 
     // =======================
