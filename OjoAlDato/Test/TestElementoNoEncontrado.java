@@ -1,6 +1,6 @@
 package Test;
 
-import ojoaldato.exception.ElementoNoEncontradoException;
+import ojoaldato.excepcion.ElementoNoEncontradoException;
 import ojoaldato.modelo.Datos;
 import org.junit.jupiter.api.Test;
 
