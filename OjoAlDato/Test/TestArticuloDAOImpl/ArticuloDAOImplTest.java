@@ -53,4 +53,34 @@ class ArticuloDAOImplTest {
         assertEquals("Artículo de prueba", encontrado.getDescripcion());
     }
 
+    @Test
+    @DisplayName("Debe actualizar un artículo existente.")
+    void testActualizar() {
+        // Crear artículo inicial
+        dao.crear(articuloTest);
+
+        // Crear un nuevo objeto Artículo con solo algunos campos modificados
+        Articulo modificado = new Articulo();
+        modificado.setCodigo("A001");
+        modificado.setDescripcion("Artículo actualizado");
+        modificado.setPvp(BigDecimal.valueOf(12.99));
+
+        // Ejecutar la actualización
+        boolean resultado = dao.actualizar(modificado);
+        assertTrue(resultado, "El método actualizar() debería volver true si se actualiza correctamente.");
+
+        // Recuperar el artículo actualizado de la base de datos
+        Articulo actualizado = dao.buscar("A001");
+
+        // Verificar campos actualizados
+        assertEquals("Artículo actualizado", actualizado.getDescripcion());
+        assertEquals(BigDecimal.valueOf(12.99), actualizado.getPvp());
+
+        // Verificar campos no modificados -> deben permanecer iguales
+        assertEquals(articuloTest.getGastosEnvio(), actualizado.getGastosEnvio());
+        assertEquals(articuloTest.getTiempoPreparacion(), actualizado.getTiempoPreparacion());
+        assertEquals(articuloTest.getStock(), actualizado.getStock());
+
+    }
+
 }
