@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PedidoDAOImpl implements PedidoDAO {
 
-    // Creación de un nuevo pedido en la base de datos
+    //Creación de un nuevo pedido en la base de datos
     @Override
     public boolean crear(Pedido pedido) {
         String sql = " INSERT INTO pedidos (num_pedido, email_cliente, codigo_articulo, cantidad, fecha_hora, precio_total, gastos_envio) " + "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -27,8 +27,7 @@ public class PedidoDAOImpl implements PedidoDAO {
             preparedStatement.setBigDecimal(6, pedido.calcularImporteTotal());
             preparedStatement.setBigDecimal(7, pedido.getArticulo().getGastosEnvio());
 
-            int filas = preparedStatement.executeUpdate();
-            return filas > 0;
+            return preparedStatement.executeUpdate() > 0;
 
         } catch (SQLException e) {
             System.err.println("Error al crear el pedido: " + e.getMessage());
@@ -36,7 +35,7 @@ public class PedidoDAOImpl implements PedidoDAO {
         }
     }
 
-    //Eliminación de un pedido en la base de datos
+    //Eliminación de un pedido en la base de datos si no está enviado
     @Override
     public boolean eliminar(Integer numPedido) {
         String sql = " DELETE FROM pedidos WHERE num_pedido = ? AND enviado = 0";
@@ -45,8 +44,7 @@ public class PedidoDAOImpl implements PedidoDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setInt(1, numPedido);
-            int filas = preparedStatement.executeUpdate();
-            return filas > 0;
+            return preparedStatement.executeUpdate() > 0;
 
         } catch (SQLException e) {
             System.err.println("Error al eliminar el pedido: " + e.getMessage());
@@ -141,6 +139,7 @@ public class PedidoDAOImpl implements PedidoDAO {
     public List<Pedido> obtenerPendientes() {
         List<Pedido> pedidos = new ArrayList<>();
         String sql = "SELECT * FROM pedidos WHERE enviado = 0";
+
         try (Connection connection = ConexionDB.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -175,7 +174,7 @@ public class PedidoDAOImpl implements PedidoDAO {
         return pedidos;
     }
 
-    //Búsqueda de pedido por número de pedido (no solicitado en rúbrica).
+    //Búsqueda de pedido por número de pedido (no solicitado en rúbrica, implementado en base a IDAO).
     @Override
     public Pedido buscar(Integer id) {
         String sql = "SELECT * FROM pedidos WHERE num_pedido = ?";
@@ -194,40 +193,37 @@ public class PedidoDAOImpl implements PedidoDAO {
         return null;
     }
 
+    //Actualización de datos de pedido no requerida
     @Override
     public boolean actualizar(Pedido pedido) {
         return false;
     }
 
-    //Método auxiliar para mapear el objeto Pedido usando consultas JOIN
+    //Método auxiliar para mapear un pedido, cargando cliente y artículo desde los DAO
     private Pedido mapearPedido(ResultSet resultSet) throws SQLException {
 
-        //Datos del pedido
         int numPedido = resultSet.getInt("num_pedido");
+        String emailCliente = resultSet.getString("email_cliente");
+        String codigoArticulo = resultSet.getString("codigo_articulo");
         int cantidad = resultSet.getInt("cantidad");
         LocalDateTime fechaHora = resultSet.getTimestamp("fecha_hora").toLocalDateTime();
 
-        //Datos del cliente
-        String emailCliente = resultSet.getString("email_cliente");
+        ClienteDAO clienteDAO = new ClienteDAOImpl();
 
-        String tipoCliente = "ESTANDAR";
-        try {
-            tipoCliente = resultSet.getString("tipo_cliente");
-            if(tipoCliente == null) tipoCliente = "ESTANDAR";
-        } catch (SQLException ignored) {
+        //ArticuloDAO articuloDAO = new ArticuloDAOImpl();
+
+        Cliente cliente = clienteDAO.buscar(emailCliente);
+        //Articulo articulo = articuloDAO.buscar(codigoArticulo);
+        //A la espera de ArticuloDAO para implementar
+
+        if (cliente == null) {
+            System.err.println("Cliente no encontrado");
         }
-
-        Cliente cliente;
-        if("PREMIUM".equalsIgnoreCase(tipoCliente)) {
-            cliente = new ClientePremium("", "", "", emailCliente, BigDecimal.valueOf(30.00), BigDecimal.valueOf(0.8));
-        } else {
-            cliente = new ClienteEstandar("", "", "", emailCliente);
+        if (articulo == null) {
+            System.err.println("Artículo no encontrado");
         }
-
-        //Datos del artículo
-        String codigoArticulo = resultSet.getString("codigo_articulo");
-        Articulo articulo = new Articulo(codigoArticulo, "", BigDecimal.ZERO, BigDecimal.ZERO, 0);
 
         return new Pedido(numPedido, cliente, articulo, cantidad, fechaHora);
+
     }
 }
