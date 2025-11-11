@@ -168,8 +168,13 @@ public class ArticuloDAOImpl implements ArticuloDAO {
     public boolean eliminar(String codigo) {
         String sql = "DELETE FROM articulos WHERE codigo = ?";
         try {
-            ejecutaSQLInUpDel(sql, codigo);
-            return true;
+            int filasAfectadas = ejecutaSQLInUpDel(sql, codigo);
+
+            if (filasAfectadas > 0) {
+                return true;
+            } else {
+                throw new ElementoNoEncontradoException("No se encontró ningún artículo con el código: " + codigo);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
