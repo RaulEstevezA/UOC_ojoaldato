@@ -113,28 +113,55 @@ public class ArticuloDAOImpl implements ArticuloDAO {
 
     @Override
     public boolean actualizar(Articulo a) {
-        String sql = "UPDATE articulos SET descripcion = ?, pvp = ?, gastos_envio = ?, tiempo_preparacion = ?, stock = ?, activo = ? " +
-                "WHERE codigo = ?";
-        try {
-            int filasAfectadas = ejecutaSQLInUpDel(sql,
-                    a.getCodigo(),
-                    a.getDescripcion(),
-                    a.getPvp(),
-                    a.getGastosEnvio(),
-                    a.getTiempoPreparacion(),
-                    a.getStock(),
-                    a.getActivo()
-            );
-
-            if (filasAfectadas > 0) {
-                return true;
-            } else {
-                throw new ElementoNoEncontradoException("Artículo con código " + a.getCodigo() + " no encontrado.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+        Articulo original = buscar(a.getCodigo());
+        if (original == null) {
+            throw new ElementoNoEncontradoException("Artículo con código " + a.getCodigo() + " no encontrado.");
         }
+
+            if (a.getDescripcion() != null && !a.getDescripcion().isBlank()) {
+                original.setDescripcion(a.getDescripcion());
+            }
+
+            if (a.getPvp() != null) {
+                original.setPvp(a.getPvp());
+            }
+
+            if (a.getGastosEnvio() != null) {
+                original.setGastosEnvio(a.getGastosEnvio());
+            }
+
+            if (a.getTiempoPreparacion() != null) {
+                original.setTiempoPreparacion(a.getTiempoPreparacion());
+            }
+
+            if (a.getStock() != null) {
+                original.setStock(a.getStock());
+            }
+
+            if (a.getActivo() != null) {
+                original.setActivo(a.getActivo());
+            }
+
+            String sql = "UPDATE articulos SET descripcion = ?, pvp = ?, gastos_envio = ?, " +
+                    "tiempo_preparacion = ?, stock = ?, activo = ? WHERE codigo = ?";
+
+            try {
+                int filasAfectadas = ejecutaSQLInUpDel(sql,
+                        original.getDescripcion(),
+                        original.getPvp(),
+                        original.getGastosEnvio(),
+                        original.getTiempoPreparacion(),
+                        original.getStock(),
+                        original.getActivo(),
+                        original.getCodigo()
+                );
+
+                return filasAfectadas > 0;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+
     }
 
     @Override
@@ -164,7 +191,7 @@ public class ArticuloDAOImpl implements ArticuloDAO {
                     a.setDescripcion(rs.getString("descripcion"));
                     a.setPvp(rs.getBigDecimal("pvp"));
                     a.setGastosEnvio(rs.getBigDecimal("gastos_envio"));
-                    a.setTiempoPreparacion(rs.getByte("tiempo_preparacion"));
+                    a.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
                     lista.add(a);
                 }
         } catch (SQLException e) {
@@ -209,7 +236,7 @@ public class ArticuloDAOImpl implements ArticuloDAO {
                     a.setDescripcion(rs.getString("descripcion"));
                     a.setPvp(rs.getBigDecimal("pvp"));
                     a.setGastosEnvio(rs.getBigDecimal("gastos_envio"));
-                    a.setTiempoPreparacion(rs.getByte("tiempo_preparacion"));
+                    a.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
                     lista.add(a);
                 }
             }
