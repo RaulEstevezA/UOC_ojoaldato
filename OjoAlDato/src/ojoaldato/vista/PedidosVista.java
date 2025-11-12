@@ -93,7 +93,7 @@ public class PedidosVista {
         // ---- Seleccionar artículo -----
         System.out.println("Código del artículo: ");
         String codigo = entrada.nextLine();
-        Articulo articulo = repositorioArticulo.buscarArticulo(codigo);
+        Articulo articulo = repositorioArticulo.getArticuloByCodigo(codigo);
         if (articulo == null) {
             System.out.println("No se encontró ningún artículo con el código proporcionado.");
             return null;
