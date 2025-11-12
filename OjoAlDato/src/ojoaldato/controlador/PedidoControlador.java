@@ -15,11 +15,7 @@ import ojoaldato.modelo.Cliente;
  */
 
 public class PedidoControlador {
-    private Datos  datos;
-
-    public PedidoControlador(Datos datos) { //Constructor modificado para recibir el objeto Datos en lugar de crear una copia propia
-        this.datos = datos;
-    }
+    private final static Datos datos = new Datos();
 
     /**
      * Crea un nuevo pedido asociado a un cliente.

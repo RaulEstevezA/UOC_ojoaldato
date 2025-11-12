@@ -1,10 +1,6 @@
 package ojoaldato.DAO;
-<<<<<<<< HEAD:OjoAlDato/Source Packages/ojoaldato/DAO/IDAO.java
-========
 
-import ojoaldato.modelo.Pedido;
->>>>>>>> e3148f72137ae20f7dcc6fc64073f6ef8ece1c66:OjoAlDato/src/ojoaldato/DAO/IDAO.java
-
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -22,8 +18,8 @@ public interface IDAO<T, K> {
     boolean crear(T entidad);
     
     /**
-     * Busca una entidad por su email
-     * @param id El email a buscar
+     * Busca una entidad por su identificador
+     * @param id El identificador a buscar
      * @return La entidad encontrada o null si no existe
      */
     T buscar(K id);
@@ -47,5 +43,4 @@ public interface IDAO<T, K> {
      * @return Lista con todas las entidades
      */
     List<T> obtenerTodos();
-
 }
