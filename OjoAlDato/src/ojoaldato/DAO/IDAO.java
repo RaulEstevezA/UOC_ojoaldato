@@ -1,9 +1,4 @@
 package ojoaldato.DAO;
-<<<<<<<< HEAD:OjoAlDato/Source Packages/ojoaldato/DAO/IDAO.java
-========
-
-import ojoaldato.modelo.Pedido;
->>>>>>>> e3148f72137ae20f7dcc6fc64073f6ef8ece1c66:OjoAlDato/src/ojoaldato/DAO/IDAO.java
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package ojoaldato.DAO;
 
-import Util.ConexionDB;
+import ojoaldato.db.ConexionDB;
 import ojoaldato.modelo.Pedido;
 
 import java.sql.*;
