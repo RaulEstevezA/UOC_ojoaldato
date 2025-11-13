@@ -1,6 +1,5 @@
-package ojoaldato.DAO.ArticuloDAO;
+package ojoaldato.DAO;
 
-import ojoaldato.DAO.IDAO;
 import ojoaldato.modelo.Articulo;
 
 import java.util.List;

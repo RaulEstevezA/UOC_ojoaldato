@@ -1,6 +1,6 @@
 package ojoaldato.controlador;
 
-import ojoaldato.DAO.ArticuloDAO.ArticuloDAOImpl;
+import ojoaldato.DAO.ArticuloDAOImpl;
 import ojoaldato.excepcion.ElementoDuplicadoException;
 import ojoaldato.excepcion.ElementoNoEncontradoException;
 import ojoaldato.modelo.Articulo;

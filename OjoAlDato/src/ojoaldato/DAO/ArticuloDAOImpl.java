@@ -1,4 +1,4 @@
-package ojoaldato.DAO.ArticuloDAO;
+package ojoaldato.DAO;
 
 import ojoaldato.db.ConexionDB;
 import ojoaldato.excepcion.ElementoDuplicadoException;
