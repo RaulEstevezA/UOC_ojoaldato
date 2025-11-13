@@ -10,7 +10,7 @@ public class TestObtenerPendientesPorEmail {
     public static void main(String[] args) {
         PedidoDAO pedidoDAO = new PedidoDAOImpl();
 
-        String emailCliente = "cliente1@ejemplo.com";
+        String emailCliente = "cliente_prueba@ejemplo.com";
         List<Pedido> pedidos = pedidoDAO.obtenerPendientesPorEmail(emailCliente);
 
         System.out.println("Pedidos pendientes para el cliente: " + emailCliente);
@@ -24,7 +24,7 @@ public class TestObtenerPendientesPorEmail {
                 System.out.println("Artículo:     " + p.getArticulo().getCodigo());
                 System.out.println("Cantidad:     " + p.getCantidad());
                 System.out.println("Fecha/Hora:   " + p.getFechaHora());
-                System.out.println("Importe total: " + p.calcularImporteTotal());
+                System.out.println("Importe total:" + p.calcularImporteTotal());
                 System.out.println("-------------------------------------------");
             }
         }

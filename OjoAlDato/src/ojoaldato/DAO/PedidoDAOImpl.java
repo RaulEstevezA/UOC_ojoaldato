@@ -5,6 +5,7 @@ import ojoaldato.modelo.*;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,13 +38,15 @@ public class PedidoDAOImpl implements PedidoDAO {
     //Eliminación de un pedido en la base de datos si no está enviado
     @Override
     public boolean eliminar(Integer numPedido) {
-        String sql = " DELETE FROM pedidos WHERE num_pedido = ? AND enviado = 0";
+        actualizarPedidosAutomaticamente();
 
-        try (Connection connection = ojoaldato.db.ConexionDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        String sql = "DELETE FROM pedidos WHERE num_pedido = ? AND enviado = 0";
 
-            preparedStatement.setInt(1, numPedido);
-            return preparedStatement.executeUpdate() > 0;
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, numPedido);
+            return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
             System.err.println("Error al eliminar el pedido: " + e.getMessage());
@@ -68,48 +71,90 @@ public class PedidoDAOImpl implements PedidoDAO {
 
     @Override
     public List<Pedido> obtenerTodos() {
+        actualizarPedidosAutomaticamente();
         return listarPedidos(BASE_QUERY, null);
     }
 
     @Override
     public List<Pedido> buscarPorEmail(String email) {
+        actualizarPedidosAutomaticamente();
         return listarPedidos(BASE_QUERY + " WHERE p.email_cliente = ?", email);
     }
 
     @Override
     public List<Pedido> obtenerEnviados() {
+        actualizarPedidosAutomaticamente();
         return listarPedidos(BASE_QUERY + " WHERE p.enviado = 1", null);
     }
 
     @Override
     public List<Pedido> obtenerEnviadosPorEmail(String email) {
+        actualizarPedidosAutomaticamente();
         return listarPedidos(BASE_QUERY + " WHERE p.enviado = 1 AND p.email_cliente = ?", email);
     }
 
     @Override
     public List<Pedido> obtenerPendientes() {
+        actualizarPedidosAutomaticamente();
         return listarPedidos(BASE_QUERY + " WHERE p.enviado = 0", null);
     }
 
     @Override
     public List<Pedido> obtenerPendientesPorEmail(String email) {
+        actualizarPedidosAutomaticamente();
         return listarPedidos(BASE_QUERY + " WHERE p.enviado = 0 AND p.email_cliente = ?", email);
     }
 
     @Override
     public Pedido buscar(Integer id) {
+        actualizarPedidosAutomaticamente();
         List<Pedido> pedidos = listarPedidos(BASE_QUERY + " WHERE p.num_pedido = ?", id);
         return pedidos.isEmpty() ? null : pedidos.get(0);
     }
 
     @Override
     public boolean actualizar(Pedido pedido) {
-        //No requerido en la rúbrica, incluido en base a IDAO
-        return false;
+        LocalDateTime ahora = LocalDateTime.now();
+        if (pedido.esCancelable(ahora)) {
+            return false;
+        }
+        String sql = "UPDATE pedidos SET enviado = 1, fecha_envio = NOW() WHERE num_pedido = ?";
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, pedido.getNumPedido());
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar pedido: " + e.getMessage());
+            return false;
+        }
     }
 
 
-    //MÉTODO AUXILIAR LISTAR PEDIDOS
+    @Override
+    public void actualizarPedidosAutomaticamente() {
+        String sql = """
+        UPDATE pedidos p
+        JOIN articulos a ON p.codigo_articulo = a.codigo
+        SET p.enviado = 1, p.fecha_envio = NOW()
+        WHERE p.enviado = 0
+          AND p.fecha_hora <= DATE_SUB(NOW(), INTERVAL a.tiempo_preparacion MINUTE)
+    """;
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            int actualizados = ps.executeUpdate();
+            if (actualizados > 0) {
+                System.out.println("Pedidos actualizados automáticamente: " + actualizados);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar pedidos automáticamente: " + e.getMessage());
+        }
+    }
+
+
+    //MÉTODO AUXILIAR PARA LISTAR PEDIDOS
 
     private List<Pedido> listarPedidos(String sql, Object parametro) {
         List<Pedido> pedidos = new ArrayList<>();

@@ -13,7 +13,7 @@ public class TestCrearPedido {
             PedidoDAO pedidoDAO = new PedidoDAOImpl();
 
             Cliente cliente = new ClienteEstandar("Cliente Premium", "Avenida Real 456", "87654321B", "cliente2@ejemplo.com");
-            Articulo articulo = new Articulo("ART002", "Artículo de prueba 2", BigDecimal.valueOf(50.0), BigDecimal.valueOf(5.0), 24, 10);
+            Articulo articulo = new Articulo("ART002", "Artículo de prueba 2", BigDecimal.valueOf(50.0), BigDecimal.valueOf(5.0), 1, 10);
 
             Pedido pedido = new Pedido(3, cliente, articulo, 2, LocalDateTime.now());
 

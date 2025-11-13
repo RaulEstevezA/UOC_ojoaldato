@@ -20,5 +20,6 @@ public interface PedidoDAO extends IDAO<Pedido, Integer> {
     //Listar pedidos pendientes filtrando por cliente
     List<Pedido> obtenerPendientesPorEmail(String email);
 
+    void actualizarPedidosAutomaticamente();
 
 }

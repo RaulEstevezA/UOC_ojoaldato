@@ -19,7 +19,7 @@ public class TestObtenerTodosPedidos {
             System.out.println("Artículo:     " + (p.getArticulo() != null ? p.getArticulo().getCodigo() : "N/A"));
             System.out.println("Cantidad:     " + p.getCantidad());
             System.out.println("Fecha/Hora:   " + p.getFechaHora());
-            System.out.println("Importe total:" + p.calcularImporteTotal());
+            System.out.println("Importe total: " + p.calcularImporteTotal());
         }
     }
 }
