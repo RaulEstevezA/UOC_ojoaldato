@@ -17,7 +17,8 @@ public class Factory {
     private Factory() {}
 
     //He visto que se puede usar synchronized para evitar que se puedan crear dos instancias al mismo tiempo, pero no tenemos múltiples hilos
-    //Método para obtener la instancia única de cada DAO
+    //Metodo para obtener la instancia única de cada DAO
+
     public static ClienteDAO getClienteDAO() {
         if (clienteDAO == null) {
             clienteDAO = new ClienteDAOImpl();
@@ -38,6 +39,5 @@ public class Factory {
         }
         return pedidoDAO;
     }
-
     
 }
