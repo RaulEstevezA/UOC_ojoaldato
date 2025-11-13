@@ -1,6 +1,7 @@
 package Test;
 
 import ojoaldato.DAO.ClienteDAO;
+import ojoaldato.DAO.ClienteDAOImpl;
 import ojoaldato.modelo.ClienteEstandar;
 import ojoaldato.modelo.ClientePremium;
 
@@ -8,7 +9,7 @@ public class TestModificarCliente {
 
     public static void main(String[] args) {
 
-        ClienteDAO dao = new ClienteDAO();
+        ClienteDAO dao = new ClienteDAOImpl();
 
         // Clientes existentes que vamos a modificar
         ClienteEstandar cliente1 = new ClienteEstandar(

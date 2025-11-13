@@ -1,12 +1,13 @@
 package Test;
 
 import ojoaldato.DAO.ClienteDAO;
+import ojoaldato.DAO.ClienteDAOImpl;
 
 public class TestDesactivarCliente {
 
     public static void main(String[] args) {
 
-        ClienteDAO dao = new ClienteDAO();
+        ClienteDAO dao = new ClienteDAOImpl();
 
         String emailCliente1 = "maria@example.com";
         String emailCliente2 = "carlos@example.com";
