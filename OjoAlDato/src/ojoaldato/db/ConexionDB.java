@@ -18,7 +18,7 @@ public class ConexionDB {
     private static final String USER = CONFIG.getProperty("db.user");
     private static final String PASSWORD = CONFIG.getProperty("db.password");
     private static final String DRIVER = CONFIG.getProperty("db.driver");
-
+    
     // Instancia Singleton de la conexión
     private static Connection connection = null;
 

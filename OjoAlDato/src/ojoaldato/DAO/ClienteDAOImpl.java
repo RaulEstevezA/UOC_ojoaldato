@@ -44,7 +44,8 @@ public class ClienteDAOImpl implements ClienteDAO {
     """;
 
     private static final String ELIMINAR_CLIENTE = """
-        DELETE FROM clientes
+        UPDATE clientes
+        SET activo = FALSE
         WHERE email = ?
     """;
 
@@ -115,10 +116,9 @@ public class ClienteDAOImpl implements ClienteDAO {
 
     @Override
     public boolean eliminar(String email) {
-        String sql = "UPDATE clientes SET activo = FALSE WHERE email = ?";
 
         try (Connection con = ConexionDB.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(ELIMINAR_CLIENTE)) {
 
             ps.setString(1, email);
             int filas = ps.executeUpdate();
