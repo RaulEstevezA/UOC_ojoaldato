@@ -1,6 +1,7 @@
 package ojoaldato.controlador;
 
-import ojoaldato.DAO.ArticuloDAO.ArticuloDAOImpl;
+import ojoaldato.DAO.ArticuloDAO;
+import ojoaldato.DAO.FactoryDAO;
 import ojoaldato.excepcion.ElementoDuplicadoException;
 import ojoaldato.excepcion.ElementoNoEncontradoException;
 import ojoaldato.modelo.Articulo;
@@ -15,9 +16,12 @@ import java.util.List;
 
 
 public class ArticuloControlador {
-    private final ArticuloDAOImpl articuloDAO = new ArticuloDAOImpl();
+    private final ArticuloDAO articuloDAO;
 
-    public ArticuloControlador() {}
+    public ArticuloControlador() {
+
+        this.articuloDAO = FactoryDAO.getArticuloDAO();
+    }
 
     /**
      * Añade un artículo en el sistema
@@ -73,8 +77,8 @@ public class ArticuloControlador {
      */
     public String deleteArticulo(String codigo) {
         try {
-            Articulo articulo = articuloDAO.buscar(codigo);
-            return "Artículo con código " + articulo.getCodigo() + " eliminado correctamente";
+            articuloDAO.eliminar(codigo);
+            return "Artículo con código " + codigo + " eliminado correctamente";
         } catch (ElementoNoEncontradoException e) {
             return "No se encontró ningún artículo con el código " + codigo;
         } catch (Exception e) {
