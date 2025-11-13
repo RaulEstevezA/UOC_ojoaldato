@@ -1,6 +1,7 @@
 package Test;
 
 import ojoaldato.DAO.ClienteDAO;
+import ojoaldato.DAO.ClienteDAOImpl;
 import ojoaldato.modelo.Cliente;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public class TestListarClientes {
 
     public static void main(String[] args) {
 
-        ClienteDAO dao = new ClienteDAO();
+        ClienteDAO dao = new ClienteDAOImpl();
 
         System.out.println("=== TEST: LISTAR CLIENTES ===");
 

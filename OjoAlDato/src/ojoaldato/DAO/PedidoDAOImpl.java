@@ -5,7 +5,6 @@ import ojoaldato.modelo.*;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,178 +51,123 @@ public class PedidoDAOImpl implements PedidoDAO {
         }
     }
 
-    //Listar todos los pedidos de la base de datos
+
+    //STRING BASE PARA CONSULTAS CON JOIN
+
+    private static final String BASE_QUERY = """
+        SELECT p.num_pedido, p.cantidad, p.fecha_hora, p.enviado, p.fecha_envio, p.precio_total, p.gastos_envio AS pedido_gastos_envio,
+               c.email AS cliente_email, c.nombre AS cliente_nombre, c.domicilio AS cliente_domicilio, c.nif AS cliente_nif, c.tipo AS cliente_tipo,
+               a.codigo AS articulo_codigo, a.descripcion AS articulo_descripcion, a.pvp AS articulo_pvp, a.gastos_envio AS articulo_gastos_envio,
+               a.tiempo_preparacion AS articulo_tiempo_preparacion, a.stock AS articulo_stock
+        FROM pedidos p
+        JOIN clientes c ON p.email_cliente = c.email
+        JOIN articulos a ON p.codigo_articulo = a.codigo
+    """;
+
+    //CONSULTAS CON JOIN
+
     @Override
     public List<Pedido> obtenerTodos() {
+        return listarPedidos(BASE_QUERY, null);
+    }
+
+    @Override
+    public List<Pedido> buscarPorEmail(String email) {
+        return listarPedidos(BASE_QUERY + " WHERE p.email_cliente = ?", email);
+    }
+
+    @Override
+    public List<Pedido> obtenerEnviados() {
+        return listarPedidos(BASE_QUERY + " WHERE p.enviado = 1", null);
+    }
+
+    @Override
+    public List<Pedido> obtenerEnviadosPorEmail(String email) {
+        return listarPedidos(BASE_QUERY + " WHERE p.enviado = 1 AND p.email_cliente = ?", email);
+    }
+
+    @Override
+    public List<Pedido> obtenerPendientes() {
+        return listarPedidos(BASE_QUERY + " WHERE p.enviado = 0", null);
+    }
+
+    @Override
+    public List<Pedido> obtenerPendientesPorEmail(String email) {
+        return listarPedidos(BASE_QUERY + " WHERE p.enviado = 0 AND p.email_cliente = ?", email);
+    }
+
+    @Override
+    public Pedido buscar(Integer id) {
+        List<Pedido> pedidos = listarPedidos(BASE_QUERY + " WHERE p.num_pedido = ?", id);
+        return pedidos.isEmpty() ? null : pedidos.get(0);
+    }
+
+    @Override
+    public boolean actualizar(Pedido pedido) {
+        //No requerido en la rúbrica, incluido en base a IDAO
+        return false;
+    }
+
+
+    //MÉTODO AUXILIAR LISTAR PEDIDOS
+
+    private List<Pedido> listarPedidos(String sql, Object parametro) {
         List<Pedido> pedidos = new ArrayList<>();
-        String sql = "SELECT * FROM pedidos";
 
-        try (Connection connection = ojoaldato.db.ConexionDB.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            while (resultSet.next()) {
-                pedidos.add(mapearPedido(resultSet));
+            if (parametro != null) {
+                if (parametro instanceof String) ps.setString(1, (String) parametro);
+                else if (parametro instanceof Integer) ps.setInt(1, (Integer) parametro);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Cliente cliente;
+                    if ("PREMIUM".equalsIgnoreCase(rs.getString("cliente_tipo"))) {
+                        cliente = new ClientePremium(
+                                rs.getString("cliente_nombre"),
+                                rs.getString("cliente_domicilio"),
+                                rs.getString("cliente_nif"),
+                                rs.getString("cliente_email"),
+                                BigDecimal.valueOf(30.0),
+                                BigDecimal.valueOf(0.8)
+                        );
+                    } else {
+                        cliente = new ClienteEstandar(
+                                rs.getString("cliente_nombre"),
+                                rs.getString("cliente_domicilio"),
+                                rs.getString("cliente_nif"),
+                                rs.getString("cliente_email")
+                        );
+                    }
+
+                    Articulo articulo = new Articulo(
+                            rs.getString("articulo_codigo"),
+                            rs.getString("articulo_descripcion"),
+                            rs.getBigDecimal("articulo_pvp"),
+                            rs.getBigDecimal("articulo_gastos_envio"),
+                            rs.getInt("articulo_tiempo_preparacion"),
+                            rs.getInt("articulo_stock")
+                    );
+
+                    Pedido pedido = new Pedido(
+                            rs.getInt("num_pedido"),
+                            cliente,
+                            articulo,
+                            rs.getInt("cantidad"),
+                            rs.getTimestamp("fecha_hora").toLocalDateTime()
+                    );
+
+                    pedidos.add(pedido);
+                }
             }
 
         } catch (SQLException e) {
             System.err.println("Error al listar los pedidos: " + e.getMessage());
         }
+
         return pedidos;
-    }
-
-    //Búsqueda de pedidos por mail de cliente
-    @Override
-    public List<Pedido> buscarPorEmail(String email) {
-        List<Pedido> pedidos = new ArrayList<>();
-        String sql = "SELECT * FROM pedidos WHERE email_cliente = ?";
-
-        try (Connection connection = ConexionDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, email);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while(resultSet.next()) {
-                    pedidos.add(mapearPedido(resultSet));
-                }
-            }
-
-        }catch (SQLException e) {
-            System.err.println("Error al obtener los pedidos por mail: " + e.getMessage());
-        }
-        return pedidos;
-    }
-
-    //Lista de pedidos enviados
-    @Override
-    public List<Pedido> obtenerEnviados() {
-        List<Pedido> pedidos = new ArrayList<>();
-        String sql = "SELECT * FROM pedidos WHERE enviado = 1";
-
-        try (Connection connection = ConexionDB.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            while (resultSet.next()) {
-                pedidos.add(mapearPedido(resultSet));
-            }
-        } catch (SQLException e) {
-            System.err.println("Error al listar los pedidos enviados " + e.getMessage());
-        }
-        return pedidos;
-    }
-
-    //Lista de pedidos enviados por cliente
-    @Override
-    public List<Pedido> obtenerEnviadosPorEmail(String email) {
-        List<Pedido> pedidos = new ArrayList<>();
-        String sql = "SELECT * FROM pedidos WHERE enviado = 1 AND email_cliente = ?";
-
-        try (Connection connection = ConexionDB.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, email);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while(resultSet.next()) {
-                    pedidos.add(mapearPedido(resultSet));
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error al listar los pedidos enviados: " + e.getMessage());
-        }
-        return pedidos;
-    }
-
-    //Listar todos los pedidos pendientes
-    @Override
-    public List<Pedido> obtenerPendientes() {
-        List<Pedido> pedidos = new ArrayList<>();
-        String sql = "SELECT * FROM pedidos WHERE enviado = 0";
-
-        try (Connection connection = ConexionDB.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            while (resultSet.next()) {
-                pedidos.add(mapearPedido(resultSet));
-            }
-        } catch (SQLException e) {
-            System.err.println("Error al listar los pedidos pendientes: " + e.getMessage());
-        }
-        return pedidos;
-    }
-
-    //Listar pedidos pendientes filtrando por cliente
-    @Override
-    public List<Pedido> obtenerPendientesPorEmail(String email) {
-        List<Pedido> pedidos = new ArrayList<>();
-        String sql = "SELECT * FROM pedidos WHERE enviado = 0 AND email_cliente = ?";
-
-        try (Connection connection = ConexionDB.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, email);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    pedidos.add(mapearPedido(resultSet));
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error al obtener los pedidos pendientes por email: " + e.getMessage());
-        }
-        return pedidos;
-    }
-
-    //Búsqueda de pedido por número de pedido (no solicitado en rúbrica, implementado en base a IDAO).
-    @Override
-    public Pedido buscar(Integer id) {
-        String sql = "SELECT * FROM pedidos WHERE num_pedido = ?";
-        try (Connection connection = ConexionDB.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setInt(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return mapearPedido(resultSet);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error al buscar el pedido: " + e.getMessage());
-        }
-        return null;
-    }
-
-    //Actualización de datos de pedido no requerida
-    @Override
-    public boolean actualizar(Pedido pedido) {
-        return false;
-    }
-
-    //Método auxiliar para mapear un pedido, cargando cliente y artículo desde los DAO
-    private Pedido mapearPedido(ResultSet resultSet) throws SQLException {
-
-        int numPedido = resultSet.getInt("num_pedido");
-        String emailCliente = resultSet.getString("email_cliente");
-        String codigoArticulo = resultSet.getString("codigo_articulo");
-        int cantidad = resultSet.getInt("cantidad");
-        LocalDateTime fechaHora = resultSet.getTimestamp("fecha_hora").toLocalDateTime();
-
-        ClienteDAO clienteDAO = new ClienteDAOImpl();
-
-        //ArticuloDAO articuloDAO = new ArticuloDAOImpl();
-
-        Cliente cliente = clienteDAO.buscar(emailCliente);
-        //Articulo articulo = articuloDAO.buscar(codigoArticulo);
-        //A la espera de ArticuloDAO para implementar
-
-        if (cliente == null) {
-            System.err.println("Cliente no encontrado");
-        }
-        if (articulo == null) {
-            System.err.println("Artículo no encontrado");
-        }
-
-        return new Pedido(numPedido, cliente, articulo, cantidad, fechaHora);
-
     }
 }
