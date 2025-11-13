@@ -1,12 +1,11 @@
 package ojoaldato.DAO;
 
 
-
 /* ESTE FACTOR YHAY QUE MODIFICARLO CUANDO ESTEN LOS DAO TERMIANDOS
   RAUL TRANQUILO, LOS COMENTARIOS SON PARA ACLARARME MEJOR, DESPUÉS SE PUEDEN QUITAR TQ(.)
 */
 
-public class Factory {
+public class FactoryDAO {
 
 // Instancias únicas de cada DAO (patrón Singleton)
     private static ClienteDAO clienteDAO = null;
@@ -14,7 +13,7 @@ public class Factory {
     private static PedidoDAO pedidoDAO = null;
 
     //Constructor privado para evitar instanciación fuera de la clase
-    private Factory() {}
+    private FactoryDAO() {}
 
     //He visto que se puede usar synchronized para evitar que se puedan crear dos instancias al mismo tiempo, pero no tenemos múltiples hilos
     //Metodo para obtener la instancia única de cada DAO
