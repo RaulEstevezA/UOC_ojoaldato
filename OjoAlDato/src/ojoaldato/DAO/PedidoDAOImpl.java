@@ -14,25 +14,41 @@ public class PedidoDAOImpl implements PedidoDAO {
     //Creación de un nuevo pedido en la base de datos
     @Override
     public boolean crear(Pedido pedido) {
-        String sql = " INSERT INTO pedidos (num_pedido, email_cliente, codigo_articulo, cantidad, fecha_hora, precio_total, gastos_envio) " + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = ojoaldato.db.ConexionDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        String sql = """
+        INSERT INTO pedidos 
+            (email_cliente, codigo_articulo, cantidad, fecha_hora, precio_total, gastos_envio) 
+        VALUES (?, ?, ?, ?, ?, ?)
+        """;
 
-            preparedStatement.setInt(1, pedido.getNumPedido());
-            preparedStatement.setString(2, pedido.getCliente().getEmail());
-            preparedStatement.setString(3, pedido.getArticulo().getCodigo());
-            preparedStatement.setInt(4, pedido.getCantidad());
-            preparedStatement.setTimestamp(5, Timestamp.valueOf(pedido.getFechaHora()));
-            preparedStatement.setBigDecimal(6, pedido.calcularImporteTotal());
-            preparedStatement.setBigDecimal(7, pedido.getArticulo().getGastosEnvio());
+        try (Connection connection = ConexionDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            return preparedStatement.executeUpdate() > 0;
+            preparedStatement.setString(1, pedido.getCliente().getEmail());
+            preparedStatement.setString(2, pedido.getArticulo().getCodigo());
+            preparedStatement.setInt(3, pedido.getCantidad());
+            preparedStatement.setTimestamp(4, Timestamp.valueOf(pedido.getFechaHora()));
+            preparedStatement.setBigDecimal(5, pedido.calcularImporteTotal());
+            preparedStatement.setBigDecimal(6, pedido.getArticulo().getGastosEnvio());
+
+            int filas = preparedStatement.executeUpdate();
+
+            if (filas > 0) {
+                // Recuperar el num_pedido generado automáticamente
+                try (ResultSet rs = preparedStatement.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int idGenerado = rs.getInt(1);
+                        pedido.setNumPedido(idGenerado);
+                    }
+                }
+                return true;
+            }
 
         } catch (SQLException e) {
             System.err.println("Error al crear el pedido: " + e.getMessage());
-            return false;
         }
+
+        return false;
     }
 
     //Eliminación de un pedido en la base de datos si no está enviado

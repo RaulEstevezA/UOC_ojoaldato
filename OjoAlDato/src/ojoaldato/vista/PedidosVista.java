@@ -78,8 +78,6 @@ public class PedidosVista {
     // Método auxiliar para pedir datos de Pedido
     // =======================
     private Pedido pedirDatosPedido() {
-        System.out.println("Número del pedido: ");
-        int numPedido = Integer.parseInt(entrada.nextLine());
 
         // ---- Seleccionar cliente ----
         System.out.println("Email del cliente: ");
@@ -103,10 +101,11 @@ public class PedidosVista {
         System.out.println("Cantidad: ");
         int cantidad = Integer.parseInt(entrada.nextLine());
 
-        // ---- Timestamp
+        // ---- Timestamp ----
         LocalDateTime fechaHora = LocalDateTime.now();
 
-        return new Pedido(numPedido, cliente, articulo, cantidad, fechaHora);
+        // NO pedimos numPedido
+        return new Pedido(cliente, articulo, cantidad, fechaHora);
     }
 
     // =======================

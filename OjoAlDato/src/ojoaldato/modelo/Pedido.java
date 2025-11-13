@@ -31,6 +31,15 @@ public class Pedido {
         this.fechaHora = (fechaHora != null) ? fechaHora : LocalDateTime.now();
     }
 
+    // numPedido se asignará automáticamente por la BD y el DAO
+    public Pedido(Cliente cliente, Articulo articulo, int cantidad, LocalDateTime fechaHora) {
+        this.cliente = cliente;
+        this.articulo = articulo;
+        this.cantidad = cantidad;
+        this.fechaHora = fechaHora;
+
+    }
+
     // Getters y setters básicos
     public int getNumPedido() { return numPedido; }
     public void setNumPedido(int numPedido) { this.numPedido = numPedido; }
