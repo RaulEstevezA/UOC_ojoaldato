@@ -23,6 +23,7 @@ CREATE TABLE clientes (
     fecha_alta DATETIME DEFAULT CURRENT_TIMESTAMP,
     activo BOOLEAN DEFAULT TRUE,
     CONSTRAINT chk_email CHECK (email LIKE '%@%.%')
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- =============================================

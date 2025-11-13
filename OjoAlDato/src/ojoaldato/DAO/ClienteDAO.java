@@ -12,7 +12,7 @@ import ojoaldato.modelo.Cliente;
 public interface ClienteDAO extends IDAO<Cliente, String> {
 
 
-     // Lista todos los clientes de tipo ESTÁNDAR.
+    // Lista todos los clientes de tipo ESTÁNDAR.
     List<Cliente> obtenerEstandar();
 
     // Lista todos los clientes de tipo PREMIUM.
