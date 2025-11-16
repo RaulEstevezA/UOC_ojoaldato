@@ -11,44 +11,83 @@ import java.util.List;
 
 public class PedidoDAOImpl implements PedidoDAO {
 
-    //Creación de un nuevo pedido en la base de datos
+    /**
+     * Crea un nuevo pedido y actualiza el stock del artículo correspondiente.
+     * Utiliza una transacción para garantizar la integridad de los datos.
+     * 
+     * @param pedido El pedido a crear
+     * @return true si el pedido se creó correctamente, false en caso contrario
+     * @throws RuntimeException Si ocurre un error al procesar el pedido
+     */
     @Override
     public boolean crear(Pedido pedido) {
+        Connection connection = null;
+        try {
+            // 1. Obtener conexión y desactivar auto-commit
+            connection = ConexionDB.getConnection();
+            connection.setAutoCommit(false);
 
-        String sql = """
-        INSERT INTO pedidos 
-            (email_cliente, codigo_articulo, cantidad, fecha_hora, precio_total, gastos_envio) 
-        VALUES (?, ?, ?, ?, ?, ?)
-        """;
+            // 2. Actualizar el stock usando el procedimiento almacenado
+            try (CallableStatement stmtStock = connection.prepareCall(
+                    "{call sp_actualizar_stock(?, ?)}")) {
+                stmtStock.setString(1, pedido.getArticulo().getCodigo());
+                stmtStock.setInt(2, -pedido.getCantidad());  // Restar del stock
+                stmtStock.execute();
+            }
 
-        try (Connection connection = ConexionDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            // 3. Insertar el pedido
+            String sql = """
+                INSERT INTO pedidos 
+                    (email_cliente, codigo_articulo, cantidad, fecha_hora, precio_total, gastos_envio) 
+                VALUES (?, ?, ?, ?, ?, ?)
+                """;
 
-            preparedStatement.setString(1, pedido.getCliente().getEmail());
-            preparedStatement.setString(2, pedido.getArticulo().getCodigo());
-            preparedStatement.setInt(3, pedido.getCantidad());
-            preparedStatement.setTimestamp(4, Timestamp.valueOf(pedido.getFechaHora()));
-            preparedStatement.setBigDecimal(5, pedido.calcularImporteTotal());
-            preparedStatement.setBigDecimal(6, pedido.getArticulo().getGastosEnvio());
+            try (PreparedStatement stmtPedido = connection.prepareStatement(
+                    sql, Statement.RETURN_GENERATED_KEYS)) {
+                
+                stmtPedido.setString(1, pedido.getCliente().getEmail());
+                stmtPedido.setString(2, pedido.getArticulo().getCodigo());
+                stmtPedido.setInt(3, pedido.getCantidad());
+                stmtPedido.setTimestamp(4, Timestamp.valueOf(pedido.getFechaHora()));
+                stmtPedido.setBigDecimal(5, pedido.calcularImporteTotal());
+                stmtPedido.setBigDecimal(6, pedido.getArticulo().getGastosEnvio());
 
-            int filas = preparedStatement.executeUpdate();
-
-            if (filas > 0) {
-                // Recuperar el num_pedido generado automáticamente
-                try (ResultSet rs = preparedStatement.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        int idGenerado = rs.getInt(1);
-                        pedido.setNumPedido(idGenerado);
+                int filas = stmtPedido.executeUpdate();
+                
+                if (filas > 0) {
+                    // Recuperar el num_pedido generado automáticamente
+                    try (ResultSet rs = stmtPedido.getGeneratedKeys()) {
+                        if (rs.next()) {
+                            pedido.setNumPedido(rs.getInt(1));
+                        }
                     }
+                    connection.commit();  // Confirmar la transacción
+                    return true;
                 }
-                return true;
+                return false;
             }
 
         } catch (SQLException e) {
-            System.err.println("Error al crear el pedido: " + e.getMessage());
+            // Si hay error, deshacer cambios
+            if (connection != null) {
+                try { 
+                    connection.rollback(); 
+                } catch (SQLException ex) {
+                    System.err.println("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw new RuntimeException("Error al crear el pedido: " + e.getMessage(), e);
+        } finally {
+            // Asegurarse de que la conexión se cierra correctamente
+            if (connection != null) {
+                try { 
+                    connection.setAutoCommit(true);
+                    connection.close(); 
+                } catch (SQLException e) {
+                    System.err.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
         }
-
-        return false;
     }
 
     //Eliminación de un pedido en la base de datos si no está enviado
