@@ -3,6 +3,7 @@ package ojoaldato.modelo;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+// está adaptado al ORM
 @Entity
 @Table(name = "articulos")
 public class Articulo {
@@ -42,6 +43,7 @@ public class Articulo {
         this.activo = true;
     }
 
+    // getters y setters
     public String getCodigo() { return codigo; }
     public void setCodigo(String codigo) { this.codigo = codigo; }
 
