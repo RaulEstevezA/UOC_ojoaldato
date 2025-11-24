@@ -1,123 +1,74 @@
 package ojoaldato.DAO;
 
-import ojoaldato.db.ConexionDB;
+import ojoaldato.db.JpaUtil;
 import ojoaldato.excepcion.ElementoDuplicadoException;
 import ojoaldato.excepcion.ElementoNoEncontradoException;
 import ojoaldato.modelo.Articulo;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class ArticuloDAOImpl implements ArticuloDAO {
 
-    /**
-     * Ejecuta una sentencia SELECT y devuelve una lista de Articulo.
-     *
-     * @param sql La sentencia SELECT a ejecutar.
-     * @param params
-     * @return
-     */
-    private List<Articulo> ejecutaSQLSelect(String sql, Object... params) {
-        List<Articulo> lista = new ArrayList<>();
-
-        try (Connection conn = ConexionDB.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            for (int i = 0; i < params.length; i++) {
-                stmt.setObject(i + 1, params[i]);
-            }
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                while(rs.next()) {
-                    Articulo a = new Articulo();
-                    a.setCodigo(rs.getString("codigo"));
-                    a.setDescripcion(rs.getString("descripcion"));
-                    a.setPvp(rs.getBigDecimal("pvp"));
-                    a.setGastosEnvio(rs.getBigDecimal("gastos_envio"));
-                    a.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
-                    a.setStock(rs.getInt("stock"));
-                    a.setActivo(rs.getBoolean("activo"));
-                    lista.add(a);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al ejecutar SELECT", e);
-        }
-
-        return lista;
-    }
-
-    /**
-     * Ejecuta sentencias SQL a ejecutar. Debe ser un INSERT, UPDATE o DELETE utilizando {@link PreparedStatement}.
-     * Centraliza la ejecución de sentencias de modificaciones evitando duplicación de código.
-     *
-     * @param sql La sentencia SQL a ejecutar. Debe ser un INSERT, UPDATE o DELETE válido.
-     * @param params Parámetros opcionales que reemplazarán los marcadores ? en la sentencia SQL, en orden.
-     * @return El número de filas afectadas por la sentencia ejecutada.
-     * @throws SQLException Si ocurre un error al conectar con la base de datos, preparar o ejecutar la sentencia.
-     */
-    private int ejecutaSQLInUpDel(String sql, Object... params) throws SQLException {
-        try (Connection conn = ConexionDB.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            for (int i = 0; i < params.length; i++) {
-                stmt.setObject(i + 1, params[i]);
-            }
-
-            return stmt.executeUpdate();
-        }
-    }
-
     @Override
     public boolean crear(Articulo a) {
-        String sql = "INSERT INTO articulos (codigo, descripcion, pvp, gastos_envio, tiempo_preparacion, stock) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+        EntityManager em = JpaUtil.getEntityManager();
+
         try {
-            int filas = ejecutaSQLInUpDel(sql,
-                    a.getCodigo(),
-                    a.getDescripcion(),
-                    a.getPvp(),
-                    a.getGastosEnvio(),
-                    a.getTiempoPreparacion(),
-                    a.getStock()
-            );
-            return filas > 0;
-        } catch (SQLException e) {
-            if (e.getSQLState() != null && (e.getSQLState().equals("23000") || e.getErrorCode() == 1062)) {
+            em.getTransaction().begin();
+
+            // Comprobación de duplicado igual que en JDBC:
+            Articulo existente = em.find(Articulo.class, a.getCodigo());
+            if (existente != null) {
                 throw new ElementoDuplicadoException(
                         "El artículo con código " + a.getCodigo() + " ya existe."
                 );
-            } else {
-                throw new RuntimeException("Error al crear artículo.", e);
             }
+
+            em.persist(a);
+            em.getTransaction().commit();
+            return true;
+
+        } catch (ElementoDuplicadoException e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
+
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw new RuntimeException("Error al crear artículo.", e);
         }
     }
 
     @Override
     public Articulo buscar(String codigo) {
-        String sql = "SELECT codigo, descripcion, pvp, gastos_envio, tiempo_preparacion, stock, activo " +
-                "FROM articulos WHERE codigo = ?";
+        EntityManager em = JpaUtil.getEntityManager();
 
-        List<Articulo> resultados = ejecutaSQLSelect(sql, codigo);
-
-        if(resultados.isEmpty()) {
-            throw new ElementoNoEncontradoException("Artículo con código " + codigo + " no encontrado.");
+        Articulo a = em.find(Articulo.class, codigo);
+        if (a == null) {
+            throw new ElementoNoEncontradoException(
+                    "Artículo con código " + codigo + " no encontrado."
+            );
         }
 
-        return resultados.getFirst();
+        return a;
     }
 
     @Override
     public boolean actualizar(Articulo a) {
-        Articulo original = buscar(a.getCodigo());
-        if (original == null) {
-            throw new ElementoNoEncontradoException("Artículo con código " + a.getCodigo() + " no encontrado.");
-        }
+        EntityManager em = JpaUtil.getEntityManager();
 
+        try {
+            em.getTransaction().begin();
+
+            Articulo original = em.find(Articulo.class, a.getCodigo());
+            if (original == null) {
+                throw new ElementoNoEncontradoException(
+                        "Artículo con código " + a.getCodigo() + " no encontrado."
+                );
+            }
+
+            // Solo actualizamos campos no nulos
             if (a.getDescripcion() != null && !a.getDescripcion().isBlank()) {
                 original.setDescripcion(a.getDescripcion());
             }
@@ -142,81 +93,70 @@ public class ArticuloDAOImpl implements ArticuloDAO {
                 original.setActivo(a.getActivo());
             }
 
-            String sql = "UPDATE articulos SET descripcion = ?, pvp = ?, gastos_envio = ?, " +
-                    "tiempo_preparacion = ?, stock = ?, activo = ? WHERE codigo = ?";
+            em.merge(original);
+            em.getTransaction().commit();
+            return true;
 
-            try {
-                int filasAfectadas = ejecutaSQLInUpDel(sql,
-                        original.getDescripcion(),
-                        original.getPvp(),
-                        original.getGastosEnvio(),
-                        original.getTiempoPreparacion(),
-                        original.getStock(),
-                        original.getActivo(),
-                        original.getCodigo()
-                );
+        } catch (ElementoNoEncontradoException e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
 
-                return filasAfectadas > 0;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
-
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw new RuntimeException("Error al actualizar artículo.", e);
+        }
     }
 
     @Override
     public boolean eliminar(String codigo) {
-        String sql = "DELETE FROM articulos WHERE codigo = ?";
-        try {
-            int filasAfectadas = ejecutaSQLInUpDel(sql, codigo);
+        EntityManager em = JpaUtil.getEntityManager();
 
-            if (filasAfectadas > 0) {
-                return true;
-            } else {
-                throw new ElementoNoEncontradoException("No se encontró ningún artículo con el código: " + codigo);
+        try {
+            em.getTransaction().begin();
+
+            Articulo a = em.find(Articulo.class, codigo);
+            if (a == null) {
+                throw new ElementoNoEncontradoException(
+                        "No se encontró ningún artículo con el código: " + codigo
+                );
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+            em.remove(a);
+            em.getTransaction().commit();
+            return true;
+
+        } catch (ElementoNoEncontradoException e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
+
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
             return false;
         }
     }
 
     @Override
     public List<Articulo> obtenerTodos() {
-        String sql = "SELECT codigo, descripcion, pvp, gastos_envio, tiempo_preparacion, stock, activo FROM articulos";
+        EntityManager em = JpaUtil.getEntityManager();
 
-        List<Articulo> lista = new ArrayList<>();
+        TypedQuery<Articulo> query =
+                em.createQuery("SELECT a FROM Articulo a", Articulo.class);
 
-        try (Connection conn = ConexionDB.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Articulo a = new Articulo();
-                    a.setCodigo(rs.getString("codigo"));
-                    a.setDescripcion(rs.getString("descripcion"));
-                    a.setPvp(rs.getBigDecimal("pvp"));
-                    a.setGastosEnvio(rs.getBigDecimal("gastos_envio"));
-                    a.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
-                    lista.add(a);
-                }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al obtener todos los artículos.", e);
-        }
-
-        return lista;
-
+        return query.getResultList();
     }
 
     @Override
     public Articulo buscarArticuloPorDescripcion(String descripcion) {
-        String sql = "SELECT codigo, descripcion, pvp, gastos_envio, tiempo_preparacion, stock, activo " +
-                "FROM articulos WHERE descripcion LIKE ?";
+        EntityManager em = JpaUtil.getEntityManager();
 
-        List<Articulo> lista = ejecutaSQLSelect(sql, "%" + descripcion + "%");
+        TypedQuery<Articulo> query =
+                em.createQuery("SELECT a FROM Articulo a WHERE a.descripcion LIKE :desc", Articulo.class);
+        query.setParameter("desc", "%" + descripcion + "%");
+
+        List<Articulo> lista = query.getResultList();
 
         if (lista.isEmpty()) {
-            throw new ElementoNoEncontradoException("Artículo no encontrado,");
+            throw new ElementoNoEncontradoException("Artículo no encontrado.");
         }
 
         return lista.getFirst();
@@ -224,32 +164,12 @@ public class ArticuloDAOImpl implements ArticuloDAO {
 
     @Override
     public List<Articulo> buscarPorDescripcion(String descripcion) {
-        String sql = "SELECT codigo, descripcion, pvp, gastos_envio, tiempo_preparacion, stock, activo " +
-                "FROM articulos WHERE descripcion LIKE ?";
+        EntityManager em = JpaUtil.getEntityManager();
 
-        List<Articulo> lista = new ArrayList<>();
+        TypedQuery<Articulo> query =
+                em.createQuery("SELECT a FROM Articulo a WHERE a.descripcion LIKE :desc", Articulo.class);
+        query.setParameter("desc", "%" + descripcion + "%");
 
-        try (Connection conn = ConexionDB.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, "%" + descripcion + "%");
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                while(rs.next()) {
-                    Articulo a = new Articulo();
-                    a.setCodigo(rs.getString("codigo"));
-                    a.setDescripcion(rs.getString("descripcion"));
-                    a.setPvp(rs.getBigDecimal("pvp"));
-                    a.setGastosEnvio(rs.getBigDecimal("gastos_envio"));
-                    a.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
-                    lista.add(a);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new ElementoNoEncontradoException("Error al obtener todos los artículos.");
-        }
-
-        return lista;
-     }
+        return query.getResultList();
+    }
 }
