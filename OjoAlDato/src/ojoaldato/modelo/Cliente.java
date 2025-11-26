@@ -1,19 +1,29 @@
 package ojoaldato.modelo;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 
-/**
- * Clase abstracta base del ojoaldato.modelo que representa a un cliente.
- * Se completará con atributos y métodos según el UML definitivo (AA1).
- */
+
+ // Clase JPA de Cliente
+@Entity
+@Table(name = "clientes")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) //Le decimos "que la clase va a ser una padre" y que cree una sola tabla para las subclases
+@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)  //Esto sirve para identificar a que subclase pertenece el cliente mediante una columna llamada tipo.
 public abstract class Cliente {
+    @Column(name = "nombre", nullable = false)
     private String nombre;
+    @Column(name = "domicilio", nullable = false)
     private String domicilio;
+    @Column(name = "nif", nullable = false)
     private String nif;
+    @Id
+    @Column(name = "email", nullable = false)
     private String email;
+    @Column(name = "cuota", precision = 10, scale = 2)
     private BigDecimal cuota;
+
 
     // Método polifórmico
     public abstract BigDecimal calcularGastosEnvio(BigDecimal base);
@@ -106,4 +116,4 @@ public abstract class Cliente {
     public int hashCode() {
         return email != null ? email.toLowerCase().hashCode() : 0;
     }
-}
+} 
