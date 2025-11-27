@@ -13,18 +13,18 @@ public class TestAgregarCliente {
 
         // Cliente estándar
         ClienteEstandar cliente1 = new ClienteEstandar(
-                "María López",
-                "Calle Mayor 15",
-                "11223344A",
-                "maria@example.com"
+                "Juan López",
+                "Calle Mayor 18",
+                "11223345A",
+                "juan@example.com"
         );
 
         // Cliente premium
         ClientePremium cliente2 = new ClientePremium(
-                "Carlos Ruiz",
-                "Avenida Libertad 20",
-                "99887766B",
-                "carlos@example.com"
+                "Juana Ruiz",
+                "Avenida Libertad 10",
+                "99887769B",
+                "juana@example.com"
         );
 
         System.out.println("=== TEST: AGREGAR CLIENTES ===");

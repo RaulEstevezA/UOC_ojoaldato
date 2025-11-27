@@ -116,4 +116,4 @@ public abstract class Cliente {
     public int hashCode() {
         return email != null ? email.toLowerCase().hashCode() : 0;
     }
-} 
+}

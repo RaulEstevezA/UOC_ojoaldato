@@ -1,47 +1,72 @@
 package TestClienteDAO;
 
-import ojoaldato.db.ConexionDB;
+import ojoaldato.DAO.ClienteDAO;
+import ojoaldato.DAO.FactoryDAO;
+import ojoaldato.db.JpaUtil;
+import ojoaldato.modelo.Cliente;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
 
 public class TestEliminarCliente {
 
     public static void main(String[] args) {
 
-        String emailCliente1 = "maria@example.com";
-        String emailCliente2 = "carlos@example.com";
+        String emailCliente1 = "juan@example.com";
+        String emailCliente2 = "juana@example.com";
 
-        String sql = "DELETE FROM clientes WHERE email = ?";
+        System.out.println("=== TEST: ELIMINAR CLIENTES (JPA/HIBERNATE) ===");
 
-        System.out.println("=== TEST: ELIMINAR CLIENTES (FÍSICO) ===");
+        // Obtenemos el DAO usando la Factory como siempre
+        ClienteDAO clienteDAO = FactoryDAO.getClienteDAO();
 
-        try (Connection con = ConexionDB.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        // El EntityManager lo gestionamos manualmente solo para la transacción del test
+        EntityManager em = JpaUtil.getEntityManager();
 
-            // Borrar primer cliente
-            ps.setString(1, emailCliente1);
-            int filas1 = ps.executeUpdate();
+        try {
+            em.getTransaction().begin();
 
-            // Borrar segundo cliente
-            ps.setString(1, emailCliente2);
-            int filas2 = ps.executeUpdate();
-
-            if (filas1 > 0)
+            // Buscar y borrar primer cliente
+            Cliente c1 = buscarPorEmail(em, emailCliente1);
+            if (c1 != null) {
+                em.remove(c1);
                 System.out.println("Cliente estándar eliminado: " + emailCliente1);
-            else
+            } else {
                 System.out.println("No se encontró el cliente estándar: " + emailCliente1);
+            }
 
-            if (filas2 > 0)
+            // Buscar y borrar segundo cliente
+            Cliente c2 = buscarPorEmail(em, emailCliente2);
+            if (c2 != null) {
+                em.remove(c2);
                 System.out.println("Cliente premium eliminado: " + emailCliente2);
-            else
+            } else {
                 System.out.println("No se encontró el cliente premium: " + emailCliente2);
+            }
 
-        } catch (SQLException e) {
+            em.getTransaction().commit();
+
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             System.err.println("Error al eliminar clientes: " + e.getMessage());
         }
 
-        System.out.println("=========================================");
+        System.out.println("==============================================");
+    }
+
+    /**
+     * Busca un cliente por email usando una consulta JPQL.
+     */
+    private static Cliente buscarPorEmail(EntityManager em, String email) {
+        try {
+            return em.createQuery(
+                            "SELECT c FROM Cliente c WHERE c.email = :email",
+                            Cliente.class
+                    ).setParameter("email", email)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null; // No encontrado
+        }
     }
 }
