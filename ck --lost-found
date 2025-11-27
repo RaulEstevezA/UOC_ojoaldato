@@ -1,0 +1,275 @@
+[33m1cbd7e9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/DAOadaptORM[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{0}: checkout: moving from develop to feature/DAOadaptORM
+[33m1cbd7e9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/DAOadaptORM[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{1}: reset: moving to origin/develop
+[33m1cbd7e9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/DAOadaptORM[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{2}: checkout: moving from feature/DAOadaptORM to develop
+[33m1cbd7e9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/DAOadaptORM[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{3}: checkout: moving from develop to feature/DAOadaptORM
+[33m1cbd7e9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/DAOadaptORM[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{4}: checkout: moving from develop to develop
+[33m1cbd7e9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/DAOadaptORM[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{5}: pull origin develop: Fast-forward
+[33mb499852[m HEAD@{6}: pull origin develop: Fast-forward
+[33m4bf3f78[m[33m ([m[1;33mtag: [m[1;33mProducto3[m[33m)[m HEAD@{7}: checkout: moving from feature/pedidodao to develop
+[33mea185d5[m[33m ([m[1;32mfeature/pedidodao[m[33m)[m HEAD@{8}: merge develop: Merge made by the 'ort' strategy.
+[33m172e5ac[m HEAD@{9}: checkout: moving from develop to feature/pedidodao
+[33m4bf3f78[m[33m ([m[1;33mtag: [m[1;33mProducto3[m[33m)[m HEAD@{10}: pull origin develop: Fast-forward
+[33mbc77e45[m HEAD@{11}: checkout: moving from feature/pedidodao to develop
+[33m172e5ac[m HEAD@{12}: checkout: moving from develop to feature/pedidodao
+[33mbc77e45[m HEAD@{13}: checkout: moving from feature/pedidodao to develop
+[33m172e5ac[m HEAD@{14}: commit (merge): Resolución de conflictos con la rama develop
+[33m1d65fe1[m[33m ([m[1;31morigin/feature/pedidodao[m[33m)[m HEAD@{15}: checkout: moving from develop to feature/pedidodao
+[33mbc77e45[m HEAD@{16}: pull origin develop: Fast-forward
+[33m8caedc1[m HEAD@{17}: checkout: moving from develop to develop
+[33m8caedc1[m HEAD@{18}: pull origin develop: Fast-forward
+[33ma219f3e[m HEAD@{19}: checkout: moving from feature/pedidodao to develop
+[33m1d65fe1[m[33m ([m[1;31morigin/feature/pedidodao[m[33m)[m HEAD@{20}: commit: Implementado método actualizarPedidosAutomaticamente() para actualizar el campo enviado según tiempo de preparación
+[33m6c7b3d1[m HEAD@{21}: commit: Implementación correcta de PedidoDAOImpl y tests de prueba
+[33ma92d3c1[m HEAD@{22}: commit (merge): Resolución de conflictos con pedidoDAO
+[33m242d719[m HEAD@{23}: checkout: moving from develop to feature/pedidodao
+[33ma219f3e[m HEAD@{24}: pull origin develop: Fast-forward
+[33m1d7d2d3[m HEAD@{25}: checkout: moving from feature/pedidodao to develop
+[33m242d719[m HEAD@{26}: commit: Implementación y ajustes en PedidoDAOImpl
+[33mdf941ed[m HEAD@{27}: commit: Modificación de PedidoDAO, implementación de PedidoDAOImpl y nuevas sentencias
+[33m44dbef7[m HEAD@{28}: merge develop: Merge made by the 'ort' strategy.
+[33mad45669[m HEAD@{29}: checkout: moving from develop to feature/pedidodao
+[33m1d7d2d3[m HEAD@{30}: pull origin develop: Fast-forward
+[33me3148f7[m HEAD@{31}: checkout: moving from feature/pedidodao to develop
+[33mad45669[m HEAD@{32}: commit: CreaciÃon de PedidoDAOImpl y cambios en PedidoDAO
+[33mb2e4272[m HEAD@{33}: merge develop: Merge made by the 'ort' strategy.
+[33m46d63c9[m HEAD@{34}: checkout: moving from develop to feature/pedidodao
+[33me3148f7[m HEAD@{35}: pull origin develop: Fast-forward
+[33m69bd07a[m HEAD@{36}: checkout: moving from feature/pedidodao to develop
+[33m46d63c9[m HEAD@{37}: merge develop: Merge made by the 'ort' strategy.
+[33m0a23768[m HEAD@{38}: checkout: moving from feature/vista to feature/pedidodao
+[33ma439747[m[33m ([m[1;32mfeature/vista[m[33m)[m HEAD@{39}: merge develop: Merge made by the 'ort' strategy.
+[33mda60124[m[33m ([m[1;31morigin/feature/vista[m[33m)[m HEAD@{40}: checkout: moving from develop to feature/vista
+[33m69bd07a[m HEAD@{41}: pull origin develop: Fast-forward
+[33m4943bd2[m HEAD@{42}: checkout: moving from feature/pedidodao to develop
+[33m0a23768[m HEAD@{43}: checkout: moving from feature/vista to feature/pedidodao
+[33mda60124[m[33m ([m[1;31morigin/feature/vista[m[33m)[m HEAD@{44}: commit: MClase conexionDB revertida con la primera estructura
+[33mc60c118[m HEAD@{45}: checkout: moving from develop to feature/vista
+[33m4943bd2[m HEAD@{46}: checkout: moving from feature/vista to develop
+[33mc60c118[m HEAD@{47}: commit: DivReestructuración la clase Consola según patrón MVC
+[33md15daa1[m HEAD@{48}: commit (merge): OReestructuración de feature/vista con los cambios de develop
+[33md5df942[m HEAD@{49}: reset: moving to HEAD
+[33md5df942[m HEAD@{50}: checkout: moving from develop to feature/vista
+[33m4943bd2[m HEAD@{51}: checkout: moving from feature/vista to develop
+[33md5df942[m HEAD@{52}: checkout: moving from feature/pedidodao to feature/vista
+[33m0a23768[m HEAD@{53}: checkout: moving from develop to feature/pedidodao
+[33m4943bd2[m HEAD@{54}: checkout: moving from feature/pedidodao to develop
+[33m0a23768[m HEAD@{55}: checkout: moving from feature/MySQL to feature/pedidodao
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{56}: checkout: moving from feature/pedidodao to feature/MySQL
+[33m0a23768[m HEAD@{57}: checkout: moving from feature/MySQL to feature/pedidodao
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{58}: checkout: moving from feature/pedidodao to feature/MySQL
+[33m0a23768[m HEAD@{59}: commit: Implementación de la clase PedidoDAO
+[33mdb7e1b5[m HEAD@{60}: commit: Implementación de la clase PedidoDAO
+[33m610e954[m HEAD@{61}: merge develop: Merge made by the 'ort' strategy.
+[33m3114ffc[m HEAD@{62}: reset: moving to HEAD
+[33m3114ffc[m HEAD@{63}: reset: moving to HEAD
+[33m3114ffc[m HEAD@{64}: checkout: moving from develop to feature/pedidodao
+[33m4943bd2[m HEAD@{65}: checkout: moving from feature/pedidodao to develop
+[33m3114ffc[m HEAD@{66}: reset: moving to HEAD
+[33m3114ffc[m HEAD@{67}: reset: moving to HEAD
+[33m3114ffc[m HEAD@{68}: checkout: moving from develop to feature/pedidodao
+[33m4943bd2[m HEAD@{69}: checkout: moving from feature/pedidodao to develop
+[33m3114ffc[m HEAD@{70}: reset: moving to HEAD
+[33m3114ffc[m HEAD@{71}: reset: moving to HEAD
+[33m3114ffc[m HEAD@{72}: checkout: moving from develop to feature/pedidodao
+[33m4943bd2[m HEAD@{73}: pull origin develop: Fast-forward
+[33mcbc151e[m HEAD@{74}: checkout: moving from feature/pedidodao to develop
+[33m3114ffc[m HEAD@{75}: commit: Resolución de conflictos y reestructuración de proyecto
+[33m237b554[m HEAD@{76}: commit (merge): Resolución de conflictos
+[33mc4afa9c[m HEAD@{77}: reset: moving to HEAD
+[33mc4afa9c[m HEAD@{78}: reset: moving to HEAD
+[33mc4afa9c[m HEAD@{79}: checkout: moving from develop to feature/pedidodao
+[33mcbc151e[m HEAD@{80}: pull origin develop: Fast-forward
+[33mab9d47a[m HEAD@{81}: checkout: moving from feature/pedidodao to develop
+[33mc4afa9c[m HEAD@{82}: reset: moving to HEAD
+[33mc4afa9c[m HEAD@{83}: commit: Añadidas sentencias para listar pedidos en PedidoDAO
+[33mcf3315d[m HEAD@{84}: checkout: moving from feature/vista to feature/pedidodao
+[33md5df942[m HEAD@{85}: commit: Refactorizando
+[33mcf3315d[m HEAD@{86}: checkout: moving from feature/pedidoDAO to feature/vista
+[33mcf3315d[m HEAD@{87}: checkout: moving from feature/vista to feature/pedidoDAO
+[33mcf3315d[m HEAD@{88}: checkout: moving from develop to feature/vista
+[33mab9d47a[m HEAD@{89}: checkout: moving from feature/vista to develop
+[33mcf3315d[m HEAD@{90}: checkout: moving from develop to feature/vista
+[33mab9d47a[m HEAD@{91}: checkout: moving from feature/vista to develop
+[33mcf3315d[m HEAD@{92}: commit (merge): Resuelto conflicto con el script SQL para hacer merge de develop
+[33mb0df335[m HEAD@{93}: checkout: moving from develop to feature/vista
+[33mab9d47a[m HEAD@{94}: checkout: moving from feature/vista to develop
+[33mb0df335[m HEAD@{95}: reset: moving to HEAD
+[33mb0df335[m HEAD@{96}: checkout: moving from develop to feature/vista
+[33mab9d47a[m HEAD@{97}: checkout: moving from feature/vista to develop
+[33mb0df335[m HEAD@{98}: checkout: moving from develop to feature/vista
+[33mab9d47a[m HEAD@{99}: checkout: moving from feature/vista to develop
+[33mb0df335[m HEAD@{100}: reset: moving to HEAD
+[33mb0df335[m HEAD@{101}: checkout: moving from develop to feature/vista
+[33mab9d47a[m HEAD@{102}: checkout: moving from develop to develop
+[33mab9d47a[m HEAD@{103}: checkout: moving from feature/vista to develop
+[33mb0df335[m HEAD@{104}: reset: moving to HEAD
+[33mb0df335[m HEAD@{105}: checkout: moving from develop to feature/vista
+[33mab9d47a[m HEAD@{106}: pull origin develop: Fast-forward
+[33mffe8d66[m HEAD@{107}: checkout: moving from feature/vista to develop
+[33mb0df335[m HEAD@{108}: commit: Creada la base de PedidoDAO (WIP)
+[33md7bab4d[m HEAD@{109}: checkout: moving from feature/vista to feature/vista
+[33md7bab4d[m HEAD@{110}: commit: Creada la base de PedidoDAO (WIP)
+[33mffe8d66[m HEAD@{111}: checkout: moving from develop to feature/vista
+[33mffe8d66[m HEAD@{112}: checkout: moving from feature/vista to develop
+[33mffe8d66[m HEAD@{113}: merge develop: Fast-forward
+[33mdb0fd7f[m HEAD@{114}: checkout: moving from develop to feature/vista
+[33mffe8d66[m HEAD@{115}: pull origin develop: Fast-forward
+[33mdb0fd7f[m HEAD@{116}: checkout: moving from feature/vista to develop
+[33mdb0fd7f[m HEAD@{117}: merge develop: Fast-forward
+[33m112ad87[m HEAD@{118}: checkout: moving from develop to feature/vista
+[33mdb0fd7f[m HEAD@{119}: pull origin develop: Fast-forward
+[33m112ad87[m HEAD@{120}: checkout: moving from feature/vista to develop
+[33m112ad87[m HEAD@{121}: checkout: moving from feature/MySQL to feature/vista
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{122}: checkout: moving from feature/MySQL to feature/MySQL
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{123}: branch: Reset to origin/feature/MySQL
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{124}: checkout: moving from feature/vista to feature/MySQL
+[33m112ad87[m HEAD@{125}: merge develop: Fast-forward
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{126}: checkout: moving from develop to feature/vista
+[33m112ad87[m HEAD@{127}: pull origin develop: Fast-forward
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{128}: checkout: moving from feature/MySQL to develop
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{129}: checkout: moving from develop to feature/MySQL
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{130}: checkout: moving from develop to develop
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{131}: checkout: moving from develop to develop
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{132}: checkout: moving from feature/vista to develop
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{133}: checkout: moving from develop to feature/vista
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{134}: checkout: moving from feature/vista to develop
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{135}: merge develop: Fast-forward
+[33m0a0efa0[m HEAD@{136}: checkout: moving from develop to feature/vista
+[33m62ed25a[m[33m ([m[1;33mtag: [m[1;33mproducto2[m[33m, [m[1;32mfeature/MySQL[m[33m)[m HEAD@{137}: pull origin develop: Fast-forward
+[33mf72becd[m HEAD@{138}: checkout: moving from feature/vista to develop
+[33m0a0efa0[m HEAD@{139}: reset: moving to HEAD
+[33m0a0efa0[m HEAD@{140}: checkout: moving from fix/controlador to feature/vista
+[33m5903ae9[m[33m ([m[1;31morigin/fix/controlador[m[33m, [m[1;32mfix/controlador[m[33m)[m HEAD@{141}: checkout: moving from feature/vista to fix/controlador
+[33m0a0efa0[m HEAD@{142}: commit: Modificadas las duplicidades de instancia de datos en la carga de ejemplo
+[33mf72becd[m HEAD@{143}: merge develop: Fast-forward
+[33m1c6ac96[m HEAD@{144}: checkout: moving from develop to feature/vista
+[33mf72becd[m HEAD@{145}: pull origin develop: Fast-forward
+[33m14e3b85[m HEAD@{146}: checkout: moving from feature/vista to develop
+[33m1c6ac96[m HEAD@{147}: commit: Modificados los controladores de la clase Consola y las clases de ClienteControlador, ArticuloControlador y PedidoControlador
+[33m14e3b85[m HEAD@{148}: merge develop: Fast-forward
+[33m61ca4e7[m HEAD@{149}: checkout: moving from develop to feature/vista
+[33m14e3b85[m HEAD@{150}: pull origin develop: Fast-forward
+[33m61ca4e7[m HEAD@{151}: checkout: moving from feature/vista to develop
+[33m61ca4e7[m HEAD@{152}: merge develop: Fast-forward
+[33m4090202[m HEAD@{153}: checkout: moving from develop to feature/vista
+[33m61ca4e7[m HEAD@{154}: pull origin develop: Fast-forward
+[33m4090202[m HEAD@{155}: checkout: moving from feature/vista to develop
+[33m4090202[m HEAD@{156}: checkout: moving from develop to feature/vista
+[33m4090202[m HEAD@{157}: checkout: moving from feature/vista to develop
+[33m4090202[m HEAD@{158}: merge develop: Fast-forward
+[33me4d864f[m HEAD@{159}: checkout: moving from develop to feature/vista
+[33m4090202[m HEAD@{160}: pull origin develop: Fast-forward
+[33m99da9dc[m HEAD@{161}: checkout: moving from feature/vista to develop
+[33me4d864f[m HEAD@{162}: checkout: moving from feature/controlador to feature/vista
+[33mf530cda[m[33m ([m[1;32mfeature/controlador[m[33m)[m HEAD@{163}: pull: Fast-forward
+[33m9008430[m HEAD@{164}: checkout: moving from feature/controlador to feature/controlador
+[33m9008430[m HEAD@{165}: checkout: moving from feature/modelo to feature/controlador
+[33m3548ef9[m[33m ([m[1;32mfeature/modelo[m[33m)[m HEAD@{166}: pull: Fast-forward
+[33mfbf5bf5[m HEAD@{167}: checkout: moving from feature/modelo to feature/modelo
+[33mfbf5bf5[m HEAD@{168}: checkout: moving from feature/vista to feature/modelo
+[33me4d864f[m HEAD@{169}: checkout: moving from develop to feature/vista
+[33m99da9dc[m HEAD@{170}: checkout: moving from feature/modelo to develop
+[33mfbf5bf5[m HEAD@{171}: checkout: moving from feature/vista to feature/modelo
+[33me4d864f[m HEAD@{172}: reset: moving to HEAD
+[33me4d864f[m HEAD@{173}: checkout: moving from feature/vista to feature/vista
+[33me4d864f[m HEAD@{174}: reset: moving to HEAD
+[33me4d864f[m HEAD@{175}: checkout: moving from develop to feature/vista
+[33m99da9dc[m HEAD@{176}: pull origin develop: Fast-forward
+[33m20bf361[m HEAD@{177}: checkout: moving from feature/vista to develop
+[33me4d864f[m HEAD@{178}: commit: Implementadas funciones de los sub-menús de Artículos y Clientes
+[33m64eaf5a[m HEAD@{179}: checkout: moving from feature/vista to feature/vista
+[33m64eaf5a[m HEAD@{180}: checkout: moving from develop to feature/vista
+[33m20bf361[m HEAD@{181}: checkout: moving from feature/vista to develop
+[33m64eaf5a[m HEAD@{182}: checkout: moving from feature/vista to feature/vista
+[33m64eaf5a[m HEAD@{183}: pull origin develop: Fast-forward
+[33m20bf361[m HEAD@{184}: checkout: moving from develop to feature/vista
+[33m20bf361[m HEAD@{185}: checkout: moving from feature/vista to develop
+[33m20bf361[m HEAD@{186}: merge develop: Fast-forward
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{187}: checkout: moving from develop to feature/vista
+[33m20bf361[m HEAD@{188}: pull origin develop: Fast-forward
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{189}: checkout: moving from feature/exceptions to develop
+[33mb01ab7a[m[33m ([m[1;31morigin/feature/exceptions[m[33m, [m[1;32mfeature/exceptions[m[33m)[m HEAD@{190}: checkout: moving from feature/controlador to feature/exceptions
+[33m9008430[m HEAD@{191}: checkout: moving from feature/modelo to feature/controlador
+[33mfbf5bf5[m HEAD@{192}: checkout: moving from develop to feature/modelo
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{193}: checkout: moving from develop to develop
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{194}: checkout: moving from develop to develop
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{195}: branch: Reset to origin/develop
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{196}: checkout: moving from feature/exceptions to develop
+[33mb01ab7a[m[33m ([m[1;31morigin/feature/exceptions[m[33m, [m[1;32mfeature/exceptions[m[33m)[m HEAD@{197}: checkout: moving from develop to feature/exceptions
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{198}: checkout: moving from main to develop
+[33m41ee1c9[m[33m ([m[1;32mmain[m[33m)[m HEAD@{199}: checkout: moving from feature/exceptions to main
+[33mb01ab7a[m[33m ([m[1;31morigin/feature/exceptions[m[33m, [m[1;32mfeature/exceptions[m[33m)[m HEAD@{200}: checkout: moving from develop to feature/exceptions
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{201}: checkout: moving from develop to develop
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{202}: branch: Reset to origin/develop
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{203}: checkout: moving from feature/exceptions to develop
+[33mb01ab7a[m[33m ([m[1;31morigin/feature/exceptions[m[33m, [m[1;32mfeature/exceptions[m[33m)[m HEAD@{204}: pull origin feature/exceptions: Fast-forward
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{205}: checkout: moving from feature/exceptions to feature/exceptions
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{206}: checkout: moving from feature/exceptions to feature/exceptions
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{207}: merge develop: Fast-forward
+[33m027cef7[m HEAD@{208}: checkout: moving from develop to feature/exceptions
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{209}: checkout: moving from feature/tests to develop
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{210}: checkout: moving from feature/vista to feature/tests
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{211}: merge develop: Fast-forward
+[33md844681[m HEAD@{212}: checkout: moving from feature/tests to feature/vista
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{213}: merge develop: Fast-forward
+[33m027cef7[m HEAD@{214}: checkout: moving from develop to feature/tests
+[33ma8a7599[m[33m ([m[1;32mfeature/tests[m[33m)[m HEAD@{215}: pull origin develop: Fast-forward
+[33m027cef7[m HEAD@{216}: checkout: moving from feature/vista to develop
+[33md844681[m HEAD@{217}: commit: Añadida primera verestructura del menú
+[33m1fa7474[m HEAD@{218}: commit: Añadida estructura básica del menú por consola
+[33m027cef7[m HEAD@{219}: checkout: moving from feature/tests to feature/vista
+[33m027cef7[m HEAD@{220}: merge develop: Fast-forward
+[33m5a0e1b9[m[33m ([m[1;31morigin/feature/tests[m[33m)[m HEAD@{221}: checkout: moving from feature/vista to feature/tests
+[33m027cef7[m HEAD@{222}: merge develop: Fast-forward
+[33md0008cd[m HEAD@{223}: checkout: moving from develop to feature/vista
+[33m027cef7[m HEAD@{224}: checkout: moving from feature/vista to develop
+[33md0008cd[m HEAD@{225}: checkout: moving from develop to feature/vista
+[33m027cef7[m HEAD@{226}: pull origin: Fast-forward
+[33md0008cd[m HEAD@{227}: checkout: moving from feature/modelo to develop
+[33mfbf5bf5[m HEAD@{228}: checkout: moving from feature/controlador to feature/modelo
+[33m9008430[m HEAD@{229}: checkout: moving from develop to feature/controlador
+[33md0008cd[m HEAD@{230}: checkout: moving from feature/controlador to develop
+[33m07f33ec[m HEAD@{231}: checkout: moving from feature/tests to feature/controlador
+[33m5a0e1b9[m[33m ([m[1;31morigin/feature/tests[m[33m)[m HEAD@{232}: commit: Añadidos tests unitarios
+[33md0008cd[m HEAD@{233}: checkout: moving from develop to feature/tests
+[33md0008cd[m HEAD@{234}: pull origin develop: Fast-forward
+[33md84bd42[m HEAD@{235}: checkout: moving from feature/tests to develop
+[33md0008cd[m HEAD@{236}: pull origin develop: Fast-forward
+[33md84bd42[m HEAD@{237}: checkout: moving from develop to feature/tests
+[33md84bd42[m HEAD@{238}: checkout: moving from feature/vista to develop
+[33md0008cd[m HEAD@{239}: pull origin develop: Fast-forward
+[33mb3845bb[m HEAD@{240}: commit: Clases de gestión de JavaFX y la Interfaz
+[33m07f33ec[m HEAD@{241}: checkout: moving from develop to feature/vista
+[33md84bd42[m HEAD@{242}: checkout: moving from feature/vista to develop
+[33m07f33ec[m HEAD@{243}: checkout: moving from develop to feature/vista
+[33md84bd42[m HEAD@{244}: checkout: moving from feature/modelo to develop
+[33mfbf5bf5[m HEAD@{245}: checkout: moving from feature/vista to feature/modelo
+[33m07f33ec[m HEAD@{246}: checkout: moving from feature/controlador to feature/vista
+[33m07f33ec[m HEAD@{247}: checkout: moving from develop to feature/controlador
+[33md84bd42[m HEAD@{248}: checkout: moving from feature/controlador to develop
+[33m07f33ec[m HEAD@{249}: checkout: moving from feature/controlador to feature/controlador
+[33m07f33ec[m HEAD@{250}: branch: Reset to origin/feature/controlador
+[33m07f33ec[m HEAD@{251}: checkout: moving from develop to feature/controlador
+[33md84bd42[m HEAD@{252}: checkout: moving from feature/modelo to develop
+[33mfbf5bf5[m HEAD@{253}: checkout: moving from develop to feature/modelo
+[33md84bd42[m HEAD@{254}: checkout: moving from feature/modelo to develop
+[33mfbf5bf5[m HEAD@{255}: checkout: moving from develop to feature/modelo
+[33md84bd42[m HEAD@{256}: checkout: moving from feature/controlador to develop
+[33m07f33ec[m HEAD@{257}: checkout: moving from develop to feature/controlador
+[33meda4b17[m HEAD@{258}: checkout: moving from feature/modelo to develop
+[33mfbf5bf5[m HEAD@{259}: pull --no-stat -v --progress origin develop: Fast-forward
+[33mfeaf971[m HEAD@{260}: checkout: moving from develop to feature/modelo
+[33meda4b17[m HEAD@{261}: checkout: moving from feature/modelo to develop
+[33mfeaf971[m HEAD@{262}: checkout: moving from develop to feature/modelo
+[33meda4b17[m HEAD@{263}: checkout: moving from develop to develop
+[33meda4b17[m HEAD@{264}: branch: Reset to origin/develop
+[33meda4b17[m HEAD@{265}: checkout: moving from feature/modelo to develop
+[33mfeaf971[m HEAD@{266}: checkout: moving from develop to feature/modelo
+[33meda4b17[m HEAD@{267}: checkout: moving from feature/modelo to develop
+[33mfeaf971[m HEAD@{268}: checkout: moving from develop to feature/modelo
+[33meda4b17[m HEAD@{269}: checkout: moving from feature/modelo to develop
+[33mfeaf971[m HEAD@{270}: checkout: moving from develop to feature/modelo
+[33meda4b17[m HEAD@{271}: checkout: moving from feature/modelo to develop
+[33mfeaf971[m HEAD@{272}: checkout: moving from develop to feature/modelo
+[33meda4b17[m HEAD@{273}: checkout: moving from main to develop
+[33m41ee1c9[m[33m ([m[1;32mmain[m[33m)[m HEAD@{274}: clone: from https://github.com/RaulEstevezA/UOC_ojoaldato.git
