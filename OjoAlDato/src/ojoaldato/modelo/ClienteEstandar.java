@@ -1,5 +1,6 @@
 package ojoaldato.modelo;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -7,8 +8,9 @@ import java.math.RoundingMode;
 /**
  * Subclase de Cliente que representa un cliente estándar.
  */
+@Entity
+@DiscriminatorValue("ESTANDAR")  //El nombre que tendra en la columna tipo de Cliente
 public class ClienteEstandar extends Cliente {
-    private BigDecimal cuota = BigDecimal.valueOf(0.00);
 
     public ClienteEstandar() {}
     public ClienteEstandar(String nombre, String domicilio, String nif, String email) {
