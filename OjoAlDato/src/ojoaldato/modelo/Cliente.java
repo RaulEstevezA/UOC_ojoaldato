@@ -21,7 +21,7 @@ public abstract class Cliente {
     @Id
     @Column(name = "email", nullable = false)
     private String email;
-    @Column(name = "cuota", precision = 10, scale = 2)
+    @Transient
     private BigDecimal cuota;
 
 

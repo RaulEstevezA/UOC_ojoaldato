@@ -16,6 +16,14 @@
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
 
+            <!-- DESACTIVA LAS QUERIES SQL EN CONSOLA -->
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="false"/>
+            <property name="hibernate.use_sql_comments" value="false"/>
+
+            <!-- DESACTIVA EL LOG DE ARRANQUE DE HIBERNATE -->
+            <property name="hibernate.generate_statistics" value="false"/>
+
         </properties>
     </persistence-unit>
 
