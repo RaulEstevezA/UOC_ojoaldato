@@ -1,0 +1,38 @@
+###############################################################
+# Configuración para eliminar los mensajes de Hibernate en consola
+#
+# 1) Descargar el archivo JAR de Log4j 1.2.17 desde:
+#    https://repo1.maven.org/maven2/log4j/log4j/1.2.17/log4j-1.2.17.jar
+#
+# 2) Mover el archivo descargado a la carpeta:
+#      /OjoAlDato/lib/
+#
+# 3) En IntelliJ IDEA:
+#      - Ir a File > Project Structure > Libraries
+#      - Pulsar en el botón (+)
+#      - Seleccionar "Java"
+#      - Elegir el archivo log4j-1.2.17.jar dentro de OjoAlDato/lib/
+#      - Confirmar con Apply y OK
+#
+# 4) Crear en /src/main/resources/ el archivo:
+#      log4j.properties.example
+#
+# 5) Copiar dentro de ese archivo el contenido indicado por el equipo.
+#
+# 6) Cada miembro del grupo deberá renombrar localmente:
+#      log4j.properties.example  →  log4j.properties
+#
+# NOTA IMPORTANTE: El archivo log4j.properties no se subirá al repositorio.
+#                   Cada miembro debe generarlo a partir del .example.
+###############################################################
+
+log4j.rootLogger=ERROR, stdout
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Target=System.out
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%m%n
+
+log4j.logger.org.hibernate=ERROR
+log4j.logger.org.hibernate.SQL=OFF
+log4j.logger.org.hibernate.type=OFF
