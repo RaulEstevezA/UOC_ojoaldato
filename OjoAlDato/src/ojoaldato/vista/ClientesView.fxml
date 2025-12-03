@@ -22,7 +22,6 @@
         <Button text="Mostrar todos"     onAction="#mostrarClientes"/>
         <Button text="Estándar"          onAction="#mostrarEstandar"/>
         <Button text="Premium"           onAction="#mostrarPremium"/>
-        <Button text="Volver"            onAction="#volver"/>
     </HBox>
 
     <!-- Contenedor dinámico inferior -->

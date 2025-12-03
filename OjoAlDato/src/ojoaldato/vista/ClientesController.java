@@ -52,13 +52,11 @@ public class ClientesController {
             );
             Parent view = loader.load();
 
-            // OJO: esta línea es CRUCIAL
             ClientesListaController controller = loader.getController();
-
-            // Inyectamos la lógica de negocio para que el controlador pueda consultar DB
             controller.setClienteControlador(clienteControlador);
 
-            // Mostramos la vista en el panel de contenido dinámico
+            controller.cargarTodos(); // <-- ¡IMPORTANTE!
+
             contenidoClientes.getChildren().setAll(view);
 
         } catch (IOException e) {
@@ -71,19 +69,47 @@ public class ClientesController {
 
     @FXML
     private void mostrarEstandar() {
-        mostrar("Listado de clientes estándar");
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/ojoaldato/vista/ClientesLista.fxml")
+            );
+            Parent view = loader.load();
+
+            ClientesListaController controller = loader.getController();
+            controller.setClienteControlador(clienteControlador);
+
+            controller.cargarEstandar();
+
+            contenidoClientes.getChildren().setAll(view);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            contenidoClientes.getChildren().setAll(
+                    new Label("Error al cargar clientes estándar")
+            );
+        }
     }
 
     @FXML
     private void mostrarPremium() {
-        mostrar("Listado de clientes premium");
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/ojoaldato/vista/ClientesLista.fxml")
+            );
+            Parent view = loader.load();
+
+            ClientesListaController controller = loader.getController();
+            controller.setClienteControlador(clienteControlador);
+
+            controller.cargarPremium();
+
+            contenidoClientes.getChildren().setAll(view);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
-    private void volver() {
-        mostrar("Volver al menú principal");
-        // luego cargaremos otra vista aquí
-    }
 
     // Método auxiliar para mostrar texto temporal
     private void mostrar(String texto) {

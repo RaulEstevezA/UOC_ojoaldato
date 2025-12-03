@@ -1,6 +1,7 @@
 package ojoaldato.vista;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -24,7 +25,6 @@ public class ClientesListaController {
     // MÉTODO PARA INYECTARLO
     public void setClienteControlador(ClienteControlador controlador) {
         this.clienteControlador = controlador;
-        cargarDatos();
     }
 
     @FXML
@@ -45,14 +45,24 @@ public class ClientesListaController {
         );
     }
 
-    private void cargarDatos() {
-        if (clienteControlador == null) return;
-
+    public void cargarTodos() {
         List<Cliente> clientes = clienteControlador.listarClientes();
 
-        System.out.println("Clientes recibidos: " + clientes.size()); // <- prueba
-        clientes.forEach(System.out::println);
+        if (clientes.isEmpty()) {
+            tablaClientes.setPlaceholder(new Label("No hay clientes registrados"));
+        }
 
         tablaClientes.getItems().setAll(clientes);
     }
+
+    public void cargarEstandar() {
+        List<Cliente> clientes = clienteControlador.listarClientesEstandar();
+        tablaClientes.getItems().setAll(clientes);
+    }
+
+    public void cargarPremium() {
+        List<Cliente> clientes = clienteControlador.listarClientesPremium();
+        tablaClientes.getItems().setAll(clientes);
+    }
+
 }
