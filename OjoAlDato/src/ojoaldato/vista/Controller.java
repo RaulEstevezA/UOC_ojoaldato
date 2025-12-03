@@ -1,14 +1,54 @@
 package ojoaldato.vista;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.event.ActionEvent;
+import javafx.scene.Parent;
+
+import java.io.IOException;
 
 public class Controller {
-    @FXML
-    private Label welcomeText;
 
     @FXML
-    protected void onHelloButtonClick() {
-        this.welcomeText.setText("Esto es una prueba - Grupo OjoAlDato");
+    private StackPane contentArea; // vinculado desde el FXML
+
+    @FXML
+    private void abrirArticulos(ActionEvent event) {
+        mostrarTextoTemporal("Vista de gestión de artículos");
+    }
+
+    @FXML
+    private void abrirClientes() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ojoaldato/vista/ClientesView.fxml"));
+            Parent view = loader.load();
+
+            ClientesController controller = loader.getController();
+            contentArea.getChildren().setAll(view);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void abrirPedidos(ActionEvent event) {
+        mostrarTextoTemporal("Vista de gestión de pedidos");
+    }
+
+    @FXML
+    private void salir(ActionEvent event) {
+        System.exit(0);
+    }
+
+    // -----------------------------
+    // Método auxiliar para mostrar contenido temporal
+    // -----------------------------
+    private void mostrarTextoTemporal(String texto) {
+        contentArea.getChildren().clear();
+        Label label = new Label(texto);
+        contentArea.getChildren().add(label);
     }
 }
