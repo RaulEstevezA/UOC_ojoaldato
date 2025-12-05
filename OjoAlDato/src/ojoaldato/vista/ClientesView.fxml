@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ojoaldato.vista.ClientesController"
+      spacing="10"
+      style="-fx-padding: 20;">
+
+    <!-- Título -->
+    <Label text="Gestión de Clientes"
+           style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <!-- Botonera horizontal fija -->
+    <HBox spacing="10">
+        <Button text="Añadir"            onAction="#anadirCliente"/>
+        <Button text="Mostrar todos"     onAction="#mostrarClientes"/>
+        <Button text="Estándar"          onAction="#mostrarEstandar"/>
+        <Button text="Premium"           onAction="#mostrarPremium"/>
+    </HBox>
+
+    <!-- Contenedor dinámico inferior -->
+    <StackPane fx:id="contenidoClientes" style="-fx-padding: 10;" />
+
+</VBox>
+
