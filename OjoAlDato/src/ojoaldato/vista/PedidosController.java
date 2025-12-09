@@ -25,22 +25,43 @@ public class PedidosController {
     @FXML
     private void nuevoPedido() {
         try {
-            // En un futuro podrías crear un formulario para nuevos pedidos
-            // Por ahora mostramos un mensaje temporal
-            mostrar("Funcionalidad de nuevo pedido en desarrollo");
+            // Cargar el formulario de nuevo pedido
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ojoaldato/vista/PedidoFormulario.fxml"));
+            Parent view = loader.load();
+            
+            // Configurar el controlador del formulario
+            PedidoFormularioController controller = loader.getController();
+            controller.setContenidoPedidos(contenidoPedidos);
+            
+            // Mostrar el formulario
+            contenidoPedidos.getChildren().setAll(view);
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarError("Error al cargar el formulario de pedido: " + e.getMessage());
         } catch (Exception e) {
-            mostrarError("Error al intentar crear un nuevo pedido");
+            e.printStackTrace();
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
     @FXML
     private void mostrarTodos() {
         try {
-            // Aquí cargarías la lista completa de pedidos
-            mostrar("Mostrando todos los pedidos");
-            // En el futuro: cargar PedidosLista.fxml
+            // Cargar la vista de lista de pedidos
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ojoaldato/vista/PedidosLista.fxml"));
+            Parent view = loader.load();
+            
+            // Configurar el controlador de la lista
+            PedidosListaController controller = loader.getController();
+            controller.setContenidoPedidos(contenidoPedidos);
+            
+            // Mostrar la lista de pedidos
+            contenidoPedidos.getChildren().setAll(view);
+            
         } catch (Exception e) {
-            mostrarError("Error al cargar los pedidos");
+            e.printStackTrace();
+            mostrarError("Error al cargar la lista de pedidos: " + e.getMessage());
         }
     }
 
@@ -61,16 +82,6 @@ public class PedidosController {
             mostrar("Mostrando pedidos enviados");
         } catch (Exception e) {
             mostrarError("Error al cargar pedidos enviados");
-        }
-    }
-
-    @FXML
-    private void mostrarEntregados() {
-        try {
-            // Filtrado de pedidos entregados
-            mostrar("Mostrando pedidos entregados");
-        } catch (Exception e) {
-            mostrarError("Error al cargar pedidos entregados");
         }
     }
 

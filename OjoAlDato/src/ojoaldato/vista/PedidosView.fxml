@@ -22,7 +22,6 @@
         <Button text="Ver Todos"       onAction="#mostrarTodos"/>
         <Button text="Pendientes"      onAction="#mostrarPendientes"/>
         <Button text="Enviados"        onAction="#mostrarEnviados"/>
-        <Button text="Entregados"      onAction="#mostrarEntregados"/>
     </HBox>
 
     <!-- Contenedor dinámico inferior -->
