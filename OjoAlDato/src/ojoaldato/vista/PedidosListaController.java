@@ -9,10 +9,10 @@ import javafx.scene.layout.StackPane;
 import ojoaldato.controlador.PedidoControlador;
 import ojoaldato.modelo.Pedido;
 import ojoaldato.modelo.Cliente;
-import ojoaldato.modelo.Articulo;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PedidosListaController {
 
@@ -25,7 +25,7 @@ public class PedidosListaController {
     @FXML private TableColumn<Pedido, String> colEstado;
     @FXML private TableColumn<Pedido, String> colTotal;
 
-    private PedidoControlador pedidoControlador = new PedidoControlador();
+    private final PedidoControlador pedidoControlador = new PedidoControlador();
     private StackPane contenidoPedidos;
 
     @FXML
@@ -39,10 +39,8 @@ public class PedidosListaController {
     }
 
     private void configurarColumnas() {
-        // Configurar columna de número de pedido
         colNumPedido.setCellValueFactory(new PropertyValueFactory<>("numPedido"));
         
-        // Configurar columna de cliente (mostrar nombre y email)
         colCliente.setCellValueFactory(cellData -> {
             Cliente cliente = cellData.getValue().getCliente();
             return new javafx.beans.property.SimpleStringProperty(
@@ -52,31 +50,23 @@ public class PedidosListaController {
             );
         });
         
-        // Configurar columna de artículo
         colArticulo.setCellValueFactory(cellData -> 
             new javafx.beans.property.SimpleStringProperty(
                 cellData.getValue().getArticulo().getDescripcion()
             )
         );
         
-        // Configurar columna de cantidad
         colCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
         
-        // Configurar columna de fecha
         colFecha.setCellValueFactory(cellData -> 
             new javafx.beans.property.SimpleStringProperty(
                 cellData.getValue().getFechaHora().toString()
             )
         );
         
-        // Configurar columna de estado
-        colEstado.setCellValueFactory(cellData -> 
-            new javafx.beans.property.SimpleStringProperty(
-                cellData.getValue().getEnviado() ? "Enviado" : "Pendiente"
-            )
-        );
+        // Ocultar la columna de estado
+        colEstado.setVisible(false);
         
-        // Configurar columna de total
         colTotal.setCellValueFactory(cellData -> {
             BigDecimal total = cellData.getValue().getPrecioTotal();
             return new javafx.beans.property.SimpleStringProperty(
@@ -85,9 +75,8 @@ public class PedidosListaController {
         });
     }
 
-    private void cargarPedidos() {
+    public void cargarPedidos() {
         try {
-            // Obtener todos los pedidos del controlador
             List<Pedido> pedidos = pedidoControlador.listarTodosPedidos();
             if (pedidos != null) {
                 ObservableList<Pedido> datos = FXCollections.observableArrayList(pedidos);
@@ -97,6 +86,40 @@ public class PedidosListaController {
             }
         } catch (Exception e) {
             mostrarError("Error al cargar los pedidos: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void cargarPedidosPendientes() {
+        try {
+            // Actualizar el estado de los pedidos pendientes
+            pedidoControlador.actualizarPedidosPendientes();
+            
+            // Obtener la lista de pedidos pendientes actualizada
+            List<Pedido> pedidos = pedidoControlador.listarPedidosPendientes(null);
+            
+            // Actualizar la tabla
+            ObservableList<Pedido> datos = FXCollections.observableArrayList(pedidos);
+            tablaPedidos.setItems(datos);
+        } catch (Exception e) {
+            mostrarError("Error al cargar pedidos pendientes: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void cargarPedidosEnviados() {
+        try {
+            // Asegurarse de que los pedidos estén actualizados
+            pedidoControlador.actualizarPedidosPendientes();
+            
+            // Obtener la lista de pedidos enviados actualizada
+            List<Pedido> pedidos = pedidoControlador.listarPedidosEnviados(null);
+            
+            // Actualizar la tabla
+            ObservableList<Pedido> datos = FXCollections.observableArrayList(pedidos);
+            tablaPedidos.setItems(datos);
+        } catch (Exception e) {
+            mostrarError("Error al cargar pedidos enviados: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -68,20 +68,34 @@ public class PedidosController {
     @FXML
     private void mostrarPendientes() {
         try {
-            // Filtrado de pedidos pendientes
-            mostrar("Mostrando pedidos pendientes");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ojoaldato/vista/PedidosLista.fxml"));
+            Parent view = loader.load();
+            
+            PedidosListaController controller = loader.getController();
+            controller.setContenidoPedidos(contenidoPedidos);
+            controller.cargarPedidosPendientes();
+            
+            contenidoPedidos.getChildren().setAll(view);
         } catch (Exception e) {
-            mostrarError("Error al cargar pedidos pendientes");
+            e.printStackTrace();
+            mostrarError("Error al cargar pedidos pendientes: " + e.getMessage());
         }
     }
 
     @FXML
     private void mostrarEnviados() {
         try {
-            // Filtrado de pedidos enviados
-            mostrar("Mostrando pedidos enviados");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ojoaldato/vista/PedidosLista.fxml"));
+            Parent view = loader.load();
+            
+            PedidosListaController controller = loader.getController();
+            controller.setContenidoPedidos(contenidoPedidos);
+            controller.cargarPedidosEnviados();
+            
+            contenidoPedidos.getChildren().setAll(view);
         } catch (Exception e) {
-            mostrarError("Error al cargar pedidos enviados");
+            e.printStackTrace();
+            mostrarError("Error al cargar pedidos enviados: " + e.getMessage());
         }
     }
 

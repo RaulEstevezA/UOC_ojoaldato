@@ -23,7 +23,6 @@ public class PedidoFormularioController {
     @FXML private ComboBox<Cliente> comboClientes;
     @FXML private ComboBox<Articulo> comboArticulos;
     @FXML private TextField txtCantidad;
-    @FXML private ComboBox<String> comboEstado;
 
     private StackPane contenidoPedidos;
     private PedidoControlador pedidoControlador;
@@ -42,10 +41,6 @@ public class PedidoFormularioController {
         
         // Configurar combo de artículos
         cargarArticulos();
-        
-        // Configurar combo de estado
-        comboEstado.getItems().addAll("Pendiente", "Enviado");
-        comboEstado.getSelectionModel().selectFirst();
         
         // Validar que la cantidad sea numérica
         txtCantidad.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -163,12 +158,9 @@ public class PedidoFormularioController {
             pedido.setCantidad(cantidad);
             pedido.setFechaHora(LocalDateTime.now());
             
-            // Establecer el estado del pedido
-            String estado = comboEstado.getSelectionModel().getSelectedItem();
-            pedido.setEnviado("Enviado".equals(estado));
-            if (pedido.getEnviado()) {
-                pedido.setFechaEnvio(LocalDateTime.now());
-            }
+                // El estado se establece como no enviado por defecto
+            // Se actualizará según el tiempo de preparación
+            pedido.setEnviado(false);
             
             // Calcular precios (esto podría moverse al modelo o al controlador de negocio)
             BigDecimal precioTotal = articulo.getPvp().multiply(new BigDecimal(cantidad));
@@ -202,7 +194,6 @@ public class PedidoFormularioController {
         comboClientes.getSelectionModel().clearSelection();
         comboArticulos.getSelectionModel().clearSelection();
         txtCantidad.clear();
-        comboEstado.getSelectionModel().selectFirst();
     }
 
     private void mostrarError(String mensaje) {

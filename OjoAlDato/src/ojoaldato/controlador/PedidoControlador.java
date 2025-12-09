@@ -118,4 +118,15 @@ public class PedidoControlador {
             return Collections.emptyList();
         }
     }
+    
+    // ======================
+    // Actualizar pedidos pendientes
+    // ======================
+    public void actualizarPedidosPendientes() {
+        try {
+            pedidoDAO.actualizarPedidosAutomaticamente();
+        } catch (Exception e) {
+            System.err.println("Error al actualizar pedidos pendientes: " + e.getMessage());
+        }
+    }
 }

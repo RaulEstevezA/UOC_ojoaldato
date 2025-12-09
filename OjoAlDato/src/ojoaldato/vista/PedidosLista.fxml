@@ -18,12 +18,13 @@
         <TableView fx:id="tablaPedidos" style="-fx-padding: 10;">
             <columns>
                 <TableColumn fx:id="colNumPedido" text="Nº Pedido" prefWidth="80"/>
-                <TableColumn fx:id="colCliente" text="Cliente" prefWidth="200"/>
-                <TableColumn fx:id="colArticulo" text="Artículo" prefWidth="150"/>
+                <TableColumn fx:id="colCliente" text="Cliente" prefWidth="250"/>
+                <TableColumn fx:id="colArticulo" text="Artículo" prefWidth="200"/>
                 <TableColumn fx:id="colCantidad" text="Cantidad" prefWidth="80"/>
-                <TableColumn fx:id="colFecha" text="Fecha" prefWidth="150"/>
-                <TableColumn fx:id="colEstado" text="Estado" prefWidth="100"/>
+                <TableColumn fx:id="colFecha" text="Fecha" prefWidth="200"/>
                 <TableColumn fx:id="colTotal" text="Total" prefWidth="100"/>
+                <!-- Columna de estado oculta -->
+                <TableColumn fx:id="colEstado" text="Estado" visible="false"/>
             </columns>
         </TableView>
     </center>
