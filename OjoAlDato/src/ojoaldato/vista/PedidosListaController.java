@@ -6,17 +6,23 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
+import javafx.fxml.Initializable;
 import ojoaldato.controlador.PedidoControlador;
 import ojoaldato.modelo.Pedido;
 import ojoaldato.modelo.Cliente;
 
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class PedidosListaController {
+public class PedidosListaController implements Initializable {
 
-    @FXML private TableView<Pedido> tablaPedidos;
+    @FXML
+    private TableView<Pedido> tablaPedidos;
+    @FXML
+    private Button btnCancelarPedido;
     @FXML private TableColumn<Pedido, Integer> colNumPedido;
     @FXML private TableColumn<Pedido, String> colCliente;
     @FXML private TableColumn<Pedido, String> colArticulo;
@@ -28,9 +34,13 @@ public class PedidosListaController {
     private final PedidoControlador pedidoControlador = new PedidoControlador();
     private StackPane contenidoPedidos;
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
         configurarColumnas();
+        // Inicialmente ocultar el botón de cancelar
+        if (btnCancelarPedido != null) {
+            btnCancelarPedido.setVisible(false);
+        }
         cargarPedidos();
     }
 
@@ -77,8 +87,13 @@ public class PedidosListaController {
 
     public void cargarPedidos() {
         try {
+            // Ocultar el botón de cancelar
+            if (btnCancelarPedido != null) {
+                btnCancelarPedido.setVisible(false);
+            }
+            
             List<Pedido> pedidos = pedidoControlador.listarTodosPedidos();
-            if (pedidos != null) {
+            if (pedidos != null && !pedidos.isEmpty()) {
                 ObservableList<Pedido> datos = FXCollections.observableArrayList(pedidos);
                 tablaPedidos.setItems(datos);
             } else {
@@ -92,6 +107,11 @@ public class PedidosListaController {
 
     public void cargarPedidosPendientes() {
         try {
+            // Mostrar el botón de cancelar
+            if (btnCancelarPedido != null) {
+                btnCancelarPedido.setVisible(true);
+            }
+            
             // Actualizar el estado de los pedidos pendientes
             pedidoControlador.actualizarPedidosPendientes();
             
@@ -109,6 +129,11 @@ public class PedidosListaController {
 
     public void cargarPedidosEnviados() {
         try {
+            // Ocultar el botón de cancelar
+            if (btnCancelarPedido != null) {
+                btnCancelarPedido.setVisible(false);
+            }
+            
             // Asegurarse de que los pedidos estén actualizados
             pedidoControlador.actualizarPedidosPendientes();
             
@@ -129,6 +154,50 @@ public class PedidosListaController {
         if (contenidoPedidos != null) {
             contenidoPedidos.getChildren().clear();
         }
+    }
+    
+    @FXML
+    private void cancelarPedido() {
+        Pedido pedidoSeleccionado = tablaPedidos.getSelectionModel().getSelectedItem();
+        
+        if (pedidoSeleccionado == null) {
+            mostrarError("Por favor, seleccione un pedido para cancelar.");
+            return;
+        }
+        
+        if (pedidoSeleccionado.getEnviado()) {
+            mostrarError("No se puede cancelar un pedido que ya ha sido enviado.");
+            return;
+        }
+        
+        try {
+            // Eliminar el pedido
+            String resultado = pedidoControlador.deletePedido(pedidoSeleccionado.getNumPedido());
+            
+            // Actualizar la vista
+            if (resultado.contains("eliminado")) {
+                // Recargar la vista actual
+                if (tablaPedidos.getScene().lookup("#btnPendientes") != null) {
+                    cargarPedidosPendientes();
+                } else {
+                    cargarPedidos();
+                }
+                mostrarMensaje("Pedido cancelado correctamente.");
+            } else {
+                mostrarError("No se pudo cancelar el pedido: " + resultado);
+            }
+        } catch (Exception e) {
+            mostrarError("Error al cancelar el pedido: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    private void mostrarMensaje(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Información");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     private void mostrarError(String mensaje) {
