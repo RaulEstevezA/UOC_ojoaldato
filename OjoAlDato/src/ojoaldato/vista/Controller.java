@@ -16,7 +16,15 @@ public class Controller {
 
     @FXML
     private void abrirArticulos(ActionEvent event) {
-        mostrarTextoTemporal("Vista de gestión de artículos");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ojoaldato/vista/ArticulosView.fxml"));
+            Parent view = loader.load();
+
+            contentArea.getChildren().setAll(view);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
