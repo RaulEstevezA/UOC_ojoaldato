@@ -30,6 +30,7 @@ public class PedidosListaController implements Initializable {
     @FXML private TableColumn<Pedido, String> colFecha;
     @FXML private TableColumn<Pedido, String> colEstado;
     @FXML private TableColumn<Pedido, String> colTotal;
+    @FXML private TextField txtBuscarEmail;
 
     private final PedidoControlador pedidoControlador = new PedidoControlador();
     private StackPane contenidoPedidos;
@@ -85,8 +86,43 @@ public class PedidosListaController implements Initializable {
         });
     }
 
+    @FXML
+    private void buscarPorEmail() {
+        String email = txtBuscarEmail.getText().trim();
+        if (email.isEmpty()) {
+            mostrarError("Por favor, ingrese un email para buscar");
+            return;
+        }
+        
+        try {
+            // Usar el método existente para buscar por email
+            List<Pedido> pedidos = pedidoControlador.listarPedidosPorCliente(email);
+            
+            if (pedidos == null || pedidos.isEmpty()) {
+                mostrarMensaje("No se encontraron pedidos para el email: " + email);
+            } else {
+                ObservableList<Pedido> datos = FXCollections.observableArrayList(pedidos);
+                tablaPedidos.setItems(datos);
+                // Mostrar el botón de cancelar solo si hay pedidos pendientes
+                if (btnCancelarPedido != null) {
+                    boolean tienePendientes = pedidos.stream()
+                        .anyMatch(p -> !p.getEnviado());
+                    btnCancelarPedido.setVisible(tienePendientes);
+                }
+            }
+        } catch (Exception e) {
+            mostrarError("Error al buscar pedidos: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
     public void cargarPedidos() {
         try {
+            // Limpiar el campo de búsqueda
+            if (txtBuscarEmail != null) {
+                txtBuscarEmail.clear();
+            }
+            
             // Ocultar el botón de cancelar
             if (btnCancelarPedido != null) {
                 btnCancelarPedido.setVisible(false);
@@ -97,7 +133,7 @@ public class PedidosListaController implements Initializable {
                 ObservableList<Pedido> datos = FXCollections.observableArrayList(pedidos);
                 tablaPedidos.setItems(datos);
             } else {
-                mostrarError("No se pudieron cargar los pedidos");
+                mostrarError("No se encontraron pedidos");
             }
         } catch (Exception e) {
             mostrarError("Error al cargar los pedidos: " + e.getMessage());
@@ -107,15 +143,17 @@ public class PedidosListaController implements Initializable {
 
     public void cargarPedidosPendientes() {
         try {
+            // Limpiar el campo de búsqueda
+            if (txtBuscarEmail != null) {
+                txtBuscarEmail.clear();
+            }
+            
             // Mostrar el botón de cancelar
             if (btnCancelarPedido != null) {
                 btnCancelarPedido.setVisible(true);
             }
             
-            // Actualizar el estado de los pedidos pendientes
-            pedidoControlador.actualizarPedidosPendientes();
-            
-            // Obtener la lista de pedidos pendientes actualizada
+            // Obtener la lista de pedidos pendientes
             List<Pedido> pedidos = pedidoControlador.listarPedidosPendientes(null);
             
             // Actualizar la tabla
@@ -129,15 +167,17 @@ public class PedidosListaController implements Initializable {
 
     public void cargarPedidosEnviados() {
         try {
+            // Limpiar el campo de búsqueda
+            if (txtBuscarEmail != null) {
+                txtBuscarEmail.clear();
+            }
+            
             // Ocultar el botón de cancelar
             if (btnCancelarPedido != null) {
                 btnCancelarPedido.setVisible(false);
             }
             
-            // Asegurarse de que los pedidos estén actualizados
-            pedidoControlador.actualizarPedidosPendientes();
-            
-            // Obtener la lista de pedidos enviados actualizada
+            // Obtener la lista de pedidos enviados
             List<Pedido> pedidos = pedidoControlador.listarPedidosEnviados(null);
             
             // Actualizar la tabla
