@@ -1,13 +1,9 @@
 package ojoaldato.vista;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
-import java.util.List;
 import ojoaldato.controlador.ArticuloControlador;
 import ojoaldato.controlador.ClienteControlador;
 import ojoaldato.controlador.PedidoControlador;
@@ -25,171 +21,140 @@ public class PedidoFormularioController {
     @FXML private TextField txtCantidad;
 
     private StackPane contenidoPedidos;
-    private PedidoControlador pedidoControlador;
-    private ClienteControlador clienteControlador;
-    private ArticuloControlador articuloControlador;
 
+    private final PedidoControlador pedidoControlador = new PedidoControlador();
+    private final ClienteControlador clienteControlador = new ClienteControlador();
+    private final ArticuloControlador articuloControlador = new ArticuloControlador();
+
+    // ======================
+    // Inicialización
+    // ======================
     @FXML
     public void initialize() {
-        // Inicializar controladores
-        pedidoControlador = new PedidoControlador();
-        clienteControlador = new ClienteControlador();
-        articuloControlador = new ArticuloControlador();
-        
-        // Configurar combo de clientes
         cargarClientes();
-        
-        // Configurar combo de artículos
         cargarArticulos();
-        
-        // Validar que la cantidad sea numérica
-        txtCantidad.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.matches("\\d*")) {
-                txtCantidad.setText(newValue.replaceAll("[^\\d]", ""));
+        validarCantidadNumerica();
+    }
+
+    // ======================
+    // Carga de datos
+    // ======================
+    private void cargarClientes() {
+        comboClientes.setItems(
+                FXCollections.observableArrayList(clienteControlador.listarClientes())
+        );
+
+        comboClientes.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Cliente item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" :
+                        item.getNombre() + " (" + item.getEmail() + ")");
+            }
+        });
+
+        comboClientes.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Cliente item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "Seleccione un cliente" :
+                        item.getNombre() + " (" + item.getEmail() + ")");
             }
         });
     }
 
-    private void cargarClientes() {
-        try {
-            ObservableList<Cliente> clientes = FXCollections.observableArrayList(
-                clienteControlador.listarClientes()
-            );
-            comboClientes.setItems(clientes);
-            
-            // Configurar cómo se muestra cada cliente en el ComboBox
-            comboClientes.setCellFactory(lv -> new javafx.scene.control.ListCell<Cliente>() {
-                @Override
-                protected void updateItem(Cliente item, boolean empty) {
-                    super.updateItem(item, empty);
-                    setText(empty || item == null ? "" : item.getNombre() + " (" + item.getEmail() + ")");
-                }
-            });
-            
-            comboClientes.setButtonCell(new javafx.scene.control.ListCell<Cliente>() {
-                @Override
-                protected void updateItem(Cliente item, boolean empty) {
-                    super.updateItem(item, empty);
-                    setText(empty || item == null ? "Seleccione un cliente" : item.getNombre() + " (" + item.getEmail() + ")");
-                }
-            });
-            
-        } catch (Exception e) {
-            mostrarError("Error al cargar los clientes: " + e.getMessage());
-        }
-    }
-
     private void cargarArticulos() {
-        try {
-            ObservableList<Articulo> articulos = FXCollections.observableArrayList(
-                articuloControlador.getAllArticulos()
-            );
-            comboArticulos.setItems(articulos);
-            
-            // Configurar cómo se muestra cada artículo en el ComboBox
-            comboArticulos.setCellFactory(lv -> new javafx.scene.control.ListCell<Articulo>() {
-                @Override
-                protected void updateItem(Articulo item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText("");
-                    } else {
-                        setText(String.format("%s - %s (%.2f€)", 
-                            item.getCodigo(), 
-                            item.getDescripcion(), 
-                            item.getPvp()));
-                    }
-                }
-            });
-            
-            comboArticulos.setButtonCell(new javafx.scene.control.ListCell<Articulo>() {
-                @Override
-                protected void updateItem(Articulo item, boolean empty) {
-                    super.updateItem(item, empty);
-                    setText(empty || item == null ? "Seleccione un artículo" : 
-                        String.format("%s - %s", item.getCodigo(), item.getDescripcion()));
-                }
-            });
-            
-        } catch (Exception e) {
-            mostrarError("Error al cargar los artículos: " + e.getMessage());
-        }
+        comboArticulos.setItems(
+                FXCollections.observableArrayList(articuloControlador.getAllArticulos())
+        );
+
+        comboArticulos.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Articulo item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" :
+                        item.getCodigo() + " - " + item.getDescripcion() +
+                                String.format(" (%.2f€)", item.getPvp()));
+            }
+        });
+
+        comboArticulos.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Articulo item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "Seleccione un artículo" :
+                        item.getCodigo() + " - " + item.getDescripcion());
+            }
+        });
     }
 
+    private void validarCantidadNumerica() {
+        txtCantidad.textProperty().addListener((obs, oldV, newV) -> {
+            if (!newV.matches("\\d*")) {
+                txtCantidad.setText(newV.replaceAll("[^\\d]", ""));
+            }
+        });
+    }
+
+    // ======================
+    // Guardar pedido
+    // ======================
     @FXML
     private void guardarPedido() {
-        try {
-            // Validar campos obligatorios
-            if (comboClientes.getSelectionModel().isEmpty()) {
-                mostrarError("Debe seleccionar un cliente");
-                return;
-            }
-            
-            if (comboArticulos.getSelectionModel().isEmpty()) {
-                mostrarError("Debe seleccionar un artículo");
-                return;
-            }
-            
-            if (txtCantidad.getText().trim().isEmpty()) {
-                mostrarError("Debe especificar la cantidad");
-                return;
-            }
-            
-            // Obtener los valores del formulario
-            Cliente cliente = comboClientes.getSelectionModel().getSelectedItem();
-            Articulo articulo = comboArticulos.getSelectionModel().getSelectedItem();
-            int cantidad;
-            
-            try {
-                cantidad = Integer.parseInt(txtCantidad.getText().trim());
-                if (cantidad <= 0) {
-                    mostrarError("La cantidad debe ser mayor que cero");
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                mostrarError("La cantidad debe ser un número válido");
-                return;
-            }
-            
-            // Crear el pedido
-            Pedido pedido = new Pedido();
-            pedido.setCliente(cliente);
-            pedido.setArticulo(articulo);
-            pedido.setCantidad(cantidad);
-            pedido.setFechaHora(LocalDateTime.now());
-            
-                // El estado se establece como no enviado por defecto
-            // Se actualizará según el tiempo de preparación
-            pedido.setEnviado(false);
-            
-            // Calcular precios (esto podría moverse al modelo o al controlador de negocio)
-            BigDecimal precioTotal = articulo.getPvp().multiply(new BigDecimal(cantidad));
-            pedido.setPrecioTotal(precioTotal);
-            
-            // Guardar el pedido
-            String resultado = pedidoControlador.addPedido(cliente, pedido);
-            
-            // Mostrar mensaje de éxito
-            mostrarMensaje("Pedido guardado", resultado);
-            
-            // Limpiar el formulario
-            limpiarFormulario();
-            
-        } catch (Exception e) {
-            mostrarError("Error al guardar el pedido: " + e.getMessage());
-            e.printStackTrace();
+
+        if (comboClientes.getSelectionModel().isEmpty()) {
+            mostrarError("Debe seleccionar un cliente");
+            return;
         }
+
+        if (comboArticulos.getSelectionModel().isEmpty()) {
+            mostrarError("Debe seleccionar un artículo");
+            return;
+        }
+
+        if (txtCantidad.getText().isBlank()) {
+            mostrarError("Debe indicar la cantidad");
+            return;
+        }
+
+        int cantidad = Integer.parseInt(txtCantidad.getText());
+        if (cantidad <= 0) {
+            mostrarError("La cantidad debe ser mayor que cero");
+            return;
+        }
+
+        Cliente cliente = comboClientes.getValue();
+        Articulo articulo = comboArticulos.getValue();
+
+        Pedido pedido = new Pedido();
+        pedido.setCliente(cliente);
+        pedido.setArticulo(articulo);
+        pedido.setCantidad(cantidad);
+        pedido.setFechaHora(LocalDateTime.now());
+        pedido.setEnviado(false);
+        pedido.setPrecioTotal(
+                articulo.getPvp().multiply(BigDecimal.valueOf(cantidad))
+        );
+
+        String resultado = pedidoControlador.addPedido(cliente, pedido);
+        mostrarMensaje("Pedido guardado", resultado);
+        limpiarFormulario();
     }
 
+    // ======================
+    // Cancelar
+    // ======================
     @FXML
     private void cancelar() {
         if (contenidoPedidos != null) {
             contenidoPedidos.getChildren().clear();
-            contenidoPedidos.getChildren().add(new javafx.scene.control.Label("Operación cancelada"));
+            contenidoPedidos.getChildren().add(new Label("Operación cancelada"));
         }
     }
 
-    // Métodos auxiliares
+    // ======================
+    // Utilidades
+    // ======================
     private void limpiarFormulario() {
         comboClientes.getSelectionModel().clearSelection();
         comboArticulos.getSelectionModel().clearSelection();
@@ -212,20 +177,7 @@ public class PedidoFormularioController {
         alert.showAndWait();
     }
 
-    // Getters y setters para la inyección de dependencias
     public void setContenidoPedidos(StackPane contenidoPedidos) {
         this.contenidoPedidos = contenidoPedidos;
-    }
-
-    public void setPedidoControlador(PedidoControlador pedidoControlador) {
-        this.pedidoControlador = pedidoControlador;
-    }
-
-    public void setClienteControlador(ClienteControlador clienteControlador) {
-        this.clienteControlador = clienteControlador;
-    }
-
-    public void setArticuloControlador(ArticuloControlador articuloControlador) {
-        this.articuloControlador = articuloControlador;
     }
 }
