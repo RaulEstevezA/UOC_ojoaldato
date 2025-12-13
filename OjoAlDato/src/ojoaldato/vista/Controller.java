@@ -43,9 +43,15 @@ public class Controller {
 
     @FXML
     private void abrirPedidos(ActionEvent event) {
-        mostrarTextoTemporal("Vista de gestión de pedidos");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ojoaldato/vista/PedidosView.fxml"));
+            Parent view = loader.load();
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarTextoTemporal("Error al cargar la vista de pedidos");
+        }
     }
-
     @FXML
     private void salir(ActionEvent event) {
         System.exit(0);
