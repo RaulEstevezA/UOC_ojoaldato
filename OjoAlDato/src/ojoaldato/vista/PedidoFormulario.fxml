@@ -1,63 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml"
-          fx:controller="ojoaldato.vista.PedidoFormularioController"
-          hgap="10" vgap="15"
-          style="-fx-padding: 25;">
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ojoaldato.vista.PedidoFormularioController"
+      alignment="CENTER"
+      spacing="20"
+      maxWidth="850"
+      style="-fx-padding: 10;">
 
-    <Label text="Nuevo Pedido" 
-           style="-fx-font-size: 18px; -fx-font-weight: bold;"
-           GridPane.columnIndex="0" GridPane.rowIndex="0"
-           GridPane.columnSpan="2"/>
+    <Label text="Nuevo Pedido"
+           styleClass="titulo-seccion"/>
 
-    <!-- Fila 1: Cliente -->
-    <Label text="Cliente:" 
-           GridPane.columnIndex="0" GridPane.rowIndex="1"
-           style="-fx-font-weight: bold;"/>
-    <ComboBox fx:id="comboClientes" 
-              GridPane.columnIndex="1" GridPane.rowIndex="1"
-              prefWidth="300"
-              style="-fx-background-radius: 5; -fx-border-radius: 5;"/>
+    <GridPane hgap="10"
+              vgap="10"
+              alignment="CENTER"
+              maxWidth="600">
 
-    <!-- Fila 2: Artículo -->
-    <Label text="Artículo:" 
-           GridPane.columnIndex="0" GridPane.rowIndex="2"
-           style="-fx-font-weight: bold;"/>
-    <ComboBox fx:id="comboArticulos" 
-              GridPane.columnIndex="1" GridPane.rowIndex="2"
-              prefWidth="300"
-              style="-fx-background-radius: 5; -fx-border-radius: 5;"/>
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
 
-    <!-- Fila 3: Cantidad -->
-    <Label text="Cantidad:" 
-           GridPane.columnIndex="0" GridPane.rowIndex="3"
-           style="-fx-font-weight: bold;"/>
-    <TextField fx:id="txtCantidad" 
-               GridPane.columnIndex="1" GridPane.rowIndex="3"
-               prefWidth="100"
-               style="-fx-background-radius: 5; -fx-border-radius: 5;"/>
+        <Label text="Cliente:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="comboClientes" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-    <!-- Fila 4: Botones -->
-    <HBox spacing="20" 
-          GridPane.columnIndex="0" GridPane.rowIndex="4"
-          GridPane.columnSpan="2"
-          alignment="CENTER"
-          style="-fx-padding: 15 0 0 0;">
-        <Button text="Guardar" onAction="#guardarPedido" 
-                defaultButton="true"
-                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 5 20;"/>
-        <Button text="Cancelar" onAction="#cancelar" 
-                cancelButton="true"
-                style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 5 20;"/>
+        <Label text="Artículo:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="comboArticulos" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Cantidad:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtCantidad" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="100"/>
+    </GridPane>
+
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Guardar" onAction="#guardarPedido" defaultButton="true"/>
+        <Button text="Cancelar" onAction="#cancelar" cancelButton="true" styleClass="cancelar"/>
     </HBox>
 
-    <!-- Estilos y configuraciones adicionales -->
-    <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
-    </padding>
-</GridPane>
+</VBox>
+

@@ -15,14 +15,6 @@ public class PedidosController {
     private StackPane contenidoPedidos;
 
     // ======================
-    // Inicialización
-    // ======================
-    @FXML
-    private void initialize() {
-        mostrar("Selecciona una opción de pedidos");
-    }
-
-    // ======================
     // Nuevo pedido
     // ======================
     @FXML
