@@ -360,3 +360,7 @@
     -fx-effect: dropshadow(gaussian, rgba(239,68,68,0.45), 16, 0, 0, 6);
     -fx-translate-y: -3;
 }
+.label.titulo-principal {
+    -fx-font-size: 26px;
+    -fx-font-weight: 900;
+}
