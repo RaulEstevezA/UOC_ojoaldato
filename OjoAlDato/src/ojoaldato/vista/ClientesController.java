@@ -18,11 +18,6 @@ public class ClientesController {
     private final ClienteControlador clienteControlador = new ClienteControlador();
 
     @FXML
-    private void initialize() {
-        mostrar("Selecciona una opción");
-    }
-
-    @FXML
     private void anadirCliente() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ojoaldato/vista/ClientesFormulario.fxml"));

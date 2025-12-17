@@ -1,29 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ojoaldato.vista.Controller">
+            fx:controller="ojoaldato.vista.Controller"
+            fx:id="root">
 
-    <!-- Menú lateral izquierdo -->
+    <!-- MENÚ LATERAL -->
     <left>
-        <VBox spacing="10" alignment="TOP_LEFT" prefWidth="200" style="-fx-padding: 15;">
-            <Button text="Gestión de Artículos" onAction="#abrirArticulos" maxWidth="Infinity"/>
-            <Button text="Gestión de Clientes" onAction="#abrirClientes" maxWidth="Infinity"/>
-            <Button text="Gestión de Pedidos" onAction="#abrirPedidos" maxWidth="Infinity"/>
-            <Button text="Salir" onAction="#salir" maxWidth="Infinity"/>
-        </VBox>
+        <StackPane fx:id="leftContainer"
+                   prefWidth="240"
+                   alignment="CENTER"
+                   visible="false"
+                   managed="false"
+                   style="-fx-padding: 30 20 30 30;">
+
+            <VBox fx:id="menuLateral"
+                  spacing="15"
+                  alignment="CENTER"
+                  styleClass="menu-lateral">
+
+                <Button text="Gestión de Artículos" prefWidth="180" onAction="#abrirArticulos"/>
+                <Button text="Gestión de Clientes"  prefWidth="180" onAction="#abrirClientes"/>
+                <Button text="Gestión de Pedidos"   prefWidth="180" onAction="#abrirPedidos"/>
+
+                <Separator prefWidth="160"/>
+
+                <Button text="⏻ Salir"
+                        prefWidth="180"
+                        onAction="#salir"
+                        styleClass="dashboard-salir"/>
+            </VBox>
+        </StackPane>
     </left>
 
-    <!-- Zona central dinámica -->
+
+    <!-- CONTENIDO CENTRAL -->
     <center>
-        <StackPane fx:id="contentArea" style="-fx-padding: 20;">
-            <Label text="Bienvenido a OnlineStore" />
+        <StackPane fx:id="contentArea"
+                   alignment="CENTER"
+                   style="-fx-padding: 40;">
+
+            <!-- MENÚ INICIAL -->
+            <VBox fx:id="inicioBox"
+                  alignment="CENTER"
+                  spacing="30"
+                  maxWidth="700"
+                  styleClass="card">
+
+                <Label text="Bienvenido a OnlineStore"
+                       styleClass="titulo-principal"/>
+
+                <HBox spacing="20" alignment="CENTER">
+                    <Button text="📦 Artículos"
+                            prefWidth="180"
+                            prefHeight="140"
+                            onAction="#abrirArticulos"
+                            styleClass="menu-card"/>
+
+                    <Button text="👤 Clientes"
+                            prefWidth="180"
+                            prefHeight="140"
+                            onAction="#abrirClientes"
+                            styleClass="menu-card"/>
+
+                    <Button text="🛒 Pedidos"
+                            prefWidth="180"
+                            prefHeight="140"
+                            onAction="#abrirPedidos"
+                            styleClass="menu-card"/>
+                </HBox>
+
+                <Button text="⏻ Salir"
+                        prefWidth="220"
+                        prefHeight="50"
+                        onAction="#salir"
+                        styleClass="dashboard-salir"/>
+            </VBox>
+
         </StackPane>
     </center>
 

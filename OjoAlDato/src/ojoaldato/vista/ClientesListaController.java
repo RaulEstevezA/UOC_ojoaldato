@@ -43,6 +43,11 @@ public class ClientesListaController {
                                 "Premium" : "Estandar"
                 )
         );
+
+        tablaClientes.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS
+        );
+
     }
 
     public void cargarTodos() {

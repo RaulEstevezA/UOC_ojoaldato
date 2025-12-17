@@ -16,7 +16,11 @@ public class MainApp extends javafx.application.Application {
         Parent root = fxmlLoader.load();
 
         // Tamaño inicial de la ventana
-        Scene scene = new Scene(root, 1100, 650);
+        Scene scene = new Scene(root, 1400, 850);
+
+        scene.getStylesheets().add(
+                getClass().getResource("/app.css").toExternalForm()
+        );
 
         stage.setTitle("OnlineStore");
         stage.setScene(scene);
