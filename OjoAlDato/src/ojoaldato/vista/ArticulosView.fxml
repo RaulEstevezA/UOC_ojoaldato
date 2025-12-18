@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="ojoaldato.vista.ArticulosViewController"
+           alignment="CENTER">
+
+    <VBox spacing="25"
+          alignment="CENTER"
+          maxWidth="900"
+          styleClass="card">
+
+        <!-- ============================= -->
+        <!-- CABECERA FIJA -->
+        <!-- ============================= -->
+        <VBox spacing="15" alignment="CENTER">
+
+            <Label text="Gestión de Artículos"
+                   styleClass="titulo-seccion"/>
+
+            <HBox spacing="15" alignment="CENTER">
+
+                <Button text="Añadir Artículo"
+                        onAction="#mostrarFormulario"
+                        styleClass="submenu-card"/>
+
+                <Button text="Mostrar Artículos"
+                        onAction="#mostrarTabla"
+                        styleClass="submenu-card"/>
+
+            </HBox>
+
+        </VBox>
+
+        <!-- ============================= -->
+        <!-- CONTENIDO DINÁMICO -->
+        <!-- ============================= -->
+        <StackPane alignment="CENTER">
+
+            <!-- ========== FORMULARIO ========== -->
+            <VBox fx:id="formularioBox"
+                  spacing="20"
+                  alignment="CENTER"
+                  visible="false"
+                  managed="false">
+
+                <Label text="Añadir Artículo"
+                       styleClass="titulo-seccion"/>
+
+                <GridPane hgap="10"
+                          vgap="10"
+                          alignment="CENTER"
+                          maxWidth="600">
+
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <Label text="Código:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtCodigo" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Label text="Descripción:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtDescripcion" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <Label text="PVP:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtPvp" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                    <Label text="Gastos de envío:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtGastosEnvio" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                    <Label text="Tiempo preparación:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtTiempoPreparacion" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                    <Label text="Stock:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtStock" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                </GridPane>
+
+                <HBox spacing="15" alignment="CENTER">
+                    <Button text="Guardar"
+                            onAction="#onAgregarArticulo"/>
+
+                    <Button text="Cancelar"
+                            onAction="#onCancelar"
+                            styleClass="cancelar"/>
+                </HBox>
+            </VBox>
+
+            <!-- ========== TABLA ========== -->
+            <VBox fx:id="tablaBox"
+                  spacing="20"
+                  alignment="TOP_CENTER"
+                  VBox.vgrow="ALWAYS"
+                  maxWidth="Infinity">
+
+                <Label text="Listado de Artículos"
+                       styleClass="titulo-seccion"/>
+
+                <TableView fx:id="tablaArticulos"
+                           VBox.vgrow="ALWAYS"
+                           maxWidth="Infinity">
+
+                    <columns>
+                        <TableColumn fx:id="colCodigo" text="Código" prefWidth="90"/>
+                        <TableColumn fx:id="colDescripcion" text="Descripción" prefWidth="280"/>
+                        <TableColumn fx:id="colPvp" text="PVP" prefWidth="90"/>
+                        <TableColumn fx:id="colGastosEnvio" text="Gastos envío" prefWidth="130"/>
+                        <TableColumn fx:id="colTiempoPreparacion" text="Tiempo prep." prefWidth="130"/>
+                        <TableColumn fx:id="colStock" text="Stock" prefWidth="130"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+        </StackPane>
+
+        <!-- MenuBox  -->
+        <VBox fx:id="menuBox"
+              visible="false"
+              managed="false"/>
+
+    </VBox>
+</StackPane>

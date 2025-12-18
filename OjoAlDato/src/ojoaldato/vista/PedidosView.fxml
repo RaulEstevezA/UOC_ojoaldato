@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="ojoaldato.vista.PedidosController"
+           alignment="CENTER">
+
+    <VBox spacing="25"
+          alignment="CENTER"
+          maxWidth="900"
+          styleClass="card">
+
+        <!-- CABECERA -->
+        <VBox spacing="15" alignment="CENTER">
+            <Label text="Gestión de Pedidos"
+                   styleClass="titulo-seccion"/>
+
+            <HBox spacing="15" alignment="CENTER">
+                <Button text="Nuevo Pedido" onAction="#nuevoPedido"      styleClass="submenu-card"/>
+                <Button text="Ver Todos"    onAction="#mostrarTodos"     styleClass="submenu-card"/>
+                <Button text="Pendientes"   onAction="#mostrarPendientes" styleClass="submenu-card"/>
+                <Button text="Enviados"     onAction="#mostrarEnviados"   styleClass="submenu-card"/>
+            </HBox>
+        </VBox>
+
+        <!-- CONTENIDO DINÁMICO -->
+        <StackPane fx:id="contenidoPedidos"
+                   alignment="CENTER"/>
+
+    </VBox>
+</StackPane>

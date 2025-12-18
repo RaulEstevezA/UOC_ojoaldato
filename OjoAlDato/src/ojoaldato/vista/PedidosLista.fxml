@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ojoaldato.vista.PedidosListaController"
+      spacing="20"
+      alignment="CENTER"
+      maxWidth="Infinity"
+      VBox.vgrow="ALWAYS">
+
+    <Label text="Lista de Pedidos"
+           styleClass="titulo-seccion"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <TextField fx:id="txtBuscarEmail"
+                   promptText="Buscar por email"
+                   prefWidth="300"/>
+        <Button text="Buscar" onAction="#buscarPorEmail"/>
+    </HBox>
+
+    <TableView fx:id="tablaPedidos"
+               maxWidth="Infinity"
+               VBox.vgrow="ALWAYS">
+
+        <columns>
+            <TableColumn fx:id="colNumPedido" text="Nº Pedido" prefWidth="90"/>
+            <TableColumn fx:id="colCliente" text="Cliente" prefWidth="280"/>
+            <TableColumn fx:id="colArticulo" text="Artículo" prefWidth="220"/>
+            <TableColumn fx:id="colCantidad" text="Cantidad" prefWidth="90"/>
+            <TableColumn fx:id="colFecha" text="Fecha" prefWidth="220"/>
+            <TableColumn fx:id="colTotal" text="Total" prefWidth="110"/>
+
+            <TableColumn fx:id="colEstado"
+                         text="Estado"
+                         visible="false"/>
+        </columns>
+
+    </TableView>
+
+
+    <HBox spacing="15" alignment="CENTER">
+        <Button fx:id="btnCancelarPedido"
+                text="Cancelar Pedido"
+                onAction="#cancelarPedido"
+                styleClass="dashboard-salir"/>
+    </HBox>
+
+</VBox>
+

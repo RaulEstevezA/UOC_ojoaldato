@@ -1,0 +1,366 @@
+/* =========================================================
+   BASE GENERAL
+   ========================================================= */
+
+.root {
+    -fx-font-family: "Segoe UI", "Roboto", "Arial";
+    -fx-background-color: linear-gradient(to bottom right, #f5f7fa, #e9edf3);
+}
+
+/* =========================================================
+   TÍTULOS
+   ========================================================= */
+
+.titulo-principal {
+    -fx-font-size: 26px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #0f172a;
+    -fx-padding: 0 0 22 0;
+}
+
+.titulo-seccion {
+    -fx-font-size: 22px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #1e293b;
+    -fx-padding: 0 0 18 0;
+}
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.stack-pane {
+    -fx-padding: 40;
+    -fx-alignment: CENTER;
+}
+
+/* =========================================================
+   TARJETAS
+   ========================================================= */
+
+.card {
+    -fx-background-color: white;
+    -fx-padding: 25;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-max-width: 1200;
+    -fx-min-width: 900;
+    -fx-min-height: 600;
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.10), 14, 0, 0, 6);
+}
+
+.vbox .vbox,
+.vbox .grid-pane,
+.grid-pane .vbox,
+.grid-pane .grid-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-effect: null;
+}
+
+.border-pane > .left .vbox {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-max-width: infinity;
+    -fx-effect: null;
+}
+
+/* =========================================================
+   TEXTOS
+   ========================================================= */
+
+.label {
+    -fx-text-fill: #1f2937;
+    -fx-font-size: 14px;
+}
+
+.label:contains("Gestión"),
+.label:contains("Listado"),
+.label:contains("Nuevo Pedido"),
+.label:contains("Lista de Pedidos"),
+.label:contains("Añadir") {
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #0f172a;
+    -fx-padding: 0 0 18 0;
+    -fx-border-color: transparent transparent #e5e7eb transparent;
+    -fx-border-width: 0 0 2 0;
+}
+
+.hbox > .label,
+.grid-pane > .label {
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #334155;
+}
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+.button {
+    -fx-background-color: linear-gradient(to right, #60a5fa, #60a5fa);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8 18;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.18), 6, 0, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to right, #60a5fa, #1d4ed8);
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.35), 10, 0, 0, 4);
+    -fx-translate-y: -1;
+}
+
+.button:pressed {
+    -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.12), 4, 0, 0, 1);
+}
+
+.button.cancelar,
+.button.volver {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #334155;
+    -fx-font-weight: 600;
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: none;
+}
+
+.button.cancelar:hover,
+.button.volver:hover {
+    -fx-background-color: #e5e7eb;
+    -fx-border-color: #94a3b8;
+}
+
+/* =========================================================
+   FORMULARIOS
+   ========================================================= */
+
+.text-field,
+.combo-box {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #cbd5e1;
+    -fx-padding: 8 12;
+    -fx-font-size: 14px;
+    -fx-background-color: #f9fafb;
+    -fx-pref-height: 40;
+}
+
+.text-field:focused,
+.combo-box:focused {
+    -fx-border-color: #60a5fa;
+    -fx-background-color: white;
+}
+
+.combo-box,
+.text-field {
+    -fx-max-width: infinity;
+}
+
+/* =========================================================
+   TABLAS
+   ========================================================= */
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-max-width: infinity;
+}
+
+/* Contenedor real */
+.table-view .virtual-flow {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #e5e7eb;
+}
+
+/* CABECERA */
+.table-view .column-header-background {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: transparent transparent #e5e7eb transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-padding: 8 6;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #334155;
+    -fx-alignment: CENTER;
+}
+
+/* FILAS */
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+    -fx-cell-size: 44px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f9fafb;
+}
+
+/* Hover */
+.table-row-cell:hover {
+    -fx-background-color: #eef2ff;
+}
+
+/* Selección */
+.table-row-cell:selected {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #1e293b;
+}
+
+/* CELDAS */
+.table-cell {
+    -fx-padding: 10 12;
+    -fx-font-size: 15px;
+    -fx-text-fill: #1f2937;
+    -fx-alignment: CENTER;
+    -fx-border-color: transparent;
+}
+
+/* Quitar líneas duras */
+.table-view .filler,
+.table-view .column-resize-line {
+    -fx-background-color: transparent;
+}
+
+/* Scrollbar discreta */
+.table-view .scroll-bar:vertical .thumb {
+    -fx-background-color: #c7d2fe;
+    -fx-background-radius: 6;
+}
+
+/* =========================================================
+   MENÚ LATERAL
+   ========================================================= */
+
+.border-pane > .left {
+    -fx-background-color: linear-gradient(to bottom, #1f2937, #111827);
+}
+
+.border-pane > .left .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e5e7eb;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 16;
+    -fx-font-size: 15px;
+    -fx-effect: none;
+}
+
+.border-pane > .left .button:hover {
+    -fx-background-color: rgba(255,255,255,0.1);
+}
+
+/* =========================================================
+   ESPACIADO Y FLUIDEZ
+   ========================================================= */
+
+.vbox, .hbox {
+    -fx-spacing: 15;
+}
+
+/* =========================================================
+   MENÚ PRINCIPAL - TARJETAS
+   ========================================================= */
+
+.menu-card {
+    -fx-background-color: #f8fafc;
+    -fx-padding: 30;
+    -fx-spacing: 12;
+    -fx-alignment: CENTER;
+    -fx-pref-width: 220;
+    -fx-pref-height: 170;
+    -fx-background-radius: 14;
+    -fx-cursor: hand;
+
+    -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.12), 10, 0, 0, 4);
+}
+
+.menu-card:hover {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.25), 16, 0, 0, 6);
+    -fx-translate-y: -3;
+}
+
+/* Icono grande */
+.menu-icon {
+    -fx-font-size: 36px;
+}
+
+/* Texto */
+.menu-text {
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1e293b;
+}
+
+.button.menu-card {
+    -fx-background-color: #60a5fa;
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-font-weight: 700;
+    -fx-pref-width: 180;
+    -fx-pref-height: 140;
+    -fx-background-radius: 14;
+    -fx-cursor: hand;
+
+    -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.18), 10, 0, 0, 4);
+}
+
+.button.menu-card:hover {
+    -fx-background-color: #2563eb;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.35), 16, 0, 0, 6);
+    -fx-translate-y: -3;
+}
+
+.button.menu-card.peligro {
+    -fx-background-color: linear-gradient(to right, #ef4444, #dc2626);
+    -fx-text-fill: white;
+}
+
+.button.menu-card.peligro:hover {
+    -fx-background-color: linear-gradient(to right, #dc2626, #b91c1c);
+    -fx-effect: dropshadow(gaussian, rgba(239,68,68,0.45), 16, 0, 0, 6);
+    -fx-translate-y: -3;
+}
+
+.table-row-cell {
+    -fx-cell-size: 42px;
+}
+
+.table-view {
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+}
+.button.dashboard-salir {
+    -fx-background-color: linear-gradient(to right, #ef4444, #dc2626);
+    -fx-text-fill: white;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.18), 10, 0, 0, 4);
+}
+
+.button.dashboard-salir:hover {
+    -fx-background-color: linear-gradient(to right, #dc2626, #b91c1c);
+    -fx-effect: dropshadow(gaussian, rgba(239,68,68,0.45), 16, 0, 0, 6);
+    -fx-translate-y: -3;
+}
+.label.titulo-principal {
+    -fx-font-size: 26px;
+    -fx-font-weight: 900;
+}

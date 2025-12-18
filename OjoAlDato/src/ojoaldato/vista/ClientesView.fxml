@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="ojoaldato.vista.ClientesController"
+           alignment="CENTER">
+
+    <VBox spacing="25"
+          alignment="CENTER"
+          maxWidth="900"
+          styleClass="card">
+
+        <!-- CABECERA -->
+        <VBox spacing="15" alignment="CENTER">
+            <Label text="Gestión de Clientes"
+                   styleClass="titulo-seccion"/>
+
+            <HBox spacing="15" alignment="CENTER">
+                <Button text="Añadir"        onAction="#anadirCliente"    styleClass="submenu-card"/>
+                <Button text="Mostrar todos" onAction="#mostrarClientes"  styleClass="submenu-card"/>
+                <Button text="Estándar"      onAction="#mostrarEstandar"  styleClass="submenu-card"/>
+                <Button text="Premium"       onAction="#mostrarPremium"   styleClass="submenu-card"/>
+            </HBox>
+        </VBox>
+
+        <!-- CONTENIDO DINÁMICO -->
+        <StackPane fx:id="contenidoClientes"
+                   alignment="CENTER"
+                   maxWidth="Infinity"/>
+
+    </VBox>
+</StackPane>

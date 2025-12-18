@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ojoaldato.vista.ClientesListaController"
+      spacing="20"
+      alignment="TOP_CENTER"
+      maxWidth="Infinity"
+      VBox.vgrow="ALWAYS">
+
+    <Label text="Listado de Clientes"
+           styleClass="titulo-seccion"/>
+
+    <TableView fx:id="tablaClientes"
+               maxWidth="Infinity"
+               VBox.vgrow="ALWAYS">
+
+        <columns>
+            <TableColumn fx:id="colNombre" text="Nombre" prefWidth="180"/>
+            <TableColumn fx:id="colDomicilio" text="Domicilio" prefWidth="180"/>
+            <TableColumn fx:id="colNif" text="NIF" prefWidth="120"/>
+            <TableColumn fx:id="colEmail" text="Email" prefWidth="220"/>
+            <TableColumn fx:id="colTipo" text="Tipo" prefWidth="120"/>
+        </columns>
+
+    </TableView>
+
+</VBox>
+

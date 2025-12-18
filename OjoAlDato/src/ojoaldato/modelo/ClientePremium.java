@@ -1,0 +1,60 @@
+package ojoaldato.modelo;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+/**
+ * Subclase de Cliente que representa un cliente premium.
+ */
+@Entity
+@DiscriminatorValue("PREMIUM")
+public class ClientePremium extends Cliente {
+    private static BigDecimal descuentoEnvio = new BigDecimal("0.8");
+
+    public ClientePremium() {
+        setCuota(BigDecimal.valueOf(30.00));
+    }
+    public ClientePremium(String nombre, String domicilio, String nif, String email) {
+        super(nombre, domicilio, nif, email);
+        setCuota(BigDecimal.valueOf(30.00));
+    }
+    public ClientePremium(String nombre, String domicilio, String nif, String email, BigDecimal cuota, BigDecimal descuentoEnvio) {
+        super(nombre, domicilio, nif, email, cuota != null ? cuota : BigDecimal.valueOf(30.00));
+        if (descuentoEnvio != null) ClientePremium.descuentoEnvio = descuentoEnvio;
+    }
+
+    @Override
+    public BigDecimal calcularGastosEnvio(BigDecimal base) {
+        return base.multiply(descuentoEnvio).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public static BigDecimal getDescuentoEnvio() {
+        return descuentoEnvio;
+    }
+
+    public static void setDescuentoEnvio(BigDecimal descuentoEnvio) {
+        ClientePremium.descuentoEnvio = descuentoEnvio;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=======================================\n");
+        sb.append("CLIENTE PREMIUM\n");
+        sb.append("=======================================\n");
+        sb.append(super.toString());
+
+        // Calculamos el porcentaje de descuento real (ejemplo: 0.8 -> 20%)
+        BigDecimal descuentoReal = BigDecimal.valueOf(100)
+                .subtract(descuentoEnvio.multiply(BigDecimal.valueOf(100)));
+
+        sb.append("Descuento envío:           ")
+                .append(descuentoReal.intValue()) // imprime 20
+                .append("%\n");
+        sb.append("Cuota mensual:             ")
+                .append(getCuota().setScale(2, RoundingMode.HALF_UP))
+                .append(" €\n");
+        return sb.toString();
+    }
+}

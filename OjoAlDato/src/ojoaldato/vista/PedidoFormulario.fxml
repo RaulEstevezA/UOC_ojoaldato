@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ojoaldato.vista.PedidoFormularioController"
+      alignment="CENTER"
+      spacing="20"
+      maxWidth="850"
+      style="-fx-padding: 10;">
+
+    <Label text="Nuevo Pedido"
+           styleClass="titulo-seccion"/>
+
+    <GridPane hgap="10"
+              vgap="10"
+              alignment="CENTER"
+              maxWidth="600">
+
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="Cliente:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="comboClientes" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Artículo:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="comboArticulos" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Cantidad:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtCantidad" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="100"/>
+    </GridPane>
+
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Guardar" onAction="#guardarPedido" defaultButton="true"/>
+        <Button text="Cancelar" onAction="#cancelar" cancelButton="true" styleClass="cancelar"/>
+    </HBox>
+
+</VBox>
+
